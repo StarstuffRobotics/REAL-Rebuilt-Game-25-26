@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
+
 
 public class SwerveModule {
     private final SparkFlex driveMotor;
@@ -33,7 +35,7 @@ public class SwerveModule {
         steerConfig.smartCurrentLimit(20).idleMode(SparkFlexConfig.IdleMode.kBrake)
                    .inverted(true); // MK4i Specific
         steerConfig.encoder.positionConversionFactor(DriveConstants.kSteerPositionConversion);
-        steerConfig.closedLoop.feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder).pid(0.5, 0, 0);
+        
 
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         steerMotor.configure(steerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -55,6 +57,6 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, getRotation());
         driveMotor.set(state.speedMetersPerSecond / 4.5); // 4.5 is max speed m/s estimate
-        steerMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkFlex.ControlType.kPosition);
+        steerMotor.getClosedLoopController().setReference(state.angle.getRadians(), SparkBase.ControlType.kPosition);
     }
 }
