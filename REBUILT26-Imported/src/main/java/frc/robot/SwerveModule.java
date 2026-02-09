@@ -17,52 +17,56 @@ public class SwerveModule {
     private final SparkFlex driveMotor;
     private final SparkFlex angleMotor;
     private final RelativeEncoder angleEncoder;
-    @SuppressWarnings("unused")
-    private final RelativeEncoder driveEncoder;
     private final SparkClosedLoopController anglePID;
     private final CANcoder absoluteEncoder;
 
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
-        
         absoluteEncoder = new CANcoder(canCoderID);
-        configureCANcoder(angleOffset);
+
+        // 1. Configure the CANcoder (Offset is in rotations, 0 to 1)
+        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+        canCoderConfig.MagnetSensor.MagnetOffset = angleOffset;
+        absoluteEncoder.getConfigurator().apply(canCoderConfig);
 
         angleEncoder = angleMotor.getEncoder();
-        driveEncoder = driveMotor.getEncoder();
         anglePID = angleMotor.getClosedLoopController();
 
-        // --- Configure Angle Motor ---
+        // 2. Configure Angle Motor (Spark Flex)
         SparkFlexConfig angleConfig = new SparkFlexConfig();
-        angleConfig.closedLoop.pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD);
-        angleConfig.closedLoop.positionWrappingEnabled(true);
-        angleConfig.closedLoop.positionWrappingInputRange(0, 2 * Math.PI);
+        angleConfig.closedLoop
+            .feedbackSensor(com.revrobotics.spark.FeedbackSensor.kPrimaryEncoder)
+            .pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD)
+            .positionWrappingEnabled(true)
+            .positionWrappingInputRange(0, 2 * Math.PI);
         
         angleConfig.encoder.positionConversionFactor(Constants.Swerve.STEER_ROTATIONS_TO_RADIANS);
-        angleConfig.inverted(true); // MAXSwerve steering is typically inverted
+        angleConfig.inverted(true); // Standard for MAXSwerve
+        angleConfig.smartCurrentLimit(40); // Protect the motor from stalls
 
-        // --- Configure Drive Motor ---
+        // 3. Configure Drive Motor (Spark Flex)
         SparkFlexConfig driveConfig = new SparkFlexConfig();
-        driveConfig.encoder.positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS);
-        driveConfig.encoder.velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
-        driveConfig.inverted(false); // Change to true if robot drives backward
+        driveConfig.encoder
+            .positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS)
+            .velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
+        
+        driveConfig.inverted(false);
+        driveConfig.smartCurrentLimit(60); // Flex/Vortex can handle high current, but start safe
+        driveConfig.openLoopRampRate(0.25); // Smooths out rapid acceleration
 
-        // --- Apply Configs ---
-        angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        // 4. Apply Configs to Hardware
+        // ResetMode.kResetSafeParameters ensures a clean state before applying
+        // PersistMode.kPersistParameters saves settings so they survive a brownout
+        angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        // 5. Sync the internal encoder with the absolute CANcoder
         resetToAbsolute();
     }
 
-    private void configureCANcoder(double offset) {
-        var config = new CANcoderConfiguration();
-        config.MagnetSensor.MagnetOffset = offset;
-        absoluteEncoder.getConfigurator().apply(config);
-    }
-
     public void resetToAbsolute() {
-        // CANcoder returns 0 to 1 rotations. Convert to 0 to 2PI radians.
+        // Convert CANcoder rotations (0-1) to Radians (0-2PI)
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
         angleEncoder.setPosition(absolutePosition);
     }
@@ -72,10 +76,21 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
+        // Optimize avoids spinning the wheel more than 90 degrees
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
         
-        // Use setReference for the drive motor to use the internal PID or just set percentage
+        // Scale velocity to percentage (-1.0 to 1.0) for the drive motor
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
+        
+        // Use the on-board PID controller for the steering angle
         anglePID.setReference(optimized.angle.getRadians(), ControlType.kPosition);
     }
+    // Add these to SwerveModule.java
+public double getAbsolutePosition() {
+    return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+}
+
+public double getRelativePosition() {
+    return angleEncoder.getPosition();
+}
 }
