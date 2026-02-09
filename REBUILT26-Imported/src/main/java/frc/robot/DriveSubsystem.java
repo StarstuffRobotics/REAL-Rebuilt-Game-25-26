@@ -73,9 +73,25 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Good for debugging! Check this on the dashboard to see if the robot knows its angle
-        SmartDashboard.putNumber("Gyro Heading", getHeading().getDegrees());
-    }
+    // Gyro Heading
+    SmartDashboard.putNumber("Gyro/Heading", getHeading().getDegrees());
+
+    // Front Left Diagnostic
+    SmartDashboard.putNumber("Swerve/FL/Abs Angle (Rad)", frontLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("Swerve/FL/Rel Angle (Rad)", frontLeft.getRelativePosition());
+
+    // Front Right Diagnostic
+    SmartDashboard.putNumber("Swerve/FR/Abs Angle (Rad)", frontRight.getAbsolutePosition());
+    SmartDashboard.putNumber("Swerve/FR/Rel Angle (Rad)", frontRight.getRelativePosition());
+
+    // Back Left Diagnostic
+    SmartDashboard.putNumber("Swerve/BL/Abs Angle (Rad)", backLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("Swerve/BL/Rel Angle (Rad)", backLeft.getRelativePosition());
+
+    // Back Right Diagnostic
+    SmartDashboard.putNumber("Swerve/BR/Abs Angle (Rad)", backRight.getAbsolutePosition());
+    SmartDashboard.putNumber("Swerve/BR/Rel Angle (Rad)", backRight.getRelativePosition());
+}
 
     /**
      * Returns the heading of the robot.
@@ -89,4 +105,5 @@ public class DriveSubsystem extends SubsystemBase {
     public void zeroHeading() {
         navx.reset();
     }
+    
 }
