@@ -22,6 +22,7 @@ public class SwerveModule {
 
     private final CANcoder absoluteEncoder;
 
+    @SuppressWarnings("removal")
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
@@ -72,8 +73,10 @@ public class SwerveModule {
         return Rotation2d.fromRadians(angleEncoder.getPosition());
     }
 
+    @SuppressWarnings("removal")
     public void setState(SwerveModuleState state) {
         // Optimize the state
+        @SuppressWarnings("deprecation")
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
         
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
