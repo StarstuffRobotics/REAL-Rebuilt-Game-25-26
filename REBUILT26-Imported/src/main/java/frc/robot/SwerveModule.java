@@ -10,25 +10,22 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-// Import CTRE Phoenix 6 for CANcoder
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+
 
 public class SwerveModule {
     private final SparkFlex driveMotor;
     private final SparkFlex angleMotor;
     private final RelativeEncoder angleEncoder;
     private final SparkClosedLoopController anglePID;
-    
-    // New: The Absolute Encoder
+
     private final CANcoder absoluteEncoder;
 
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
 
-        // Initialize CANcoder
         absoluteEncoder = new CANcoder(canCoderID);
         configureCANcoder(angleOffset);
 
@@ -39,36 +36,38 @@ public class SwerveModule {
         SparkFlexConfig angleConfig = new SparkFlexConfig();
         angleConfig.closedLoop.pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD);
         
-        // Wrap the PID input so the motor knows 2*PI is the same as 0
         angleConfig.closedLoop.positionWrappingEnabled(true);
-        angleConfig.closedLoop.positionWrappingInputRange(0, 2 * Math.PI);
+        angleConfig.closedLoop.positionWrappingInputRange(0,2 * Math.PI);
 
-        // Conversion factor: 1 motor rotation = (2 * PI / gear ratio) radians
-        // SDS MK4i is usually 150/7:1 or 12.8:1. Double check your specific ratio!
-        double gearRatio = 12.8; 
+        // Conversion factor: Set this so 1 rotation = 2 * PI radians
+        // This accounts for the steering gear ratio (12.8:1 in this example)
+        double gearRatio = 12.8;
         angleConfig.encoder.positionConversionFactor(2 * Math.PI / gearRatio); 
 
-        // --- Apply Configs ---
-        angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        driveMotor.configure(new SparkFlexConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        // --- Configure Drive Motor ---
+        SparkFlexConfig driveConfig = new SparkFlexConfig();
+        // You can add current limits here if needed: driveConfig.smartCurrentLimit(40);
 
-        // --- SEED THE ENCODER ---
-        // This makes the Spark Flex internal encoder match the physical wheel position
+        // --- Apply Configs (Updated for 2026) ---
+        // We use kNoPersistParameters to avoid the deprecation warning
+        angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
         resetToAbsolute();
     }
 
-    private void configureCANcoder(double offset) {
+    private void configureCANcoder(double offset){
         var config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         absoluteEncoder.getConfigurator().apply(config);
     }
 
-    public void resetToAbsolute() {
-        // Get absolute position in rotations and convert to radians
+    private void resetToAbsolute(){
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
         angleEncoder.setPosition(absolutePosition);
     }
 
+    /** Returns the current heading of the module */
     public Rotation2d getAngle() {
         return Rotation2d.fromRadians(angleEncoder.getPosition());
     }
