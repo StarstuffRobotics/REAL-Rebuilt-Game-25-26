@@ -11,59 +11,73 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+// Import CTRE Phoenix 6 for CANcoder
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+
 public class SwerveModule {
     private final SparkFlex driveMotor;
     private final SparkFlex angleMotor;
     private final RelativeEncoder angleEncoder;
     private final SparkClosedLoopController anglePID;
+    
+    // New: The Absolute Encoder
+    private final CANcoder absoluteEncoder;
 
-    public SwerveModule(int driveID, int angleID) {
+    public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
+
+        // Initialize CANcoder
+        absoluteEncoder = new CANcoder(canCoderID);
+        configureCANcoder(angleOffset);
 
         angleEncoder = angleMotor.getEncoder();
         anglePID = angleMotor.getClosedLoopController();
 
         // --- Configure Angle Motor ---
         SparkFlexConfig angleConfig = new SparkFlexConfig();
-        
-        // Set PID values from your Constants file
         angleConfig.closedLoop.pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD);
         
-        // Conversion factor: Set this so 1 rotation = 2 * PI radians
-        // This accounts for the steering gear ratio (12.8:1 in this example)
-        angleConfig.encoder.positionConversionFactor(2 * Math.PI / 12.8); 
+        // Wrap the PID input so the motor knows 2*PI is the same as 0
+        angleConfig.closedLoop.positionWrappingEnabled(true);
+        angleConfig.closedLoop.positionWrappingInputRange(0, 2 * Math.PI);
 
-        // --- Configure Drive Motor ---
-        SparkFlexConfig driveConfig = new SparkFlexConfig();
-        // You can add current limits here if needed: driveConfig.smartCurrentLimit(40);
+        // Conversion factor: 1 motor rotation = (2 * PI / gear ratio) radians
+        // SDS MK4i is usually 150/7:1 or 12.8:1. Double check your specific ratio!
+        double gearRatio = 12.8; 
+        angleConfig.encoder.positionConversionFactor(2 * Math.PI / gearRatio); 
 
-        // --- Apply Configs (Updated for 2026) ---
-        // We use kNoPersistParameters to avoid the deprecation warning
+        // --- Apply Configs ---
         angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        driveMotor.configure(new SparkFlexConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+        // --- SEED THE ENCODER ---
+        // This makes the Spark Flex internal encoder match the physical wheel position
+        resetToAbsolute();
     }
 
-    /** Returns the current heading of the module */
+    private void configureCANcoder(double offset) {
+        var config = new CANcoderConfiguration();
+        config.MagnetSensor.MagnetOffset = offset;
+        absoluteEncoder.getConfigurator().apply(config);
+    }
+
+    public void resetToAbsolute() {
+        // Get absolute position in rotations and convert to radians
+        double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+        angleEncoder.setPosition(absolutePosition);
+    }
+
     public Rotation2d getAngle() {
         return Rotation2d.fromRadians(angleEncoder.getPosition());
     }
 
-    /** Sets the desired state (speed and angle) for the module */
     public void setState(SwerveModuleState state) {
-        // Prevent wheel "jitter" when the robot is nearly still
-        if (Math.abs(state.speedMetersPerSecond) < 0.01) {
-            driveMotor.set(0);
-            return;
-        }
-
-        // Optimize the state to prevent the wheel from spinning more than 90 degrees
+        // Optimize the state
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
         
-        // Drive speed is normalized (value between -1.0 and 1.0)
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
-        
-        // Set the steering position using the Spark closed-loop controller
         anglePID.setReference(optimized.angle.getRadians(), ControlType.kPosition);
     }
 }

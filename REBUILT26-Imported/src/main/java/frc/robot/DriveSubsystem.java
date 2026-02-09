@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
     // Initialize your four modules using the IDs from Constants
-    private final SwerveModule frontLeft = new SwerveModule(Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID);
-    private final SwerveModule frontRight = new SwerveModule(Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID);
-    private final SwerveModule backLeft = new SwerveModule(Constants.Swerve.BL_DRIVE_ID, Constants.Swerve.BL_ANGLE_ID);
-    private final SwerveModule backRight = new SwerveModule(Constants.Swerve.BR_DRIVE_ID, Constants.Swerve.BR_ANGLE_ID);
+    private final SwerveModule frontLeft = new SwerveModule(Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID, 0, 0);
+    private final SwerveModule frontRight = new SwerveModule(Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID, 0, 0);
+    private final SwerveModule backLeft = new SwerveModule(Constants.Swerve.BL_DRIVE_ID, Constants.Swerve.BL_ANGLE_ID, 0, 0);
+    private final SwerveModule backRight = new SwerveModule(Constants.Swerve.BR_DRIVE_ID, Constants.Swerve.BR_ANGLE_ID, 0, 0);
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         ChassisSpeeds speeds;
