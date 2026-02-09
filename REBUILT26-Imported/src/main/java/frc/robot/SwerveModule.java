@@ -13,72 +13,68 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
-
 public class SwerveModule {
     private final SparkFlex driveMotor;
     private final SparkFlex angleMotor;
     private final RelativeEncoder angleEncoder;
+    @SuppressWarnings("unused")
+    private final RelativeEncoder driveEncoder;
     private final SparkClosedLoopController anglePID;
-
     private final CANcoder absoluteEncoder;
 
-    @SuppressWarnings("removal")
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
-
+        
         absoluteEncoder = new CANcoder(canCoderID);
         configureCANcoder(angleOffset);
 
         angleEncoder = angleMotor.getEncoder();
+        driveEncoder = driveMotor.getEncoder();
         anglePID = angleMotor.getClosedLoopController();
 
         // --- Configure Angle Motor ---
         SparkFlexConfig angleConfig = new SparkFlexConfig();
         angleConfig.closedLoop.pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD);
-        
         angleConfig.closedLoop.positionWrappingEnabled(true);
-        angleConfig.closedLoop.positionWrappingInputRange(0,2 * Math.PI);
-
-        // Conversion factor: Set this so 1 rotation = 2 * PI radians
-        // This accounts for the steering gear ratio (12.8:1 in this example)
-        double gearRatio = 12.8;
-        angleConfig.encoder.positionConversionFactor(2 * Math.PI / gearRatio); 
+        angleConfig.closedLoop.positionWrappingInputRange(0, 2 * Math.PI);
+        
+        angleConfig.encoder.positionConversionFactor(Constants.Swerve.STEER_ROTATIONS_TO_RADIANS);
+        angleConfig.inverted(true); // MAXSwerve steering is typically inverted
 
         // --- Configure Drive Motor ---
         SparkFlexConfig driveConfig = new SparkFlexConfig();
-        // You can add current limits here if needed: driveConfig.smartCurrentLimit(40);
+        driveConfig.encoder.positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS);
+        driveConfig.encoder.velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
+        driveConfig.inverted(false); // Change to true if robot drives backward
 
-        // --- Apply Configs (Updated for 2026) ---
-        // We use kNoPersistParameters to avoid the deprecation warning
+        // --- Apply Configs ---
         angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
         resetToAbsolute();
     }
 
-    private void configureCANcoder(double offset){
+    private void configureCANcoder(double offset) {
         var config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         absoluteEncoder.getConfigurator().apply(config);
     }
 
-    private void resetToAbsolute(){
+    public void resetToAbsolute() {
+        // CANcoder returns 0 to 1 rotations. Convert to 0 to 2PI radians.
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
         angleEncoder.setPosition(absolutePosition);
     }
 
-    /** Returns the current heading of the module */
     public Rotation2d getAngle() {
         return Rotation2d.fromRadians(angleEncoder.getPosition());
     }
 
-    @SuppressWarnings("removal")
     public void setState(SwerveModuleState state) {
-        // Optimize the state
-        @SuppressWarnings("deprecation")
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
         
+        // Use setReference for the drive motor to use the internal PID or just set percentage
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
         anglePID.setReference(optimized.angle.getRadians(), ControlType.kPosition);
     }

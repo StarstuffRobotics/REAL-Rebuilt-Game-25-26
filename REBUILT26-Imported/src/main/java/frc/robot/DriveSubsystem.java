@@ -1,6 +1,6 @@
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
+import com.studica.frc.AHRS; // Updated for 2026 Studica Library
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -9,8 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-    // Hardware: Four Modules
-    // We now pass the ACTUAL constants instead of placeholders (0, 0)
+    // --- Swerve Modules ---
     private final SwerveModule frontLeft = new SwerveModule(
         Constants.Swerve.FL_DRIVE_ID, 
         Constants.Swerve.FL_ANGLE_ID, 
@@ -35,52 +34,59 @@ public class DriveSubsystem extends SubsystemBase {
         Constants.Swerve.BR_CANCODER_ID, 
         Constants.Swerve.BR_OFFSET);
 
-    // Gyroscope (Pigeon 2.0 is standard for many swerve builds)
-    // Change the ID if your gyro is different!
-    private final Pigeon2 gyro = new Pigeon2(1);
+    // --- navX2 Gyro ---
+    // In 2026, we specify NavXComType.kMXP_SPI for the MXP port connection
+    private final AHRS navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
 
     public DriveSubsystem() {
-        // Optional: Reset gyro on startup
-        zeroHeading();
-    }
-
-    @Override
-    public void periodic() {
-        // Log telemetry to SmartDashboard so you can see if the code is alive
-        SmartDashboard.putNumber("Robot Heading", getHeading().getDegrees());
+        // We wait a second and then zero the gyro to ensure it's calibrated
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                zeroHeading();
+            } catch (Exception e) {}
+        }).start();
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         ChassisSpeeds speeds;
         
         if (fieldRelative) {
-            // Converts joystick inputs relative to the field using gyro feedback
+            // Now using the real gyro heading instead of new Rotation2d(0)
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading());
         } else {
-            // Standard robot-centric driving
             speeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
         }
 
-        // Calculate module states
+        // Convert speeds to module states
         SwerveModuleState[] states = Constants.Swerve.KINEMATICS.toSwerveModuleStates(speeds);
         
-        // Prevents the robot from trying to drive faster than physically possible
+        // Prevent motors from trying to exceed physical limits
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.MAX_SPEED);
 
-        // Send states to modules
+        // Apply states to modules
         frontLeft.setState(states[0]);
         frontRight.setState(states[1]);
         backLeft.setState(states[2]);
         backRight.setState(states[3]);
     }
 
-    /** Returns the current rotation of the robot from the gyro */
-    public Rotation2d getHeading() {
-        return gyro.getRotation2d();
+    @Override
+    public void periodic() {
+        // Good for debugging! Check this on the dashboard to see if the robot knows its angle
+        SmartDashboard.putNumber("Gyro Heading", getHeading().getDegrees());
     }
 
-    /** Resets the gyro to 0. Call this when the robot is facing away from the driver. */
+    /**
+     * Returns the heading of the robot.
+     * WPILib expects Counter-Clockwise (CCW) to be positive.
+     */
+    public Rotation2d getHeading() {
+        // navX is CW positive, so we negate it based on the constant setting
+        return Rotation2d.fromDegrees(Constants.Swerve.INVERT_GYRO ? -navx.getAngle() : navx.getAngle());
+    }
+
     public void zeroHeading() {
-        gyro.reset();
+        navx.reset();
     }
 }
