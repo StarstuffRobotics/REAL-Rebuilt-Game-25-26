@@ -11,15 +11,23 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+
 public class SwerveModule {
     private final SparkFlex driveMotor;
     private final SparkFlex angleMotor;
     private final RelativeEncoder angleEncoder;
     private final SparkClosedLoopController anglePID;
 
-    public SwerveModule(int driveID, int angleID) {
+    private final CANcoder absoluteEncoder;
+
+    public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
+
+        absoluteEncoder = new CANcoder(canCoderID);
+        configureCANcoder(angleOffset);
 
         angleEncoder = angleMotor.getEncoder();
         anglePID = angleMotor.getClosedLoopController();
@@ -30,9 +38,16 @@ public class SwerveModule {
         // Set PID values from your Constants file
         angleConfig.closedLoop.pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD);
         
+        
+        angleConfig.closedLoop.positionWrappingEnabled(true);
+        angleConfig.closedLoop.positionWrappingInputRange(0,2 * Math.PI);
+        
+
         // Conversion factor: Set this so 1 rotation = 2 * PI radians
         // This accounts for the steering gear ratio (12.8:1 in this example)
-        angleConfig.encoder.positionConversionFactor(2 * Math.PI / 12.8); 
+        double gearRatio = 12.8;
+        angleConfig.encoder.positionConversionFactor(2 * Math.PI / gearRatio); 
+        
 
         // --- Configure Drive Motor ---
         SparkFlexConfig driveConfig = new SparkFlexConfig();
@@ -42,7 +57,22 @@ public class SwerveModule {
         // We use kNoPersistParameters to avoid the deprecation warning
         angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+
+        resetToAbsolute();
     }
+
+    private void configureCANcoder(double offset) {
+        var config = new CANcoderConfiguration();
+        config.MagnetSensor.MagnetOffset = offset;
+        absoluteEncoder.getConfigurator().apply(config);
+    }
+
+    public void resetToAbsolute() {
+        double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+        angleEncoder.setPosition(absolutePosition);
+    }
+
+
 
     /** Returns the current heading of the module */
     public Rotation2d getAngle() {
