@@ -7,21 +7,21 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
     public static final class DriveConstants {
         // --- CAN IDs (Update these) ---
-        public static final int kFrontLeftDriveId = 10;
-        public static final int kFrontLeftSteerId = 14;
-        public static final int kFrontLeftEncoderId = 11;
+        public static final int kFrontLeftDriveId = 11;
+        public static final int kFrontLeftSteerId = 15;
+        public static final int kFrontLeftEncoderId = 12;////////ask
 
-        public static final int kFrontRightDriveId = 7;
-        public static final int kFrontRightSteerId = 8;
-        public static final int kFrontRightEncoderId = 12;
+        public static final int kFrontRightDriveId = 8;
+        public static final int kFrontRightSteerId = 9;
+        public static final int kFrontRightEncoderId = 10;
 
-        public static final int kBackLeftDriveId = 1;
-        public static final int kBackLeftSteerId = 2;
-        public static final int kBackLeftEncoderId = 13;
+        public static final int kBackLeftDriveId = 2;
+        public static final int kBackLeftSteerId = 3;
+        public static final int kBackLeftEncoderId = 4;
 
-        public static final int kBackRightDriveId = 4;
-        public static final int kBackRightSteerId = 5;
-        public static final int kBackRightEncoderId = 14;
+        public static final int kBackRightDriveId = 5;
+        public static final int kBackRightSteerId = 6;
+        public static final int kBackRightEncoderId = 7;
 
         // --- Offsets in Rotations (0 to 1) ---
         public static final double kFrontLeftOffset = 0.0;
