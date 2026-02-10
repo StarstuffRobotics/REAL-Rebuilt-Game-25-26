@@ -8,7 +8,6 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkFlexConfig;
-// Problematic FeedbackSensor import removed
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -33,13 +32,7 @@ public class SwerveModule {
         angleEncoder = angleMotor.getEncoder();
         anglePID = angleMotor.getClosedLoopController();
 
-        // Steering Config
         SparkFlexConfig angleConfig = new SparkFlexConfig();
-        
-        /* * FIX: We've removed the enum call that was causing the red lines. 
-         * By not calling .feedbackSensor(), the Spark Flex defaults to the 
-         * Primary Encoder (which is exactly what we want).
-         */
         angleConfig.closedLoop
             .pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD)
             .positionWrappingEnabled(true)
@@ -49,18 +42,17 @@ public class SwerveModule {
         angleConfig.inverted(steeringInverted); 
         angleConfig.smartCurrentLimit(40);
 
-        // Drive Config
         SparkFlexConfig driveConfig = new SparkFlexConfig();
-        driveConfig.encoder
-            .positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS)
-            .velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
+        driveConfig.encoder.positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS);
+        driveConfig.encoder.velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
         driveConfig.inverted(false);
         driveConfig.smartCurrentLimit(60);
 
-        // Apply and Persist
         angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+        // Give the CANcoder a moment to broadcast before syncing
+        try { Thread.sleep(50); } catch (Exception e) {}
         resetToAbsolute();
     }
 
@@ -73,17 +65,14 @@ public class SwerveModule {
         return Rotation2d.fromRadians(angleEncoder.getPosition());
     }
 
-    public double getAbsolutePosition() {
-        return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
-    }
-
-    public double getRelativePosition() {
-        return angleEncoder.getPosition();
-    }
-
     public void setState(SwerveModuleState state) {
+        // Optimization is vital; if it's off, the motor might think it's 180 degrees away and do nothing
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
+        
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
         anglePID.setReference(optimized.angle.getRadians(), ControlType.kPosition);
     }
+
+    public double getRelativePosition() { return angleEncoder.getPosition(); }
+    public double getAbsolutePosition() { return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; }
 }

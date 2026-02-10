@@ -15,14 +15,11 @@ public class DriveCommand extends Command {
         this.y = y;
         this.rot = rot;
         this.isFieldRelative = isFieldRelative;
-        
-        // This tells the robot that no other command can use the drive base while this is running
         addRequirements(drive);
     }
 
     @Override
     public void execute() {
-        // Send the real-time joystick values to the subsystem
         drive.drive(
             x.getAsDouble() * Constants.Swerve.MAX_SPEED,
             y.getAsDouble() * Constants.Swerve.MAX_SPEED,
