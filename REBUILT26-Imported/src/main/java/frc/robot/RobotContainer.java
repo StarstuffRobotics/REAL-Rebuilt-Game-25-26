@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OI;
+import frc.robot.Constants.Swerve;
+
 
 public class RobotContainer {
     // 1. Subsystems
@@ -21,28 +23,16 @@ public class RobotContainer {
         // Configure the default command for drive (runs automatically)
         // Note: We invert the Y and X because Xbox controllers return negative for "Up"
         m_drive.setDefaultCommand(
-            new DriveCommand(
-                m_drive,
-                () -> -modifyAxis(m_controller.getLeftY()),   // Forward/Backward
-                () -> -modifyAxis(m_controller.getLeftX()),   // Left/Right strafe
-                () -> -modifyAxis(m_controller.getRightX()),  // Rotation
-                () -> fieldCentric
-            )
-        );
+    new DriveCommand(
+        m_drive,
+        () -> -modifyAxis(m_controller.getLeftY()), // This MUST be X (Forward/Back)
+        () -> -modifyAxis(m_controller.getLeftX()), // This MUST be Y (Left/Right)
+        () -> -modifyAxis(m_controller.getRightX()),// This MUST be Rotation
+        () -> fieldCentric
+    )
+);
 
         configureBindings();
-    }
-
-    private void configureBindings() {
-        // Toggle Field Centric mode when 'A' is pressed
-        m_controller.a().onTrue(new InstantCommand(() -> {
-            fieldCentric = !fieldCentric;
-            SmartDashboard.putBoolean("Field Centric Enabled", fieldCentric);
-        }));
-
-        // Reset Gyro when 'Start' button is pressed
-        // (Useful if the robot's "Forward" gets drifted)
-        m_controller.start().onTrue(m_drive.runOnce(m_drive::zeroHeading));
     }
 
     /**
@@ -50,14 +40,6 @@ public class RobotContainer {
      * @param value Raw joystick input
      * @return Processed input
      */
-    private double modifyAxis(double value) {
-        // Deadband
-        if (Math.abs(value) < OI.DEADBAND) return 0;
-
-        // Square the input (value^2) to make fine movements easier
-        // Math.copySign ensures that -0.5 becomes -0.25 instead of +0.25
-        return Math.copySign(value * value, value);
-    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -67,5 +49,17 @@ public class RobotContainer {
         // When you're ready for auto, you can return a command here like:
         // return new PathPlannerCommand(...);
         return null;
+    }
+    private void configureBindings() {
+        m_controller.a().onTrue(new InstantCommand(() -> {
+            fieldCentric = !fieldCentric;
+            SmartDashboard.putBoolean("Field Centric Enabled", fieldCentric);
+        }));
+        m_controller.start().onTrue(m_drive.runOnce(m_drive::zeroHeading));
+    }
+
+    private double modifyAxis(double value) {
+        if (Math.abs(value) < OI.DEADBAND) return 0;
+        return Math.copySign(value * value, value);
     }
 }
