@@ -6,9 +6,6 @@ import edu.wpi.first.math.util.Units;
 
 public final class Constants {
     public static final class Swerve {
-        // Inside Constants.java -> Swerve class
-public static final double SLOW_SPEED_FACTOR = 0.2; // 20% of max speed
-public static final double SLOW_ROTATION_FACTOR = 0.6; // 60% of max rotation
         // --- CAN IDs ---
         public static final int FL_DRIVE_ID = 11;
         public static final int FL_ANGLE_ID = 15;
@@ -23,7 +20,7 @@ public static final double SLOW_ROTATION_FACTOR = 0.6; // 60% of max rotation
         public static final int BL_DRIVE_ID = 2;
         public static final int BL_ANGLE_ID = 3;
         public static final int BL_CANCODER_ID = 4;
-        public static final double BL_OFFSET = 0.470;
+        public static final double BL_OFFSET = -0.470;
         
         public static final int BR_DRIVE_ID = 5;
         public static final int BR_ANGLE_ID = 6;
