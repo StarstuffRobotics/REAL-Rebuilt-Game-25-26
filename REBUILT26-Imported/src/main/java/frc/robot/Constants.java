@@ -20,7 +20,7 @@ public final class Constants {
         public static final int BL_DRIVE_ID = 2;
         public static final int BL_ANGLE_ID = 3;
         public static final int BL_CANCODER_ID = 4;
-        public static final double BL_OFFSET = 0.470; // Fixed typo from 0.0470
+        public static final double BL_OFFSET = 0.0470; // Fixed typo from 0.0470
         
         public static final int BR_DRIVE_ID = 5;
         public static final int BR_ANGLE_ID = 6;

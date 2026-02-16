@@ -5,23 +5,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OI;
-import frc.robot.Constants.Swerve;
-
 
 public class RobotContainer {
-    // 1. Subsystems
     private final DriveSubsystem m_drive = new DriveSubsystem();
-
-    // 2. Controllers
     private final CommandXboxController m_controller = 
-        new CommandXboxController(OI.DRIVER_CONTROLLER_PORT);
+        new CommandXboxController(Constants.OI.DRIVER_CONTROLLER_PORT);
 
-    // 3. State Variables
     private boolean fieldCentric = true;
 
     public RobotContainer() {
-        // Configure the default command for drive (runs automatically)
-        // Note: We invert the Y and X because Xbox controllers return negative for "Up"
         m_drive.setDefaultCommand(
             new DriveCommand(
                 m_drive,
@@ -36,27 +28,14 @@ public class RobotContainer {
         configureBindings();
     }
 
-    /**
-     * Applies a deadband and squares the input for smoother control.
-     * @param value Raw joystick input
-     * @return Processed input
-     */
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     * Currently returns null (no autonomous).
-     */
-    public Command getAutonomousCommand() {
-        // When you're ready for auto, you can return a command here like:
-        // return new PathPlannerCommand(...);
-        return null;
-    }
     private void configureBindings() {
         m_controller.a().onTrue(new InstantCommand(() -> {
             fieldCentric = !fieldCentric;
             SmartDashboard.putBoolean("Field Centric Enabled", fieldCentric);
         }));
-        m_controller.start().onTrue(m_drive.runOnce(m_drive::zeroHeading));
+
+        // Reset Heading
+        m_controller.start().onTrue(new InstantCommand(m_drive::zeroHeading, m_drive));
     }
 
     public double modifyAxis(double value) {
@@ -70,5 +49,13 @@ public class RobotContainer {
 
     public double getDriveTurn(){
         return m_controller.getRightX();
+    }
+
+    public Command getAutonomousCommand() {
+
+        // Replace with the actual autonomous command
+
+        return null; // Return your autonomous command here
+
     }
 }
