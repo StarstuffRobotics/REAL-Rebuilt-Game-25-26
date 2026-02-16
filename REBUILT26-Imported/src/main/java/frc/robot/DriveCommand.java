@@ -26,9 +26,9 @@ public class DriveCommand extends Command {
     @Override
     public void execute() {
         // Send the real-time joystick values to the subsystem
-        double modifiedX = robotContainer.modifyAxis(x.getAsDouble());
-        double modifiedY = robotContainer.modifyAxis(y.getAsDouble());
-        double modifiedRot = robotContainer.modifyAxis(rot.getAsDouble());
+        double modifiedX = x.getAsDouble();
+        double modifiedY = y.getAsDouble();
+        double modifiedRot = rot.getAsDouble();
 
         drive.drive(
             modifiedX * Constants.Swerve.MAX_SPEED,

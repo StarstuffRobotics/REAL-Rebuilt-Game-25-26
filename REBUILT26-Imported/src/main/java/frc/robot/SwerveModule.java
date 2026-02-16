@@ -66,11 +66,17 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
-        // Optimization is vital; if it's off, the motor might think it's 180 degrees away and do nothing
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
         
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
-        anglePID.setReference(optimized.angle.getRadians(), ControlType.kPosition);
+
+        // Convert -PI to PI range into 0 to 2PI range to match your config
+        double angleToSet = optimized.angle.getRadians();
+        if (angleToSet < 0) {
+            angleToSet += 2 * Math.PI;
+        }
+
+        anglePID.setReference(angleToSet, ControlType.kPosition);
     }
 
     public double getRelativePosition() { return angleEncoder.getPosition(); }

@@ -39,8 +39,12 @@ public class RobotContainer {
     }
 
     public double modifyAxis(double value) {
+        // Deadband is still good to keep drift away
         if (Math.abs(value) < OI.DEADBAND) return 0;
-        return Math.copySign(value * value, value);
+        
+        // Remove the squaring line: return Math.copySign(value * value, value);
+        // Return raw linear value instead:
+        return value;
     }
 
     public double getDriveForward(){
