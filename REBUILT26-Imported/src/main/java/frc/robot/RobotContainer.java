@@ -23,14 +23,15 @@ public class RobotContainer {
         // Configure the default command for drive (runs automatically)
         // Note: We invert the Y and X because Xbox controllers return negative for "Up"
         m_drive.setDefaultCommand(
-    new DriveCommand(
-        m_drive,
-        () -> -modifyAxis(m_controller.getLeftY()), // This MUST be X (Forward/Back)
-        () -> -modifyAxis(m_controller.getLeftX()), // This MUST be Y (Left/Right)
-        () -> -modifyAxis(m_controller.getRightX()),// This MUST be Rotation
-        () -> fieldCentric
-    )
-);
+            new DriveCommand(
+                m_drive,
+                () -> -modifyAxis(m_controller.getLeftY()), // This MUST be X (Forward/Back)
+                () -> -modifyAxis(m_controller.getLeftX()), // This MUST be Y (Left/Right)
+                () -> -modifyAxis(m_controller.getRightX()),// This MUST be Rotation
+                () -> fieldCentric,
+                this
+            )
+        );
 
         configureBindings();
     }
@@ -58,8 +59,16 @@ public class RobotContainer {
         m_controller.start().onTrue(m_drive.runOnce(m_drive::zeroHeading));
     }
 
-    private double modifyAxis(double value) {
+    public double modifyAxis(double value) {
         if (Math.abs(value) < OI.DEADBAND) return 0;
         return Math.copySign(value * value, value);
+    }
+
+    public double getDriveForward(){
+        return m_controller.getLeftY();
+    }
+
+    public double getDriveTurn(){
+        return m_controller.getRightX();
     }
 }
