@@ -9,7 +9,9 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
@@ -55,6 +57,22 @@ public class SwerveModule {
         try { Thread.sleep(50); } catch (Exception e) {}
         resetToAbsolute();
     }
+   
+   //Not sure this this is the right fix, need to test it.
+
+    public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
+        driveMotor = new SparkFlex(drivingCanId, MotorType.kBrushless);
+        angleMotor = new SparkFlex(turningCanId, MotorType.kBrushless);
+        absoluteEncoder = new CANcoder(drivingCanId); // Initialize absoluteEncoder
+
+        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+        canCoderConfig.MagnetSensor.MagnetOffset = chassisAngularOffset;
+        absoluteEncoder.getConfigurator().apply(canCoderConfig);
+
+        angleEncoder = angleMotor.getEncoder(); // Initialize angleEncoder
+        anglePID = angleMotor.getClosedLoopController(); // Initialize anglePID
+    }
+
 
     public void resetToAbsolute() {
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
@@ -78,7 +96,29 @@ public class SwerveModule {
 
         anglePID.setReference(angleToSet, ControlType.kPosition);
     }
+    
+    public SwerveModuleState getState() {
+        double velocity = driveMotor.getEncoder().getVelocity();
+        Rotation2d angle = getAngle();
+        return new SwerveModuleState(velocity, angle);
+    }
 
+    public SwerveModulePosition getPosition() {
+
+        // Implement the logic to return the SwerveModulePosition
+
+        // Example:
+
+        return new SwerveModulePosition(getDriveDistance(), getAngle());
+
+    }
+
+    public double getDriveDistance() {
+        // Implement the logic to return the drive distance in meters
+        return driveMotor.getEncoder().getPosition();
+    }
+
+    
     public double getRelativePosition() { return angleEncoder.getPosition(); }
     public double getAbsolutePosition() { return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; }
 }
