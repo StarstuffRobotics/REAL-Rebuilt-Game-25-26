@@ -36,6 +36,6 @@ public class DriveCommand extends Command {
             modifiedY * Constants.Swerve.MAX_SPEED,
             modifiedRot * Constants.Swerve.MAX_ANGULAR_SPEED,
             isFieldRelative.getAsBoolean()
-        );
+            );
     }
 }
