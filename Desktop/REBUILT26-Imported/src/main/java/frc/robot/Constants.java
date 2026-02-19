@@ -34,12 +34,12 @@ public final class Constants {
 
     public static final int kFrontLeftDrivingCanId = 8;
     public static final int kRearLeftDrivingCanId = 11;
-    public static final int kFrontRightDrivingCanId = 4;
-    public static final int kRearRightDrivingCanId = 12;
+    public static final int kFrontRightDrivingCanId = 5;
+    public static final int kRearRightDrivingCanId = 2;
 
     public static final int kFrontLeftTurningCanId = 9;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kFrontRightTurningCanId = 5;
+    public static final int kRearLeftTurningCanId = 7;//need to change
+    public static final int kFrontRightTurningCanId = 6;
     public static final int kRearRightTurningCanId = 3;
 
 
