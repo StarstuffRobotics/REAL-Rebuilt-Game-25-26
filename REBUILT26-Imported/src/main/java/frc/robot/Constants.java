@@ -32,15 +32,15 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
 
-    public static final int kFrontLeftDrivingCanId = 8;
-    public static final int kRearLeftDrivingCanId = 11;
-    public static final int kFrontRightDrivingCanId = 4;
-    public static final int kRearRightDrivingCanId = 12;
+    // public static final int kFrontLeftDrivingCanId = 8;
+    // public static final int kRearLeftDrivingCanId = 11;
+    // public static final int kFrontRightDrivingCanId = 4;
+    // public static final int kRearRightDrivingCanId = 12;
 
-    public static final int kFrontLeftTurningCanId = 9;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kFrontRightTurningCanId = 5;
-    public static final int kRearRightTurningCanId = 3;
+    // public static final int kFrontLeftTurningCanId = 9;
+    // public static final int kRearLeftTurningCanId = 7;
+    // public static final int kFrontRightTurningCanId = 5;
+    // public static final int kRearRightTurningCanId = 3;
 
 
     // public static final int kFrontLeftDrivingCanId = 11;
@@ -73,22 +73,22 @@ public final class Constants {
         // --- CAN IDs ---
         public static final int FL_DRIVE_ID = 11;
         public static final int FL_ANGLE_ID = 15;
-        public static final int FL_CANCODER_ID = 12;
+        public static final int FL_CANCODER_ID = 10;
         public static final double FL_OFFSET = 0.065; 
         
         public static final int FR_DRIVE_ID = 8;
         public static final int FR_ANGLE_ID = 9;
-        public static final int FR_CANCODER_ID = 10;
+        public static final int FR_CANCODER_ID = 7;
         public static final double FR_OFFSET = 0.110;
 
         public static final int BL_DRIVE_ID = 2;
         public static final int BL_ANGLE_ID = 3;
-        public static final int BL_CANCODER_ID = 4;
+        public static final int BL_CANCODER_ID = 12;
         public static final double BL_OFFSET = 0.0470; // Fixed typo from 0.0470
         
         public static final int BR_DRIVE_ID = 5;
         public static final int BR_ANGLE_ID = 6;
-        public static final int BR_CANCODER_ID = 7;
+        public static final int BR_CANCODER_ID = 4;
         public static final double BR_OFFSET = -0.051;
 
         // --- Physical Constants ---
