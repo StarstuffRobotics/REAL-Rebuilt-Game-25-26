@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
+    /*
     // Initialize your four modules using the IDs from Constants
     private final SwerveModule frontLeft = new SwerveModule(Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID, Constants.Swerve.FL_CANCODER_ID, Constants.Swerve.FL_OFFSET, Constants.Swerve.FL_INVERTED);
     private final SwerveModule frontRight = new SwerveModule(Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID, Constants.Swerve.FR_CANCODER_ID, Constants.Swerve.FR_OFFSET, Constants.Swerve.FR_INVERTED);
@@ -38,4 +39,5 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Placeholder for gyro resetting
     public void zeroHeading() {}
+    */
 }
