@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax; // Import NeoMotorConstants
 
 public final class Constants {
   public static final class DriveConstants {
+    
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -29,29 +30,6 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
-    // SPARK MAX CAN IDs
-
-    // public static final int kFrontLeftDrivingCanId = 8;
-    // public static final int kRearLeftDrivingCanId = 11;
-    // public static final int kFrontRightDrivingCanId = 4;
-    // public static final int kRearRightDrivingCanId = 12;
-
-    // public static final int kFrontLeftTurningCanId = 9;
-    // public static final int kRearLeftTurningCanId = 7;
-    // public static final int kFrontRightTurningCanId = 5;
-    // public static final int kRearRightTurningCanId = 3;
-
-
-    // public static final int kFrontLeftDrivingCanId = 11;
-    // public static final int kRearLeftDrivingCanId = 13;
-    // public static final int kFrontRightDrivingCanId = 15;
-    // public static final int kRearRightDrivingCanId = 17;
-
-    // public static final int kFrontLeftTurningCanId = 10;
-    // public static final int kRearLeftTurningCanId = 12;
-    // public static final int kFrontRightTurningCanId = 14;
-    // public static final int kRearRightTurningCanId = 16;
 
     public static final boolean kGyroReversed = false;
   }  
@@ -75,21 +53,25 @@ public final class Constants {
         public static final int FL_ANGLE_ID = 9;
         public static final int FL_CANCODER_ID = 10;
         public static final double FL_OFFSET = 0.065; 
+        public static final boolean FL_INVERTED = false;
         
         public static final int FR_DRIVE_ID = 5;
         public static final int FR_ANGLE_ID = 6;
         public static final int FR_CANCODER_ID = 7;
         public static final double FR_OFFSET = 0.110;
+        public static final boolean FR_INVERTED = false;
 
         public static final int BL_DRIVE_ID = 11;
         public static final int BL_ANGLE_ID = 15;
         public static final int BL_CANCODER_ID = 12;
         public static final double BL_OFFSET = 0.0470; // Fixed typo from 0.0470
-        
+        public static final boolean BL_INVERTED = false;
+
         public static final int BR_DRIVE_ID = 2;
         public static final int BR_ANGLE_ID = 3;
         public static final int BR_CANCODER_ID = 4;
         public static final double BR_OFFSET = -0.051;
+        public static final boolean BR_INVERTED = false;
 
         // --- Physical Constants ---
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.0);

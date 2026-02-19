@@ -22,27 +22,27 @@ import frc.robot.Configs.DriveConstants;
 public class DriveSubsystem extends SubsystemBase {
     // Mirroring logic: Left and Right sides often need opposite steering inversions
     private final SwerveModule m_frontLeft = new SwerveModule(
-        DriveConstants.kFrontLeftDrivingCanId,
-        DriveConstants.kFrontLeftTurningCanId,
-        DriveConstants.kFrontLeftChassisAngularOffset
+        Swerve.FL_DRIVE_ID,
+        Swerve.FL_ANGLE_ID,
+        Swerve.FL_OFFSET
     );
 
     private final SwerveModule m_frontRight = new SwerveModule(
-        DriveConstants.kFrontRightDrivingCanId,
-        DriveConstants.kFrontRightTurningCanId,
-        DriveConstants.kFrontRightChassisAngularOffset
+        Swerve.FR_DRIVE_ID,
+        Swerve.FR_ANGLE_ID,
+        Swerve.FR_OFFSET
     );
 
     private final SwerveModule m_rearLeft = new SwerveModule(
-        DriveConstants.kRearLeftDrivingCanId,
-        DriveConstants.kRearLeftTurningCanId,
-        DriveConstants.kBackLeftChassisAngularOffset
+        Swerve.BL_DRIVE_ID,
+        Swerve.BL_ANGLE_ID,
+        Swerve.BL_OFFSET
     );
 
     private final SwerveModule m_rearRight = new SwerveModule(
-        DriveConstants.kRearRightDrivingCanId,
-        DriveConstants.kRearRightTurningCanId,
-        DriveConstants.kBackRightChassisAngularOffset
+        Swerve.BR_DRIVE_ID,
+        Swerve.BR_ANGLE_ID,
+        Swerve.BR_OFFSET
     );
 
     private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
