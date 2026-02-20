@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
-import frc.robot.FuelSim;
+//import frc.robot.FuelSim;
 import frc.robot.Constants.Dimensions; 
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
@@ -111,7 +111,7 @@ public class RobotContainer {
 
 
 
-
+/*
         private void configureFuelSim() {
             FuelSim instance = FuelSim.getInstance();
             instance.spawnStartingFuel();
@@ -145,6 +145,7 @@ public class RobotContainer {
                     .withName("Reset Fuel")
                     .ignoringDisable(true));
         }
+        */
     
         public ExtendedTranslation3d lanuchVel(LinearVelocity velocity, Angle angle) {
             // Convert the velocity and angle into a 3D velocity vector
@@ -173,6 +174,6 @@ public class RobotContainer {
             );
 
             ExtendedTranslation3d initialPosition = new ExtendedTranslation3d(robot.getTranslation());
-            FuelSim.getInstance().spawnFuel(initialPosition, lanuchVel(vel, angle));
+            //FuelSim.getInstance().spawnFuel(initialPosition, lanuchVel(vel, angle));
         }
 }

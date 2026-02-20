@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // We leave this empty because the CommandScheduler 
         // is handling our DefaultDrive command!
+        startCompetition();
     }
 
     @Override

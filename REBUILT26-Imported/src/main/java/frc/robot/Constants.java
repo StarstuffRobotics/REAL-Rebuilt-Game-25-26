@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import com.revrobotics.spark.SparkMax; // Import NeoMotorConstants
+import com.revrobotics.spark.SparkFlex; // Import NeoMotorConstants
 
 @SuppressWarnings("unused")
 public final class Constants {
