@@ -18,44 +18,31 @@ import frc.robot.Constants.Swerve;
 import frc.robot.*;
 import frc.robot.Configs.MAXSwerveModule; // Ensure this is the correct package for MAXSwerveModule
 import frc.robot.Configs.DriveConstants;
+import com.studica.frc.AHRS;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @SuppressWarnings("unused")
 public class DriveSubsystem extends SubsystemBase {
     // Mirroring logic: Left and Right sides often need opposite steering inversions
-    private final SwerveModule m_frontLeft = new SwerveModule(
-        Swerve.FL_DRIVE_ID,
-        Swerve.FL_ANGLE_ID,
-        Swerve.FL_CANCODER_ID,
-        Swerve.FL_OFFSET,
-        Swerve.FL_INVERTED
-    );
-
-    private final SwerveModule m_frontRight = new SwerveModule(
-        Swerve.FR_DRIVE_ID,
-        Swerve.FR_ANGLE_ID,
-        Swerve.FR_CANCODER_ID,
-        Swerve.FR_OFFSET,
-        Swerve.FR_INVERTED
-    );
-
-    private final SwerveModule m_rearLeft = new SwerveModule(
-        Swerve.BL_DRIVE_ID,
-        Swerve.BL_ANGLE_ID,
-        Swerve.BL_CANCODER_ID,
-        Swerve.BL_OFFSET,
-        Swerve.BL_INVERTED
-    );
-
-    private final SwerveModule m_rearRight = new SwerveModule(
-        Swerve.BR_DRIVE_ID,
-        Swerve.BR_ANGLE_ID,
-        Swerve.BR_CANCODER_ID,
-        Swerve.BR_OFFSET,
-        Swerve.BR_INVERTED
-    );
     
-    private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-    
+    private final SwerveModule frontLeft = new SwerveModule(
+        Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID, Constants.Swerve.FL_CANCODER_ID, Constants.Swerve.FL_OFFSET, true);
+
+    private final SwerveModule frontRight = new SwerveModule(
+        Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID, Constants.Swerve.FR_CANCODER_ID, Constants.Swerve.FR_OFFSET, false);
+
+    private final SwerveModule backLeft = new SwerveModule(
+        Constants.Swerve.BL_DRIVE_ID, Constants.Swerve.BL_ANGLE_ID, Constants.Swerve.BL_CANCODER_ID, Constants.Swerve.BL_OFFSET, true);
+
+    private final SwerveModule backRight = new SwerveModule(
+        Constants.Swerve.BR_DRIVE_ID, Constants.Swerve.BR_ANGLE_ID, Constants.Swerve.BR_CANCODER_ID, Constants.Swerve.BR_OFFSET, false);
+
+        
     private final AHRS navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
     
     private SwerveModuleState[] swerveModuleStates;
@@ -66,12 +53,12 @@ public class DriveSubsystem extends SubsystemBase {
     // Define the swerve drive odometry
     private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
         m_kinematics,
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(navx.getAngle()),
         new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
         }
     );
 
@@ -90,26 +77,26 @@ public class DriveSubsystem extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Swerve.MAX_SPEED);
         
         
-        m_frontLeft.setState(states[0]);
-        m_frontRight.setState(states[1]);
-        m_rearLeft.setState(states[2]);
-        m_rearRight.setState(states[3]);
+        frontLeft.setState(states[0]);
+        frontRight.setState(states[1]);
+        backLeft.setState(states[2]);
+        backRight.setState(states[3]);
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Gyro Heading", getHeading().getDegrees());
         // Track the relative vs absolute position to see if they are drifting
-        SmartDashboard.putNumber("Swerve/FR/Abs Angle", m_frontRight.getAbsolutePosition());
-        SmartDashboard.putNumber("Swerve/FR/Rel Angle", m_frontRight.getRelativePosition());
+        SmartDashboard.putNumber("Swerve/FR/Abs Angle", frontRight.getAbsolutePosition());
+        SmartDashboard.putNumber("Swerve/FR/Rel Angle", frontRight.getRelativePosition());
         
         m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(navx.getAngle()),
         new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
         });
     }
     
@@ -121,10 +108,10 @@ public class DriveSubsystem extends SubsystemBase {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(
             desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
-        m_frontLeft.setState(desiredStates[0]);
-        m_frontRight.setState(desiredStates[1]);
-        m_rearLeft.setState(desiredStates[2]);
-        m_rearRight.setState(desiredStates[3]);
+        frontLeft.setState(desiredStates[0]);
+        frontRight.setState(desiredStates[1]);
+        backLeft.setState(desiredStates[2]);
+        backRight.setState(desiredStates[3]);
     }
     
     
@@ -133,10 +120,10 @@ public class DriveSubsystem extends SubsystemBase {
     
     public SwerveModuleState[] getSwerveModuleStates() {
         return new SwerveModuleState[] {
-            m_frontLeft.getState(),
-            m_frontRight.getState(),
-            m_rearLeft.getState(),
-            m_rearRight.getState()
+            frontLeft.getState(),
+            frontRight.getState(),
+            backLeft.getState(),
+            backRight.getState()
         };
     }
 
@@ -153,7 +140,7 @@ public class DriveSubsystem extends SubsystemBase {
             robotSpeeds.vxMetersPerSecond,
             robotSpeeds.vyMetersPerSecond,
             robotSpeeds.omegaRadiansPerSecond,
-            Rotation2d.fromDegrees(m_gyro.getAngle())
+            Rotation2d.fromDegrees(navx.getAngle())
         );
     }
 

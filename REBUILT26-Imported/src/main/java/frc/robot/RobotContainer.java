@@ -35,23 +35,28 @@ import frc.robot.Constants.Dimensions;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.ExtendedTranslation3d;
+import frc.robot.Constants.Swerve;
 
 
 
-@SuppressWarnings("unused")
+
+
 public class RobotContainer {
     private final DriveSubsystem m_drive = new DriveSubsystem();
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final TurretSubsystem m_turret = new TurretSubsystem();
   private int fuelStored;
-
+    // 2. Controllers
     private final CommandXboxController m_controller = 
-        new CommandXboxController(Constants.OI.DRIVER_CONTROLLER_PORT);
+        new CommandXboxController(OI.DRIVER_CONTROLLER_PORT);
 
+    // 3. State Variables
     private boolean fieldCentric = true;
 
     public RobotContainer() {
+        // Configure the default command for drive (runs automatically)
+        // Note: We invert the Y and X because Xbox controllers return negative for "Up"
         m_drive.setDefaultCommand(
             new DriveCommand(
                 m_drive,
@@ -66,23 +71,32 @@ public class RobotContainer {
         configureBindings();
     }
 
+    /**
+     * Applies a deadband and squares the input for smoother control.
+     * @param value Raw joystick input
+     * @return Processed input
+     */
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     * Currently returns null (no autonomous).
+     */
+    public Command getAutonomousCommand() {
+        // When you're ready for auto, you can return a command here like:
+        // return new PathPlannerCommand(...);
+        return null;
+    }
     private void configureBindings() {
         m_controller.a().onTrue(new InstantCommand(() -> {
             fieldCentric = !fieldCentric;
             SmartDashboard.putBoolean("Field Centric Enabled", fieldCentric);
         }));
-
-        // Reset Heading
-        m_controller.start().onTrue(new InstantCommand(m_drive::zeroHeading, m_drive));
+        m_controller.start().onTrue(m_drive.runOnce(m_drive::zeroHeading));
     }
 
     public double modifyAxis(double value) {
-        // Deadband is still good to keep drift away
         if (Math.abs(value) < OI.DEADBAND) return 0;
-        
-        // Remove the squaring line: return Math.copySign(value * value, value);
-        // Return raw linear value instead:
-        return value;
+        return Math.copySign(value * value, value);
     }
 
     public double getDriveForward(){
@@ -91,14 +105,6 @@ public class RobotContainer {
 
     public double getDriveTurn(){
         return m_controller.getRightX();
-    }
-
-    public Command getAutonomousCommand() {
-
-        // Replace with the actual autonomous command
-
-        return null; // Return your autonomous command here
-
     }
 
 
