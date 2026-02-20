@@ -1,25 +1,42 @@
 package frc.robot;
 
+import com.studica.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-    /*
+    
     // Initialize your four modules using the IDs from Constants
-    private final SwerveModule frontLeft = new SwerveModule(Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID, Constants.Swerve.FL_CANCODER_ID, Constants.Swerve.FL_OFFSET, Constants.Swerve.FL_INVERTED);
-    private final SwerveModule frontRight = new SwerveModule(Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID, Constants.Swerve.FR_CANCODER_ID, Constants.Swerve.FR_OFFSET, Constants.Swerve.FR_INVERTED);
-    private final SwerveModule backLeft = new SwerveModule(Constants.Swerve.BL_DRIVE_ID, Constants.Swerve.BL_ANGLE_ID, Constants.Swerve.BL_CANCODER_ID, Constants.Swerve.BL_OFFSET, Constants.Swerve.BL_INVERTED);
-    private final SwerveModule backRight = new SwerveModule(Constants.Swerve.BR_DRIVE_ID, Constants.Swerve.BR_ANGLE_ID, Constants.Swerve.BR_CANCODER_ID, Constants.Swerve.BR_OFFSET, Constants.Swerve.BR_INVERTED);
+    private final SwerveModule frontLeft = new SwerveModule(
+        Constants.Swerve.FL_DRIVE_ID, Constants.Swerve.FL_ANGLE_ID, Constants.Swerve.FL_CANCODER_ID, Constants.Swerve.FL_OFFSET, true);
+
+    private final SwerveModule frontRight = new SwerveModule(
+        Constants.Swerve.FR_DRIVE_ID, Constants.Swerve.FR_ANGLE_ID, Constants.Swerve.FR_CANCODER_ID, Constants.Swerve.FR_OFFSET, false);
+
+    private final SwerveModule backLeft = new SwerveModule(
+        Constants.Swerve.BL_DRIVE_ID, Constants.Swerve.BL_ANGLE_ID, Constants.Swerve.BL_CANCODER_ID, Constants.Swerve.BL_OFFSET, true);
+
+    private final SwerveModule backRight = new SwerveModule(
+        Constants.Swerve.BR_DRIVE_ID, Constants.Swerve.BR_ANGLE_ID, Constants.Swerve.BR_CANCODER_ID, Constants.Swerve.BR_OFFSET, false);
+
+    private final AHRS navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
+
+    public DriveSubsystem() {
+        new Thread(() -> {
+            try { Thread.sleep(1000); zeroHeading(); } catch (Exception e) {}
+        }).start();
+    }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
         ChassisSpeeds speeds;
         
         if (fieldRelative) {
             // Using a new Rotation2d(0) as a placeholder since no gyro is connected yet
-            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(0));
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getHeading());
         } else {
             speeds = new ChassisSpeeds(xSpeed, ySpeed, rot);
         }
@@ -37,7 +54,18 @@ public class DriveSubsystem extends SubsystemBase {
         backRight.setState(states[3]);
     }
 
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Gyro Heading", getHeading().getDegrees());
+        // Track the relative vs absolute position to see if they are drifting
+        SmartDashboard.putNumber("Swerve/FR/Abs Angle", frontRight.getAbsolutePosition());
+        SmartDashboard.putNumber("Swerve/FR/Rel Angle", frontRight.getRelativePosition());
+    }
+    public Rotation2d getHeading() {
+        return Rotation2d.fromDegrees(Constants.Swerve.INVERT_GYRO ? -navx.getAngle() : navx.getAngle());
+    }
+    
     // Placeholder for gyro resetting
-    public void zeroHeading() {}
-    */
+    public void zeroHeading() { navx.reset(); }
+    
 }

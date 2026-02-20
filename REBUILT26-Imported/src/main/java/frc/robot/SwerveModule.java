@@ -60,7 +60,8 @@ public class SwerveModule {
    
    //Not sure this this is the right fix, need to test it.
 
-    public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
+   /* 
+   public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
         driveMotor = new SparkFlex(drivingCanId, MotorType.kBrushless);
         angleMotor = new SparkFlex(turningCanId, MotorType.kBrushless);
         absoluteEncoder = new CANcoder(drivingCanId); // Initialize absoluteEncoder
@@ -72,6 +73,7 @@ public class SwerveModule {
         angleEncoder = angleMotor.getEncoder(); // Initialize angleEncoder
         anglePID = angleMotor.getClosedLoopController(); // Initialize anglePID
     }
+        */
 
 
     public void resetToAbsolute() {
