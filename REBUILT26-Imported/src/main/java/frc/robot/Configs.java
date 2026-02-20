@@ -12,6 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.*;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.SwerveModule;
 
+@SuppressWarnings("unused")
 public final class Configs {
         
         public static final class DriveConstants {

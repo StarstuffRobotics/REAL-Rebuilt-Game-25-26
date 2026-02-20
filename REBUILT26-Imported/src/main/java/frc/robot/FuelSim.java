@@ -17,6 +17,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 // import org.littletonrobotics.junction.Logger;
 
+@SuppressWarnings("unused")
 public class FuelSim {
     private static final double PERIOD = 0.02; // sec
     private static int subticks = 5;

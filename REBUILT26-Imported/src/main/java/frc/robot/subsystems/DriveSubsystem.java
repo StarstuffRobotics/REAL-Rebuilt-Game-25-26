@@ -19,6 +19,7 @@ import frc.robot.*;
 import frc.robot.Configs.MAXSwerveModule; // Ensure this is the correct package for MAXSwerveModule
 import frc.robot.Configs.DriveConstants;
 
+@SuppressWarnings("unused")
 public class DriveSubsystem extends SubsystemBase {
     // Mirroring logic: Left and Right sides often need opposite steering inversions
     private final SwerveModule m_frontLeft = new SwerveModule(
