@@ -25,25 +25,33 @@ public class DriveSubsystem extends SubsystemBase {
     private final SwerveModule m_frontLeft = new SwerveModule(
         Swerve.FL_DRIVE_ID,
         Swerve.FL_ANGLE_ID,
-        Swerve.FL_CANCODER_ID
+        Swerve.FL_CANCODER_ID,
+        Swerve.FL_OFFSET,
+        false//test, then change if needed
     );
 
     private final SwerveModule m_frontRight = new SwerveModule(
         Swerve.FR_DRIVE_ID,
         Swerve.FR_ANGLE_ID,
-        Swerve.FR_CANCODER_ID
+        Swerve.FR_CANCODER_ID,
+        Swerve.FR_OFFSET,
+        false//test, then change if needed
     );
 
     private final SwerveModule m_rearLeft = new SwerveModule(
         Swerve.BL_DRIVE_ID,
-        Swerve.FR_ANGLE_ID,
-        Swerve.FR_CANCODER_ID
+        Swerve.BL_ANGLE_ID, 
+        Swerve.BL_CANCODER_ID,
+        Swerve.BL_OFFSET,
+        true//test, then change if needed
     );
 
     private final SwerveModule m_rearRight = new SwerveModule(
         Swerve.BR_DRIVE_ID,
         Swerve.BR_ANGLE_ID,
-        Swerve.BR_CANCODER_ID
+        Swerve.BR_CANCODER_ID,
+        Swerve.BR_OFFSET,
+        true//test, then change if needed
     );
 
     private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();

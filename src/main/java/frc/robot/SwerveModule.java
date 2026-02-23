@@ -24,9 +24,11 @@ public class SwerveModule {
 
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset, boolean steeringInverted) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
+        System.out.println("Drive Motor initialized with CAN ID: " + driveID);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
+        System.out.println("Angle Motor initialized with CAN ID: " + angleID);
         absoluteEncoder = new CANcoder(canCoderID);
-
+        System.out.println("CANcoder initialized with CAN ID: " + canCoderID);
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
         canCoderConfig.MagnetSensor.MagnetOffset = angleOffset;
         absoluteEncoder.getConfigurator().apply(canCoderConfig);
@@ -60,18 +62,18 @@ public class SwerveModule {
    
    //Not sure this this is the right fix, need to test it.
 
-    public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
-        driveMotor = new SparkFlex(drivingCanId, MotorType.kBrushless);
-        angleMotor = new SparkFlex(turningCanId, MotorType.kBrushless);
-        absoluteEncoder = new CANcoder(drivingCanId); // Initialize absoluteEncoder
+    // public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
+    //     driveMotor = new SparkFlex(drivingCanId, MotorType.kBrushless);
+    //     angleMotor = new SparkFlex(turningCanId, MotorType.kBrushless);
+    //     absoluteEncoder = new CANcoder(drivingCanId); // Initialize absoluteEncoder
 
-        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-        canCoderConfig.MagnetSensor.MagnetOffset = chassisAngularOffset;
-        absoluteEncoder.getConfigurator().apply(canCoderConfig);
+    //     CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+    //     canCoderConfig.MagnetSensor.MagnetOffset = chassisAngularOffset;
+    //     absoluteEncoder.getConfigurator().apply(canCoderConfig);
 
-        angleEncoder = angleMotor.getEncoder(); // Initialize angleEncoder
-        anglePID = angleMotor.getClosedLoopController(); // Initialize anglePID
-    }
+    //     angleEncoder = angleMotor.getEncoder(); // Initialize angleEncoder
+    //     anglePID = angleMotor.getClosedLoopController(); // Initialize anglePID
+    // }
 
 
     public void resetToAbsolute() {

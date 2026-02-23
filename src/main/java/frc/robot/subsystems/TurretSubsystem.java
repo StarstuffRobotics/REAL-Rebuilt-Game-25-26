@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+
+
+//FIXED HOOD, TURRET SPINS, NEED TO CONTROL TRAJECTORY USING SPEED AND SPIN
 public class TurretSubsystem {
     public boolean simAbleToIntake() {
         // Return true if the turret is in a position to intake

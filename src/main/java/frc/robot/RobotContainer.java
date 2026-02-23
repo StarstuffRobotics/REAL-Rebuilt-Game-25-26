@@ -41,10 +41,14 @@ import frc.robot.subsystems.ExtendedTranslation3d;
 
 public class RobotContainer {
     private final DriveSubsystem m_drive = new DriveSubsystem();
-    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    
+    private final FuelSim m_fuelSim = FuelSim.getInstance(); //need to figure out how to implement
+
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final TurretSubsystem m_turret = new TurretSubsystem();
-  private int fuelStored;
+    private int fuelStored;
+    
+    
 
     private final CommandXboxController m_controller = 
         new CommandXboxController(Constants.OI.DRIVER_CONTROLLER_PORT);
@@ -113,8 +117,8 @@ public class RobotContainer {
                 Dimensions.FULL_WIDTH,
                 Dimensions.FULL_LENGTH,
                 Dimensions.BUMPER_HEIGHT,
-                m_robotDrive::getPose,
-                m_robotDrive::getFieldSpeeds);
+                m_drive::getPose,
+                m_drive::getFieldSpeeds);
             instance.registerIntake(
                 -Dimensions.div(Dimensions.FULL_LENGTH, 2), // Divide FULL_LENGTH by 2
                 Dimensions.div(Dimensions.FULL_LENGTH, 2), // Divide FULL_LENGTH by 2
@@ -157,7 +161,7 @@ public class RobotContainer {
         public void launchFuel(LinearVelocity vel, Angle angle) {
             if (fuelStored == 0) return;
             fuelStored--;
-            Pose2d pose2d = m_robotDrive.getPose();
+            Pose2d pose2d = m_drive.getPose();
 
             Pose3d robot = new Pose3d(
                 pose2d.getX(),
