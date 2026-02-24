@@ -11,7 +11,6 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
@@ -24,11 +23,9 @@ public class SwerveModule {
 
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset, boolean steeringInverted) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
-        System.out.println("Drive Motor initialized with CAN ID: " + driveID);
         angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
-        System.out.println("Angle Motor initialized with CAN ID: " + angleID);
         absoluteEncoder = new CANcoder(canCoderID);
-        System.out.println("CANcoder initialized with CAN ID: " + canCoderID);
+
         CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
         canCoderConfig.MagnetSensor.MagnetOffset = angleOffset;
         absoluteEncoder.getConfigurator().apply(canCoderConfig);
@@ -44,37 +41,16 @@ public class SwerveModule {
         
         angleConfig.encoder.positionConversionFactor(Constants.Swerve.STEER_ROTATIONS_TO_RADIANS);
         angleConfig.inverted(steeringInverted); 
-        angleConfig.smartCurrentLimit(40);
 
         SparkFlexConfig driveConfig = new SparkFlexConfig();
         driveConfig.encoder.positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS);
         driveConfig.encoder.velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
-        driveConfig.inverted(false);
-        driveConfig.smartCurrentLimit(60);
 
         angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        // Give the CANcoder a moment to broadcast before syncing
-        try { Thread.sleep(50); } catch (Exception e) {}
         resetToAbsolute();
     }
-   
-   //Not sure this this is the right fix, need to test it.
-
-    // public SwerveModule(int drivingCanId, int turningCanId, double chassisAngularOffset) {
-    //     driveMotor = new SparkFlex(drivingCanId, MotorType.kBrushless);
-    //     angleMotor = new SparkFlex(turningCanId, MotorType.kBrushless);
-    //     absoluteEncoder = new CANcoder(drivingCanId); // Initialize absoluteEncoder
-
-    //     CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-    //     canCoderConfig.MagnetSensor.MagnetOffset = chassisAngularOffset;
-    //     absoluteEncoder.getConfigurator().apply(canCoderConfig);
-
-    //     angleEncoder = angleMotor.getEncoder(); // Initialize angleEncoder
-    //     anglePID = angleMotor.getClosedLoopController(); // Initialize anglePID
-    // }
-
 
     public void resetToAbsolute() {
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
@@ -87,40 +63,21 @@ public class SwerveModule {
 
     public void setState(SwerveModuleState state) {
         SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
-        
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
 
-        // Convert -PI to PI range into 0 to 2PI range to match your config
-        double angleToSet = optimized.angle.getRadians();
-        if (angleToSet < 0) {
-            angleToSet += 2 * Math.PI;
-        }
+        // SparkMax wrapping is 0 to 2PI
+        double targetAngle = optimized.angle.getRadians();
+        while (targetAngle < 0) targetAngle += 2 * Math.PI;
+        while (targetAngle >= 2 * Math.PI) targetAngle -= 2 * Math.PI;
 
-        anglePID.setReference(angleToSet, ControlType.kPosition);
-    }
-    
-    public SwerveModuleState getState() {
-        double velocity = driveMotor.getEncoder().getVelocity();
-        Rotation2d angle = getAngle();
-        return new SwerveModuleState(velocity, angle);
+        anglePID.setReference(targetAngle, ControlType.kPosition);
     }
 
     public SwerveModulePosition getPosition() {
-
-        // Implement the logic to return the SwerveModulePosition
-
-        // Example:
-
-        return new SwerveModulePosition(getDriveDistance(), getAngle());
-
+        return new SwerveModulePosition(driveMotor.getEncoder().getPosition(), getAngle());
     }
 
-    public double getDriveDistance() {
-        // Implement the logic to return the drive distance in meters
-        return driveMotor.getEncoder().getPosition();
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(driveMotor.getEncoder().getVelocity(), getAngle());
     }
-
-    
-    public double getRelativePosition() { return angleEncoder.getPosition(); }
-    public double getAbsolutePosition() { return absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI; }
 }
