@@ -18,16 +18,32 @@ public class DriveSubsystem extends SubsystemBase {
     // Standardizing inversions: Most Swerve setups use the same orientation for all 4.
     // If the robot drives backward, flip the drive motor inversion in SwerveModule.
     private final SwerveModule m_frontLeft = new SwerveModule(
-        Swerve.FL_DRIVE_ID, Swerve.FL_ANGLE_ID, Swerve.FL_CANCODER_ID, Swerve.FL_OFFSET, false);
+        Swerve.FL_DRIVE_ID, 
+        Swerve.FL_ANGLE_ID, 
+        Swerve.FL_CANCODER_ID, 
+        Swerve.FL_OFFSET, 
+        Swerve.FL_INVERTED);
 
     private final SwerveModule m_frontRight = new SwerveModule(
-        Swerve.FR_DRIVE_ID, Swerve.FR_ANGLE_ID, Swerve.FR_CANCODER_ID, Swerve.FR_OFFSET, false);
+        Swerve.FR_DRIVE_ID, 
+        Swerve.FR_ANGLE_ID, 
+        Swerve.FR_CANCODER_ID, 
+        Swerve.FR_OFFSET, 
+        Swerve.FR_INVERTED);
 
     private final SwerveModule m_rearLeft = new SwerveModule(
-        Swerve.BL_DRIVE_ID, Swerve.BL_ANGLE_ID, Swerve.BL_CANCODER_ID, Swerve.BL_OFFSET, false);
+        Swerve.BL_DRIVE_ID, 
+        Swerve.BL_ANGLE_ID, 
+        Swerve.BL_CANCODER_ID, 
+        Swerve.BL_OFFSET, 
+        Swerve.BL_INVERTED);
 
     private final SwerveModule m_rearRight = new SwerveModule(
-        Swerve.BR_DRIVE_ID, Swerve.BR_ANGLE_ID, Swerve.BR_CANCODER_ID, Swerve.BR_OFFSET, false);
+        Swerve.BR_DRIVE_ID, 
+        Swerve.BR_ANGLE_ID, 
+        Swerve.BR_CANCODER_ID, 
+        Swerve.BR_OFFSET, 
+        Swerve.BR_INVERTED);
 
     private final AHRS m_navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
     private final Field2d m_field = new Field2d();
@@ -70,8 +86,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Rotation2d getHeading() {
     // We use getPitch() because the gyro is vertical
-    return Rotation2d.fromDegrees(Swerve.INVERT_GYRO ? m_navx.getPitch() : -m_navx.getPitch());
-}
+        return Rotation2d.fromDegrees(Swerve.INVERT_GYRO ? m_navx.getPitch() : -m_navx.getPitch());
+    }
 
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
