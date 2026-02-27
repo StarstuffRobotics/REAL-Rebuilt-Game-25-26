@@ -66,11 +66,17 @@ public class RobotContainer {
     public RobotContainer() {
         m_drive.setDefaultCommand(
             new RunCommand(
-            () -> m_drive.drive(
-                -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND),
-                -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND),
-                -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND),
-                true),
+            () -> {
+                double forward = -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND);
+                double strafe = -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND);
+                double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
+
+                if (forward == 0 && strafe == 0 && rotation == 0) {
+                    m_drive.setX();
+                } else {
+                    m_drive.drive(forward, strafe, rotation, fieldCentric);
+                }
+            },
             m_drive)
             );
         
@@ -160,7 +166,7 @@ public class RobotContainer {
                     .ignoringDisable(true));
         }
     
-        public ExtendedTranslation3d lanuchVel(LinearVelocity velocity, Angle angle) {
+        public ExtendedTranslation3d launchVel(LinearVelocity velocity, Angle angle) {
             // Convert the velocity and angle into a 3D velocity vector
             double speed = velocity.in(MetersPerSecond);; // Assuming LinearVelocity has a method to get the value in meters per second
             double angleRadians = angle.in(Radians); // Convert angle to radians using the appropriate method
@@ -187,6 +193,6 @@ public class RobotContainer {
             );
 
             ExtendedTranslation3d initialPosition = new ExtendedTranslation3d(robot.getTranslation());
-            FuelSim.getInstance().spawnFuel(initialPosition, lanuchVel(vel, angle));
+            FuelSim.getInstance().spawnFuel(initialPosition, launchVel(vel, angle));
         }
 }
