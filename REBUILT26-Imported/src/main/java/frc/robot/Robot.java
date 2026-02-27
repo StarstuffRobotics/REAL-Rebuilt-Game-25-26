@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+//
 /**
  * The VM is configured to run this class automatically. 
  * This is the "brain" that connects your code to the hardware.
@@ -66,7 +66,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // We leave this empty because the CommandScheduler 
         // is handling our DefaultDrive command!
-        startCompetition();
     }
 
     @Override
@@ -82,5 +81,7 @@ public class Robot extends TimedRobot {
     public void simulationInit() {}
 
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 }

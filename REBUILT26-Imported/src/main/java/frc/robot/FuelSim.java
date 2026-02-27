@@ -1,4 +1,3 @@
-/*
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,7 +17,6 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 // import org.littletonrobotics.junction.Logger;
 
-@SuppressWarnings("unused")
 public class FuelSim {
     private static final double PERIOD = 0.02; // sec
     private static int subticks = 5;
@@ -204,9 +202,9 @@ public class FuelSim {
     private double bumperHeight;
     private ArrayList<SimIntake> intakes = new ArrayList<>();
 
-    
-    // Returns a singleton instance of FuelSim
-     
+    /**
+     * Returns a singleton instance of FuelSim
+     */
     public static FuelSim getInstance() {
         if (instance == null) {
             instance = new FuelSim();
@@ -215,16 +213,16 @@ public class FuelSim {
         return instance;
     }
 
-    
-     //Clears the field of fuel
-     
+    /**
+     * Clears the field of fuel
+     */
     public void clearFuel() {
         fuels.clear();
     }
 
-    
-    //Spawns fuel in the neutral zone and depots
-    
+    /**
+     * Spawns fuel in the neutral zone and depots
+     */
     public void spawnStartingFuel() {
         // Center fuel
         ExtendedTranslation3d center = new ExtendedTranslation3d(FIELD_LENGTH / 2, FIELD_WIDTH / 2, FUEL_RADIUS);
@@ -258,23 +256,23 @@ public class FuelSim {
             .getStructArrayTopic("Fuel Simulation/Fuels", ExtendedTranslation3d.struct)
             .publish();
     
-    
+    /**
      * Adds array of `ExtendedTranslation3d`'s to NetworkTables at "/Fuel Simulation/Fuels"
-     
+     */
     public void logFuels() {
         fuelPublisher.set(fuels.stream().map((fuel) -> fuel.pos).toArray(ExtendedTranslation3d[]::new));
     }
 
     /**
      * Start the simulation. `updateSim` must still be called every loop
-     
+     */
     public void start() {
         running = true;
     }
 
     /**
      * Pause the simulation.
-     
+     */
     public void stop() {
         running = false;
     }
@@ -282,7 +280,7 @@ public class FuelSim {
     /**
      * Sets the number of physics iterations per loop (0.02s)
      * @param subticks
-     
+     */
     public void setSubticks(int subticks) {
         FuelSim.subticks = subticks;
     }
@@ -294,7 +292,7 @@ public class FuelSim {
      * @param bumperHeight
      * @param poseSupplier
      * @param fieldSpeedsSupplier field-relative `ChassisSpeeds` supplier
-     
+     */
     public void registerRobot(
             double width,
             double length,
@@ -311,7 +309,7 @@ public class FuelSim {
     /**
      * To be called periodically
      * Will do nothing if sim is not running
-     
+     */
     public void updateSim() {
         if (!running) return;
 
@@ -320,7 +318,7 @@ public class FuelSim {
 
     /**
      * Run the simulation forward 1 time step (0.02s)
-     
+     */
     public void stepSim() {
         for (int i = 0; i < subticks; i++) {
             for (Fuel fuel : fuels) {
@@ -342,7 +340,7 @@ public class FuelSim {
      * Adds a fuel onto the field
      * @param pos Position to spawn at
      * @param vel Initial velocity vector
-     
+     */
     public void spawnFuel(ExtendedTranslation3d pos, ExtendedTranslation3d vel) {
         fuels.add(new Fuel(pos, vel));
     }
@@ -426,7 +424,7 @@ public class FuelSim {
      * @param yMax Maximum y position for the bounding box
      * @param ableToIntake Should a return a boolean whether the intake is active
      * @param intakeCallback Function to call when a fuel is intaked
-     
+     */
     public void registerIntake(
             double xMin, double xMax, double yMin, double yMax, BooleanSupplier ableToIntake, Runnable intakeCallback) {
         intakes.add(new SimIntake(xMin, xMax, yMin, yMax, ableToIntake, intakeCallback));
@@ -439,7 +437,7 @@ public class FuelSim {
      * @param yMin Minimum y position for the bounding box
      * @param yMax Maximum y position for the bounding box
      * @param ableToIntake Should a return a boolean whether the intake is active
-     
+     */
     public void registerIntake(double xMin, double xMax, double yMin, double yMax, BooleanSupplier ableToIntake) {
         registerIntake(xMin, xMax, yMin, yMax, ableToIntake, () -> {});
     }
@@ -451,7 +449,7 @@ public class FuelSim {
      * @param yMin Minimum y position for the bounding box
      * @param yMax Maximum y position for the bounding box
      * @param intakeCallback Function to call when a fuel is intaked
-     
+     */
     public void registerIntake(double xMin, double xMax, double yMin, double yMax, Runnable intakeCallback) {
         registerIntake(xMin, xMax, yMin, yMax, () -> true, intakeCallback);
     }
@@ -462,7 +460,7 @@ public class FuelSim {
      * @param xMax Maximum x position for the bounding box
      * @param yMin Minimum y position for the bounding box
      * @param yMax Maximum y position for the bounding box
-     
+     */
     public void registerIntake(double xMin, double xMax, double yMin, double yMax) {
         registerIntake(xMin, xMax, yMin, yMax, () -> true, () -> {});
     }
@@ -496,7 +494,7 @@ public class FuelSim {
             this.exit = exit;
             this.exitVelXMult = exitVelXMult;
         }
-
+//
         private void handleHubInteraction(Fuel fuel) {
             if (didFuelScore(fuel)) {
                 fuel.pos = exit;
@@ -519,7 +517,7 @@ public class FuelSim {
 
         /**
          * Reset this hub's score to 0
-         
+         */
         public void resetScore() {
             score = 0;
         }
@@ -527,7 +525,7 @@ public class FuelSim {
         /**
          * Get the current count of fuel scored in this hub
          * @return
-         
+         */
         public int getScore() {
             return score;
         }
@@ -619,4 +617,3 @@ public class FuelSim {
 
    
 }
-*/
