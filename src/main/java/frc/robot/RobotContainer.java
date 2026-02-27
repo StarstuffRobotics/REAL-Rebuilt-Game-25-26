@@ -55,18 +55,24 @@ public class RobotContainer {
 
    
     private boolean fieldCentric = true;
-
+    //new RunCommand(
+        // () -> m_robotDrive.drive(
+        //     -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+        //     -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+        //     -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+        //     true),
+        // m_robotDrive));
     public RobotContainer() {
         m_drive.setDefaultCommand(
-            new DriveCommand(
-                m_drive,
-                () -> -modifyAxis(m_controller.getLeftY()), // This MUST be X (Forward/Back)
-                () -> -modifyAxis(m_controller.getLeftX()), // This MUST be Y (Left/Right)
-                () -> -modifyAxis(m_controller.getRightX()),// This MUST be Rotation
-                () -> fieldCentric,
-                this
-            )
-        );
+            new RunCommand(
+            () -> m_drive.drive(
+                -MathUtil.applyDeadband(m_controller.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_controller.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_controller.getRightX(), OIConstants.kDriveDeadband),
+                true),
+            m_drive)
+            );
+        
 //
         configureBindings();
     }
