@@ -86,6 +86,14 @@ public class RobotContainer {
 
         // Reset Heading
         m_controller.start().onTrue(new InstantCommand(m_drive::zeroHeading, m_drive));
+        m_controller.start().onTrue(
+            new RunCommand(m_drive::setX, m_drive)
+                .until(() -> 
+                    Math.abs(m_controller.getLeftY()) > 0.05 || 
+                    Math.abs(m_controller.getLeftX()) > 0.05 || 
+                    Math.abs(m_controller.getRightX()) > 0.05
+                )
+        );
     }
 
     public double modifyAxis(double value) {
