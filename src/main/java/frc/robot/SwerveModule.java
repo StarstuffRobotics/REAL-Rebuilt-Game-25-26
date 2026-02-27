@@ -62,7 +62,11 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState state) {
-        SwerveModuleState optimized = SwerveModuleState.optimize(state, getAngle());
+        // Skip optimize when speed is 0 — optimize can flip the angle 180°
+        // for free (since -0 == 0), causing the PID target to flip-flop each cycle
+        SwerveModuleState optimized = (state.speedMetersPerSecond == 0)
+            ? state
+            : SwerveModuleState.optimize(state, getAngle());
         driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
 
         // SparkMax wrapping is 0 to 2PI
