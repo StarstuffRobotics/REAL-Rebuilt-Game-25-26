@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import frc.robot.FuelSim;
 import frc.robot.Constants.Dimensions; 
+import frc.robot.Constants.*;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.ExtendedTranslation3d;
@@ -66,14 +67,14 @@ public class RobotContainer {
         m_drive.setDefaultCommand(
             new RunCommand(
             () -> m_drive.drive(
-                -MathUtil.applyDeadband(m_controller.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_controller.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_controller.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND),
+                -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND),
+                -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND),
                 true),
             m_drive)
             );
         
-//
+
         configureBindings();
     }
 

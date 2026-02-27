@@ -126,7 +126,7 @@ public final class Constants {
 
   public static final class OI {
     public static final int DRIVER_CONTROLLER_PORT = 0;
-    public static final double DEADBAND = 0.1;
+    public static final double DEADBAND = 0.05;
   }
 
   public static final class Dimensions {
