@@ -494,7 +494,7 @@ public class FuelSim {
             this.exit = exit;
             this.exitVelXMult = exitVelXMult;
         }
-
+//
         private void handleHubInteraction(Fuel fuel) {
             if (didFuelScore(fuel)) {
                 fuel.pos = exit;
