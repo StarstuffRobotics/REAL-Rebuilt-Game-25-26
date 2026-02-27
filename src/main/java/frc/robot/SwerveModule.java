@@ -54,7 +54,13 @@ public class SwerveModule {
 //
     public void resetToAbsolute() {
         double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+        // Normalize to [0, 2*PI] to match the PID wrapping range
+        absolutePosition = ((absolutePosition % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
         angleEncoder.setPosition(absolutePosition);
+    }
+
+    public void stop() {
+        driveMotor.set(0);
     }
 
     public Rotation2d getAngle() {

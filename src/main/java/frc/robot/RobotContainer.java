@@ -72,7 +72,7 @@ public class RobotContainer {
                 double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
 
                 if (forward == 0 && strafe == 0 && rotation == 0) {
-                    m_drive.setX();
+                    m_drive.stopModules();
                 } else {
                     m_drive.drive(forward, strafe, rotation, fieldCentric);
                 }

@@ -112,6 +112,13 @@ public class DriveSubsystem extends SubsystemBase {
         };
     }
 
+    public void stopModules() {
+        m_frontLeft.stop();
+        m_frontRight.stop();
+        m_rearLeft.stop();
+        m_rearRight.stop();
+    }
+
     public void setX() {
         m_frontLeft.setState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
         m_frontRight.setState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
