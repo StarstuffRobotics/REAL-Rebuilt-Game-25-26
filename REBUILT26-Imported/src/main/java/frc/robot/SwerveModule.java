@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import com.revrobotics.spark.SparkFlex;
@@ -42,7 +43,8 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(driveMotor.getEncoder().getVelocity(), getRotation());
+        return ne
+        w SwerveModuleState(driveMotor.getEncoder().getVelocity(), getRotation());
     }
 
     public SwerveModulePosition getPosition() {

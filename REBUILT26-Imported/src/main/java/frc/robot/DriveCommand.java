@@ -1,3 +1,4 @@
+
 package frc.robot;
 
 import java.util.function.DoubleSupplier;
@@ -35,14 +36,7 @@ public class DriveCommand extends Command {
         double y = MathUtil.applyDeadband(m_ySpeed.getAsDouble(), 0.1);
         double r = MathUtil.applyDeadband(m_rot.getAsDouble(), 0.1);
 
-
-        // 2. Square the inputs (preserve the sign)
-    double xSquared = Math.copySign(x * x, x);//for quadratic
-    double ySquared = Math.copySign(y * y, y);
-    double rSquared = Math.copySign(r * r, r);
-    
         // Send to subsystem (Max speed 4.5 m/s, Max rotation 2.0 rad/s)
-        //m_drive.drive(x * 4.5, y * 4.5, r * 2.0, m_fieldRelative);//for linear
-        m_drive.drive(xSquared * 4.5, ySquared * 4.5, rSquared * 2.0, m_fieldRelative);//for quadratic
+        m_drive.drive(x * 4.5, y * 4.5, r * 2.0, m_fieldRelative);
     }
 }
