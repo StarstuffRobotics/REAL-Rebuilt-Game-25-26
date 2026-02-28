@@ -1,8 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.DriveSubsystem;
 //
 /**
  * The VM is configured to run this class automatically. 
@@ -11,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
     private RobotContainer m_robotContainer;
+    private final DriveSubsystem m_drive = new DriveSubsystem();
+    private boolean RUNONE = false; // set to true to run the code that sets the modules to 0 and resets them to absolute, set to false to run the code that sets the modules to 45 and resets them to absolute
 
     /**
      * This function is run when the robot is first started up.
@@ -20,6 +26,23 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // Instantiate our RobotContainer. 
         // This will perform all our button bindings and subsystem initialization.
+        if (!RUNONE){
+            new InstantCommand(m_drive::zeroHeading, m_drive);
+            new InstantCommand(() -> m_drive.getFR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);
+            new InstantCommand(() -> m_drive.getRR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);
+            new InstantCommand(() -> m_drive.getFL().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);
+            new InstantCommand(() -> m_drive.getRL().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(45))), m_drive);
+            
+            new InstantCommand(() -> m_drive.getFR().resetToAbsolute());
+            new InstantCommand(() -> m_drive.getRR().resetToAbsolute());
+            new InstantCommand(() -> m_drive.getFL().resetToAbsolute());
+            new InstantCommand(() -> m_drive.getRL().resetToAbsolute());
+        
+            RUNONE=true;
+        }
+       
+       
+       
         m_robotContainer = new RobotContainer();
     }
 

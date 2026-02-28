@@ -96,7 +96,7 @@ public final class Constants {
         new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2)
         );
 
-    public static final double MAX_SPEED = 4.5;
+    public static final double MAX_SPEED = 4.0;
     public static final double MAX_ANGULAR_SPEED = Math.PI * 2;
 
     public static final double angleP = 0.4; // Slightly lower for stability
@@ -126,7 +126,7 @@ public final class Constants {
 
   public static final class OI {
     public static final int DRIVER_CONTROLLER_PORT = 0;
-    public static final double DEADBAND = 0.05;
+    public static final double DEADBAND = 0.01;
   }
 
   public static final class Dimensions {

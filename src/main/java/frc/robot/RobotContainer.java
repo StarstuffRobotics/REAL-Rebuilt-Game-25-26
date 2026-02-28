@@ -33,6 +33,7 @@ import java.util.List;
 import frc.robot.FuelSim;
 import frc.robot.Constants.Dimensions; 
 import frc.robot.Constants.*;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 import frc.robot.subsystems.ExtendedTranslation3d;
@@ -52,33 +53,31 @@ public class RobotContainer {
     
 
     private final CommandXboxController m_controller = 
-        new CommandXboxController(Constants.OI.DRIVER_CONTROLLER_PORT);
+        new CommandXboxController(Constants.OI.DRIVER_CONTROLLER_PORT
+        
+    );
 
    
     private boolean fieldCentric = true;
-    //new RunCommand(
-        // () -> m_robotDrive.drive(
-        //     -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-        //     -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-        //     -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-        //     true),
-        // m_robotDrive));
+   
     public RobotContainer() {
         m_drive.setDefaultCommand(
             new RunCommand(
-            () -> {
-                double forward = -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND);
-                double strafe = -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND);
-                double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
+                () -> {
+                    double forward = -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND);
+                    double strafe = -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND);
+                    double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
+                    
+                    if (forward == 0 && strafe == 0 && rotation == 0) {
+                        m_drive.setX();
+                    } else {
+                        m_drive.drive(forward, strafe, rotation, fieldCentric);
+                    }
 
-                if (forward == 0 && strafe == 0 && rotation == 0) {
-                    m_drive.setX();
-                } else {
-                    m_drive.drive(forward, strafe, rotation, fieldCentric);
-                }
-            },
-            m_drive)
-            );
+                },
+                m_drive
+            )
+        );
         
 
         configureBindings();
@@ -92,14 +91,17 @@ public class RobotContainer {
 
         // Reset Heading
         m_controller.start().onTrue(new InstantCommand(m_drive::zeroHeading, m_drive));
-        m_controller.start().onTrue(
-            new RunCommand(m_drive::setX, m_drive)
-                .until(() -> 
-                    Math.abs(m_controller.getLeftY()) > 0.05 || 
-                    Math.abs(m_controller.getLeftX()) > 0.05 || 
-                    Math.abs(m_controller.getRightX()) > 0.05
-                )
-        );
+        
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getFR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getRR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getFL().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getRL().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(45))), m_drive));
+        
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getFR().resetToAbsolute()));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getRR().resetToAbsolute()));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getFL().resetToAbsolute()));
+        // m_controller.start().onTrue(new InstantCommand(() -> m_drive.getRL().resetToAbsolute()));
+
     }
 
     public double modifyAxis(double value) {
@@ -126,11 +128,6 @@ public class RobotContainer {
         return null; // Return your autonomous command here
 
     }
-
-
-
-
-
 
         private void configureFuelSim() {
             FuelSim instance = FuelSim.getInstance();
@@ -166,7 +163,7 @@ public class RobotContainer {
                     .ignoringDisable(true));
         }
     
-        public ExtendedTranslation3d launchVel(LinearVelocity velocity, Angle angle) {
+        public ExtendedTranslation3d lanuchVel(LinearVelocity velocity, Angle angle) {
             // Convert the velocity and angle into a 3D velocity vector
             double speed = velocity.in(MetersPerSecond);; // Assuming LinearVelocity has a method to get the value in meters per second
             double angleRadians = angle.in(Radians); // Convert angle to radians using the appropriate method
@@ -193,6 +190,6 @@ public class RobotContainer {
             );
 
             ExtendedTranslation3d initialPosition = new ExtendedTranslation3d(robot.getTranslation());
-            FuelSim.getInstance().spawnFuel(initialPosition, launchVel(vel, angle));
+            FuelSim.getInstance().spawnFuel(initialPosition, lanuchVel(vel, angle));
         }
 }
