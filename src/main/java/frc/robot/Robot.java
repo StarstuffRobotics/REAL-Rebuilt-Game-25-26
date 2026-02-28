@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. 
         // This will perform all our button bindings and subsystem initialization.
         if (!RUNONE){
-            new InstantCommand(m_drive::zeroHeading, m_drive);
+           
             new InstantCommand(() -> m_drive.getFR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);
             new InstantCommand(() -> m_drive.getRR().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);
             new InstantCommand(() -> m_drive.getFL().setState(new SwerveModuleState(0, Rotation2d.fromDegrees(0))), m_drive);

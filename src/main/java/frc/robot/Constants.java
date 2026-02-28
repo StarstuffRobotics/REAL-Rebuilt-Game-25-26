@@ -63,7 +63,7 @@ public final class Constants {
     public static final int FR_ANGLE_ID = 6;
     public static final int FR_CANCODER_ID = 7;
     public static final double FR_OFFSET = 0;// change them back, do a better job and make sure they are right
-    public static final boolean FR_INVERTED = true;
+    public static final boolean FR_INVERTED = false;
 
     public static final int BL_DRIVE_ID = 11;
     public static final int BL_ANGLE_ID = 15;
@@ -75,7 +75,7 @@ public final class Constants {
     public static final int BR_ANGLE_ID = 3;
     public static final int BR_CANCODER_ID = 4;
     public static final double BR_OFFSET = 0;// change them back, do a better job and make sure they are right
-    public static final boolean BR_INVERTED = true;
+    public static final boolean BR_INVERTED = false;
 
     // --- Physical Constants ---
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);

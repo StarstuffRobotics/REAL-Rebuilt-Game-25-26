@@ -68,7 +68,7 @@ public class RobotContainer {
                     double strafe = -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND);
                     double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
                     
-                    if (forward == 0 && strafe == 0 && rotation == 0) {
+                    if (m_controller.leftBumper().getAsBoolean()) {
                         m_drive.setX();
                     } else {
                         m_drive.drive(forward, strafe, rotation, fieldCentric);
@@ -84,6 +84,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        
         m_controller.a().onTrue(new InstantCommand(() -> {
             fieldCentric = !fieldCentric;
             SmartDashboard.putBoolean("Field Centric Enabled", fieldCentric);
