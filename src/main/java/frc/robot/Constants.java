@@ -48,4 +48,9 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+  
+//All this is in inches and fake numbers for now
+  private final double limelightTurretOffsetX = 0;
+  private final double limelightTurretOffsetY = 0;
+  private final double limelightTurretHeight = 18.5;
 }
