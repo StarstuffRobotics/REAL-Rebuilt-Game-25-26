@@ -53,4 +53,8 @@ public final class Constants
   private final double limelightTurretOffsetX = 0;
   private final double limelightTurretOffsetY = 0;
   private final double limelightTurretHeight = 18.5;
+
+  private double Tx;
+  private double Ty;
+  private boolean Tv;
 }
