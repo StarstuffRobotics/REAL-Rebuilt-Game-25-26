@@ -1,34 +1,37 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkFlex;
 
 import frc.robot.LimelightHelpers;
-import frc.robot.constants; 
+import frc.robot.Constants;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.CANcoder;
 
 public class TurretSubsystem extends SubsystemBase {
     
         //electronics
-private RevNeo turret_motor;
-private CanCoder turret_encoder;
+    private SparkFlex turret_motor; 
+    turret_motor = new SparkFlex(21, MotorType.kBrushless);
+    private CANcoder turret_encoder = new CANcoder(31);
 
 
 
 
-public enum TurretState {
-    IDLE, SPIN, FIND_TARGET, TRACK_TARGET
-}
+    public enum TurretState {
+        IDLE, SPIN, FIND_TARGET, TRACK_TARGET
+    }
 
     public TurretSubsystem(){
-
-        turret_motor = new RevNeo(21);
-        turret_encoder = new CanCoder(31);
-}
+        double Tx;
+        double Ty;
+        boolean Tv;
+    }
 
     public void periodic(){
-        Tx = LimelightHelpers.getTX("limelight-vision");
-        Ty = LimelightHelpers.getTY("limelight-vision");
-        Tv = LimelightHelpers.getTV("limelight-vision");
+        double Tx = LimelightHelpers.getTX("limelight-vision");
+         Ty = LimelightHelpers.getTY("limelight-vision");
+         Tv = LimelightHelpers.getTV("limelight-vision");
     }
     public void startMotor(double speed){
         turret_motor.set(speed);
@@ -47,7 +50,7 @@ public enum TurretState {
         double angleToGoalDegrees = limelightMountAngleDegrees + Ty;
         double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
 
-        return(36 - limelightTurretHeight) / Math.tan(angleToGoalRadians);
+        return(36 - Ty) / Math.tan(angleToGoalRadians);
 
     
 
