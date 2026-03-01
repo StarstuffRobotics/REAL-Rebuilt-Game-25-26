@@ -1,0 +1,71 @@
+{
+  "fileName": "ReduxLib-v2026.1.1.json",
+  "name": "ReduxLib",
+  "version": "2026.1.1",
+  "frcYear": "2026",
+  "uuid": "4f4c4fcd-4e7a-49be-8f97-aae72c43401e",
+  "mavenUrls": [
+    "https://maven.reduxrobotics.com/"
+  ],
+  "jsonUrl": "https://maven.reduxrobotics.com/ReduxLib_2026.json",
+  "javaDependencies": [
+    {
+      "groupId": "com.reduxrobotics.frc",
+      "artifactId": "ReduxLib-java",
+      "version": "2026.1.1"
+    }
+  ],
+  "jniDependencies": [
+    {
+      "groupId": "com.reduxrobotics.frc",
+      "artifactId": "ReduxLib-driver",
+      "version": "2026.1.1",
+      "skipInvalidPlatforms": true,
+      "isJar": false,
+      "validPlatforms": [
+        "windowsx86-64",
+        "linuxx86-64",
+        "linuxarm32",
+        "linuxarm64",
+        "linuxathena",
+        "osxuniversal"
+      ]
+    }
+  ],
+  "cppDependencies": [
+    {
+      "groupId": "com.reduxrobotics.frc",
+      "artifactId": "ReduxLib-cpp",
+      "version": "2026.1.1",
+      "libName": "ReduxLib",
+      "headerClassifier": "headers",
+      "sharedLibrary": false,
+      "skipInvalidPlatforms": true,
+      "binaryPlatforms": [
+        "windowsx86-64",
+        "linuxx86-64",
+        "linuxarm32",
+        "linuxarm64",
+        "linuxathena",
+        "osxuniversal"
+      ]
+    },
+    {
+      "groupId": "com.reduxrobotics.frc",
+      "artifactId": "ReduxLib-driver",
+      "version": "2026.1.1",
+      "libName": "ReduxLibDriver",
+      "headerClassifier": "headers",
+      "sharedLibrary": false,
+      "skipInvalidPlatforms": true,
+      "binaryPlatforms": [
+        "windowsx86-64",
+        "linuxx86-64",
+        "linuxarm32",
+        "linuxarm64",
+        "linuxathena",
+        "osxuniversal"
+      ]
+    }
+  ]
+}
