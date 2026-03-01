@@ -18,13 +18,11 @@ public class RobotContainer {
             new RunCommand(
             () -> {
                 double forward = -MathUtil.applyDeadband(m_controller.getLeftY(), OI.DEADBAND);
-                double strafe = -MathUtil.applyDeadband(m_controller.getLeftX(), OI.DEADBAND);
-                double rotation = -MathUtil.applyDeadband(m_controller.getRightX(), OI.DEADBAND);
 
-                if (forward == 0 && strafe == 0 && rotation == 0) {
+                if (forward == 0) {
                     m_drive.stop();
                 } else {
-                    m_drive.drive(forward, strafe, rotation);
+                    m_drive.drive(forward);
                 }
             },
             m_drive)
@@ -34,15 +32,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // X lock front right wheel
-        m_controller.start().onTrue(
-            new RunCommand(m_drive::setX, m_drive)
-                .until(() ->
-                    Math.abs(m_controller.getLeftY()) > 0.05 ||
-                    Math.abs(m_controller.getLeftX()) > 0.05 ||
-                    Math.abs(m_controller.getRightX()) > 0.05
-                )
-        );
     }
 
     public Command getAutonomousCommand() {

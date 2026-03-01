@@ -16,78 +16,77 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 
 public class SwerveModule {
     private final SparkFlex driveMotor;
-    private final SparkFlex angleMotor;
-    private final RelativeEncoder angleEncoder;
-    private final SparkClosedLoopController anglePID;
-    private final CANcoder absoluteEncoder;
+    // private final SparkFlex angleMotor;
+    // private final RelativeEncoder angleEncoder;
+    // private final SparkClosedLoopController anglePID;
+    // private final CANcoder absoluteEncoder;
 
     public SwerveModule(int driveID, int angleID, int canCoderID, double angleOffset, boolean steeringInverted) {
         driveMotor = new SparkFlex(driveID, MotorType.kBrushless);
-        angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
-        absoluteEncoder = new CANcoder(canCoderID);
+        // angleMotor = new SparkFlex(angleID, MotorType.kBrushless);
+        // absoluteEncoder = new CANcoder(canCoderID);
 
-        CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
-        canCoderConfig.MagnetSensor.MagnetOffset = angleOffset;
-        absoluteEncoder.getConfigurator().apply(canCoderConfig);
+        // CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
+        // canCoderConfig.MagnetSensor.MagnetOffset = angleOffset;
+        // absoluteEncoder.getConfigurator().apply(canCoderConfig);
 
-        angleEncoder = angleMotor.getEncoder();
-        anglePID = angleMotor.getClosedLoopController();
+        // angleEncoder = angleMotor.getEncoder();
+        // anglePID = angleMotor.getClosedLoopController();
 
-        SparkFlexConfig angleConfig = new SparkFlexConfig();
-        angleConfig.closedLoop
-            .pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD)
-            .positionWrappingEnabled(true)
-            .positionWrappingInputRange(0, 2 * Math.PI);
-        
-        angleConfig.encoder.positionConversionFactor(Constants.Swerve.STEER_ROTATIONS_TO_RADIANS);
-        angleConfig.inverted(steeringInverted); 
+        // SparkFlexConfig angleConfig = new SparkFlexConfig();
+        // angleConfig.closedLoop
+        //     .pid(Constants.Swerve.angleP, Constants.Swerve.angleI, Constants.Swerve.angleD)
+        //     .positionWrappingEnabled(true)
+        //     .positionWrappingInputRange(0, 2 * Math.PI);
+
+        // angleConfig.encoder.positionConversionFactor(Constants.Swerve.STEER_ROTATIONS_TO_RADIANS);
+        // angleConfig.inverted(steeringInverted);
 
         SparkFlexConfig driveConfig = new SparkFlexConfig();
         driveConfig.encoder.positionConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS);
         driveConfig.encoder.velocityConversionFactor(Constants.Swerve.DRIVE_ROTATIONS_TO_METERS / 60.0);
 
-        angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        resetToAbsolute();
+        // resetToAbsolute();
     }
 //
-    public void resetToAbsolute() {
-        double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
-        // Normalize to [0, 2*PI] to match the PID wrapping range
-        absolutePosition = ((absolutePosition % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-        angleEncoder.setPosition(absolutePosition);
-    }
+    // public void resetToAbsolute() {
+    //     double absolutePosition = absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI;
+    //     // Normalize to [0, 2*PI] to match the PID wrapping range
+    //     absolutePosition = ((absolutePosition % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+    //     angleEncoder.setPosition(absolutePosition);
+    // }
 
     public void stop() {
         driveMotor.set(0);
     }
 
-    public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(angleEncoder.getPosition());
-    }
+    // public Rotation2d getAngle() {
+    //     return Rotation2d.fromRadians(angleEncoder.getPosition());
+    // }
 
-    public void setState(SwerveModuleState state) {
-        // Skip optimize when speed is 0 — optimize can flip the angle 180°
-        // for free (since -0 == 0), causing the PID target to flip-flop each cycle
-        SwerveModuleState optimized = (state.speedMetersPerSecond == 0)
-            ? state
-            : SwerveModuleState.optimize(state, getAngle());
-        driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
+    // public void setState(SwerveModuleState state) {
+    //     SwerveModuleState optimized = (state.speedMetersPerSecond == 0)
+    //         ? state
+    //         : SwerveModuleState.optimize(state, getAngle());
+    //     driveMotor.set(optimized.speedMetersPerSecond / Constants.Swerve.MAX_SPEED);
+    //     double targetAngle = optimized.angle.getRadians();
+    //     while (targetAngle < 0) targetAngle += 2 * Math.PI;
+    //     while (targetAngle >= 2 * Math.PI) targetAngle -= 2 * Math.PI;
+    //     anglePID.setReference(targetAngle, ControlType.kPosition);
+    // }
 
-        // SparkMax wrapping is 0 to 2PI
-        double targetAngle = optimized.angle.getRadians();
-        while (targetAngle < 0) targetAngle += 2 * Math.PI;
-        while (targetAngle >= 2 * Math.PI) targetAngle -= 2 * Math.PI;
+    // public SwerveModulePosition getPosition() {
+    //     return new SwerveModulePosition(driveMotor.getEncoder().getPosition(), getAngle());
+    // }
 
-        anglePID.setReference(targetAngle, ControlType.kPosition);
-    }
+    // public SwerveModuleState getState() {
+    //     return new SwerveModuleState(driveMotor.getEncoder().getVelocity(), getAngle());
+    // }
 
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(driveMotor.getEncoder().getPosition(), getAngle());
-    }
-
-    public SwerveModuleState getState() {
-        return new SwerveModuleState(driveMotor.getEncoder().getVelocity(), getAngle());
+    public void setDriveSpeed(double speed) {
+        driveMotor.set(speed);
     }
 }
