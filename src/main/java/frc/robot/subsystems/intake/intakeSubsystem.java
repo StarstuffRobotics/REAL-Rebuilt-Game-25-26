@@ -14,14 +14,21 @@ public class intakeSubsystem {
     private SparkFlex roller_motor = new SparkFlex(21, MotorType.kBrushless);
     SparkClosedLoopController pid = updown_motor.getClosedLoopController();
 
+    private boolean isup = false;
     //intake up down methods
-
+    
     public void intakeUp(double rotations){
         pid.setReference(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+        isup = true;
     }
 
     public void intakeDown(double rotations){
         pid.setReference(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+        isup = false;
+    }
+
+    public boolean getIsUp(){
+        return isup;
     }
 
     public void intakeStop(){

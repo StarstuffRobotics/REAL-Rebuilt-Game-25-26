@@ -22,9 +22,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intake.intakeCommands;
+import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -38,7 +39,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-
+  private final intakeSubsystem intakeSubsystem = new intakeSubsystem();
+  private final intakeCommands intakeCommands = new intakeCommands(intakeSubsystem);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -122,7 +124,9 @@ public class RobotContainer
     Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
     Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngleKeyboard);
-
+    
+    
+    
     if (RobotBase.isSimulation())
     {
       drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
@@ -170,8 +174,37 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+
+      //so this is telop, I think...
+
+      // planed button bindings, subject to change:
+      // a while true: everything in reverse exept shoorter 
+      // b on true: intake roller toggle (up down)
+      // y on true: shooter, accelerator, spindexer the right way
+      // x on true: intake wheels toggle (in out) 
+      // d pad up while true: turret hood up
+      // d pad down while true: turret hood down
+      // d pad left on true: hang down
+      // d pad right on true: hang up
+      // left bumper on true: slow mode toggle (fast,slow)
+      // right bumper while true: set X
+      // right trigger while true: adjust turret to the right (override the limelight)
+      // left trigger while true: adjust turret to the left (override the limelight)
+      // left stickY while true: forwards and backwards
+      // left stickX while true: strafing left right
+      // right stickX while true: rotation
+
+
+      
+      driverXbox.a().onTrue(Commands.runOnce(() -> {
+          if (intakeSubsystem.getIsUp()) {
+            intakeCommands.intakeDown(10.0);
+          } else {
+            intakeCommands.intakeUp(10.0);
+          }
+        }));
+      
+      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());

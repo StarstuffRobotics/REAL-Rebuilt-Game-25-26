@@ -1,8 +1,9 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.intakeSubsystem;
 
-public class intakeCommands {
+public class intakeCommands extends Command {
     //the commands that control the methods from intakeSubsystem. bound to some of the buttons in configureBindings.
     private final intakeSubsystem intake;
 
@@ -20,14 +21,26 @@ public class intakeCommands {
         intake.intakeDown(pos);
     }
 
+    public void intakeStop(){
+        intake.intakeStop();
+    }
+
 
     //intake roller control
     public void rollerIn(double speed){
-        intake.rollerIn(speed);
+
+        if (!intake.getIsUp()){
+            intake.rollerIn(speed);
+        }
     }
 
     public void rollerOut(double speed){
-        intake.rollerOut(-speed);
+        if (!intake.getIsUp()){
+            intake.rollerOut(-speed);
+        }
     }
 
+    public void rollerStop(){
+        intake.rollerStop();
+    }
 }

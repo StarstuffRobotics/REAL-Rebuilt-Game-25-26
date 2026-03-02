@@ -50,12 +50,15 @@ public final class Constants
     public static final double TURN_CONSTANT    = 6;
   }
   
+
 //All this is in inches and fake numbers for now
+  public static class LimelightConstants
+  {
   private final double limelightTurretOffsetX = 0;
   private final double limelightTurretOffsetY = 0;
   private final double limelightTurretHeight = 18.5;
 
-  private double Tx;
-  private double Ty;
-  private boolean Tv;
+  }
+
+
 }
