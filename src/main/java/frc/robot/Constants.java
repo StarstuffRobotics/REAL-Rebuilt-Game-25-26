@@ -51,11 +51,17 @@ public final class Constants
   }
   
 //All this is in inches and fake numbers for now
-  private final double limelightTurretOffsetX = 0;
-  private final double limelightTurretOffsetY = 0;
-  private final double limelightTurretHeight = 18.5;
+public static class limelightConstants {
+  
+  public static final double limelightTurretOffsetX = 0;
+  public static final double limelightTurretOffsetY = 0;
+  public static final double limelightTurretHeight = 18.5;
 
-  private double Tx;
-  private double Ty;
-  private boolean Tv;
+}
+
+public static class spindexerConstants {
+  public static final int kSpindexerMotorId = 22;
+  public static final double kSpindexerSpeed = 0.5;
+}
+
 }
