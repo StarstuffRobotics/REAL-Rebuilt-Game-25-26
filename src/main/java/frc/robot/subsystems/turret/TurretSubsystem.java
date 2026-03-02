@@ -1,12 +1,10 @@
 package frc.robot.subsystems.turret;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import frc.robot.LimelightHelpers;
-import frc.robot.Constants;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.ctre.phoenix6.hardware.CANcoder;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 
 public class TurretSubsystem extends SubsystemBase {
     
@@ -14,14 +12,16 @@ public class TurretSubsystem extends SubsystemBase {
     private SparkFlex turret_motor1 = new SparkFlex(25, MotorType.kBrushless);
     private SparkFlex turret_motor2 = new SparkFlex(25, MotorType.kBrushless);
 
+    private double Tx;
+    private double Ty;
+    private boolean Tv;
+
     public enum TurretState {
         IDLE, SPIN, FIND_TARGET, TRACK_TARGET
     }
 
     public TurretSubsystem(){
-        double Tx;
-        double Ty;
-        boolean Tv;
+        
     }
 
     public void periodic(){
@@ -30,15 +30,18 @@ public class TurretSubsystem extends SubsystemBase {
          Tv = LimelightHelpers.getTV("limelight-vision");
     }
     public void startMotor(double speed){
-        turret_motor.set(speed);
+        turret_motor1.set(speed);
+        turret_motor2.set(speed);
     }
 
     public void stopMotor(){
-        turret_motor.stopMotor();
+        turret_motor1.stopMotor();
+        turret_motor1.stopMotor();
     }
 
     public double getAngle(){
-        return turret_encoder.getAbsolutePosition().getValueAsDouble();
+        //return turret_encoder.getAbsolutePosition().getValueAsDouble(); need to figure this out
+        return 0;
     }
 
     public double getDistance(){
@@ -58,6 +61,8 @@ public class TurretSubsystem extends SubsystemBase {
         double TxRAD = Math.toRadians(Tx);
 
         double targetX = Tx + distance ;
+
+        return 0;
     }
 
     public static double calculateVelocity(double g, double d, double thetaDegrees, double h0, double h) {
