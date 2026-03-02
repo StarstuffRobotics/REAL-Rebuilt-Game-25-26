@@ -42,10 +42,10 @@ public class RobotContainer
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
-  SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * 1, //so that forward on the joystick is forward on the field, it was reversed
-                                                                () -> driverXbox.getRightX() * -1) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
-                                                            .withControllerRotationAxis(() -> driverXbox.getLeftX() * -1)
+   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                                                                () -> driverXbox.getLeftY() * -1, //so that forward on the joystick is forward on the field, it was reversed
+                                                                () -> driverXbox.getLeftX() * -1) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
+                                                            .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
