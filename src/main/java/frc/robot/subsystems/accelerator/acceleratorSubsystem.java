@@ -19,6 +19,15 @@ public class acceleratorSubsystem extends SubsystemBase {
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    public void spinToggle(){
+        if (!spining) {
+            spin();
+            spining=true;
+        }else{
+            stop();
+        }
+    }
+
     public void spin() {
         if (!spining) {
             motor.set(AcceleratorConstants.kAcceleratorSpeed);

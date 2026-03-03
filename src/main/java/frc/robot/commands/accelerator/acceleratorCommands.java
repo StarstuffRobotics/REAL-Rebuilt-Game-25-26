@@ -9,12 +9,8 @@ public class acceleratorCommands {
         this.acceleratorSubsystem = acceleratorSubsystem;
     }
 
-    public void spin() {
-        acceleratorSubsystem.spin();
-    }
-
-    public void spin(double speed) {
-        acceleratorSubsystem.spin();
+    public void spinToggle() {
+        acceleratorSubsystem.spinToggle();
     }
 
     public void reverseSpin() {
