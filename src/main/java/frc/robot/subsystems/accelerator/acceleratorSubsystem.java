@@ -11,6 +11,8 @@ import frc.robot.Constants.AcceleratorConstants;
 public class acceleratorSubsystem extends SubsystemBase {
     private final SparkFlex motor = new SparkFlex(AcceleratorConstants.kAcceleratorMotorId, MotorType.kBrushless);
 
+    private boolean spining = false;
+
     public acceleratorSubsystem() {
         SparkFlexConfig config = new SparkFlexConfig();
         config.smartCurrentLimit(40);
@@ -19,21 +21,30 @@ public class acceleratorSubsystem extends SubsystemBase {
 
     public void spin() {
         motor.set(AcceleratorConstants.kAcceleratorSpeed);
+        spining=true;
     }
 
     public void spin(double speed) {
         motor.set(speed);
+        spining=true;
     }
 
     public void reverseSpin(){
         motor.set(-AcceleratorConstants.kAcceleratorSpeed);
+        spining=true;
     }
 
     public void reverseSpin(double speed){
         motor.set(-speed);
+        spining=true;
     }
 
     public void stop() {
         motor.set(0);
+        spining=false;
+    }
+
+    public boolean getSpining(){
+        return spining;
     }
 }

@@ -28,4 +28,8 @@ public class acceleratorCommands {
     public void stop() {
         acceleratorSubsystem.stop();
     }
+
+    public boolean getSpining() {
+        return acceleratorSubsystem.getSpining();
+    }
 }
