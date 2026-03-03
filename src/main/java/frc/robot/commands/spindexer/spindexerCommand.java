@@ -3,10 +3,10 @@ package frc.robot.commands.spindexer;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
 
 
-public class spindexerCommands {
+public class spindexerCommand {
     private final spindexerSubsystem spindexer;
 
-    public spindexerCommands(spindexerSubsystem spindexer){
+    public spindexerCommand(spindexerSubsystem spindexer){
         this.spindexer = spindexer;
     }
 

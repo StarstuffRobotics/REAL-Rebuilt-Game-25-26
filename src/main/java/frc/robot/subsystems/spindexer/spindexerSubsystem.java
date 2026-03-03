@@ -14,6 +14,8 @@ public class spindexerSubsystem extends SubsystemBase {
     private final SparkMax motor = new SparkMax(spindexerConstants.kSpindexerMotorId, MotorType.kBrushless);
     private final SparkMaxConfig config = new SparkMaxConfig();
 
+    private boolean spindexerSpinning = false;
+
     public spindexerSubsystem() {
         /* * The new API uses a config object to set everything at once. 
          * This is much more reliable than setting individual parameters.
@@ -26,22 +28,45 @@ public class spindexerSubsystem extends SubsystemBase {
     }
 
     public void spin() {
-        motor.set(spindexerConstants.kSpindexerSpeed);
+        if (!spindexerSpinning) {
+            spindexerSpinning = true;
+            motor.set(spindexerConstants.kSpindexerSpeed);
+        }else{
+            stop();
+        }
+        
     }
 
     public void spin(double speed) {
-        motor.set(speed);
+        if (!spindexerSpinning) {
+            motor.set(speed);
+        }else{
+            stop();
+        }
     }
 
     public void reversedSpin() {
-        motor.set(-spindexerConstants.kSpindexerSpeed);
+        if (!spindexerSpinning) {
+            motor.set(-spindexerConstants.kSpindexerSpeed);
+        }else{
+            stop();
+        }
     }
 
     public void reversedSpin(double speed) {
-        motor.set(-speed);
+        if (!spindexerSpinning) {
+            motor.set(-speed);
+        }else{
+            stop();
+        }
     }
 
     public void stop() {
         motor.set(0);
+        spindexerSpinning = false;
+    }
+
+    public boolean getSpindexerSpinning() {
+        return spindexerSpinning;
     }
 }
