@@ -177,25 +177,37 @@ public class RobotContainer
 
       //so this is telop, I think...
 
-      // planed button bindings, subject to change:
-      // a while true: everything in reverse exept shoorter 
-      // b on true: intake roller toggle (up down)
-      // y on true: shooter, accelerator, spindexer the right way
-      // x on true: intake wheels toggle (in out) 
-      // d pad up while true: turret hood up
-      // d pad down while true: turret hood down
-      // d pad left on true: hang down
-      // d pad right on true: hang up
-      // left bumper on true: slow mode toggle (fast,slow)
-      // right bumper while true: set X
-      // right trigger while true: adjust turret to the right (override the limelight)
-      // left trigger while true: adjust turret to the left (override the limelight)
-      // left stickY while true: forwards and backwards
-      // left stickX while true: strafing left right
-      // right stickX while true: rotation
+      // Planned Button Bindings, These are Subject to Change:
+      // Button                 Type                Action
+      //
+      // A (A)                  While True:         Reverse Button (Applies to Shooter Flywheels, Acclerator, Spindexer, and Intake Wheels)
+      // B (B)                  On True             Intake Roller Up/Down Toggle (Up <-> Down)
+      // Y (Y)                  On True             Shooter, Accelerator, and Spindexer Toggle (On <-> Off) (Make Sure Directions are Correct)
+      // X (X)                  On True             Intake Wheels Toggle (In <-> Off) 
+      // D-Pad-Up (DP-U)        While True          Adjust Turret Hood Up
+      // D-Pad-Down (DP-D)      While True          Adjust Turret Hood Down
+      // D-Pad-Left (DP-L)      On True             Hang Down (All the Way Down)
+      // D-Pad-Right (DP-R)     On True             Hang Up (All the Way Up)
+      // Left-Bumper (LB)       On True             Slow Mode Toggle (Fast <-> Slow  Applies to Turret Adjustment, All Drivebase Movement, and Hood Adjustment)
+      // Right-Bumper (RB)      While True          SetX (Sets Wheels to an X Pattern to Resist Being Pushed)
+      // Right-Trigger (RT)     While True          Adjusts Turret to the Right (Offsets/Overides the Limelight)
+      // Left-Trigger (LT)      While True          Adjusts Turret to the Left (Offsets/Overides the Limelight)
+      // Left-StickY (LS-Y)     While True          Drives Forwards and Backwards
+      // Left-StickX (LS-X)     While True          Strafes Left and Right
+      // Right-StickX (RS-X)    While True          Turns the Robot Left and Right
+
+      //Unused Buttons:
+      // Button                     Type                Action
+      // D-Pad-Up-Left (DP-UL)      
+      // D-Pad-Up-Right (DP-UR)     
+      // D-Pad-Down-Left (DP-DL)    
+      // D-Pad-Down-Right (DP-DR)   
+      // D-Pad-Center (DP-C)        
 
 
-      
+
+
+
       driverXbox.a().onTrue(Commands.runOnce(() -> {
           if (intakeSubsystem.getIsUp()) {
             intakeCommands.intakeDown(10.0);
