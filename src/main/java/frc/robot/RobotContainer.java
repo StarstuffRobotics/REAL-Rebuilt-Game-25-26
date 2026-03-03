@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.intake.intakeCommands;
-import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 /**
@@ -39,8 +37,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-  private final intakeSubsystem intakeSubsystem = new intakeSubsystem();
-  private final intakeCommands intakeCommands = new intakeCommands(intakeSubsystem);
+  
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -196,13 +193,7 @@ public class RobotContainer
 
 
       
-      driverXbox.a().onTrue(Commands.runOnce(() -> {
-          if (intakeSubsystem.getIsUp()) {
-            intakeCommands.intakeDown(10.0);
-          } else {
-            intakeCommands.intakeUp(10.0);
-          }
-        }));
+      
       
       driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
