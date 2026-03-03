@@ -20,23 +20,39 @@ public class acceleratorSubsystem extends SubsystemBase {
     }
 
     public void spin() {
-        motor.set(AcceleratorConstants.kAcceleratorSpeed);
-        spining=true;
+        if (!spining) {
+            motor.set(AcceleratorConstants.kAcceleratorSpeed);
+            spining=true;
+        }else{
+            stop();
+        }
     }
 
     public void spin(double speed) {
-        motor.set(speed);
-        spining=true;
+        if (!spining) {
+            motor.set(speed);
+            spining=true;
+        }else{
+            stop();
+        }
     }
 
     public void reverseSpin(){
-        motor.set(-AcceleratorConstants.kAcceleratorSpeed);
-        spining=true;
+        if (!spining) {
+            motor.set(-AcceleratorConstants.kAcceleratorSpeed);
+            spining=true;
+        }else{
+            stop();
+        }
     }
 
     public void reverseSpin(double speed){
-        motor.set(-speed);
-        spining=true;
+        if (!spining) {
+            motor.set(-speed);
+            spining=true;
+        }else{
+            stop();
+        }
     }
 
     public void stop() {

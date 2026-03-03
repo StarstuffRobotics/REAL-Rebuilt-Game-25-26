@@ -200,13 +200,7 @@ public class RobotContainer
       
    
       
-      driverXbox.y().onTrue(Commands.runOnce(() -> {
-        if (acceleratorCommands.getSpining()) {
-          acceleratorCommands.stop();
-        } else {
-          acceleratorCommands.spin();
-        }
-      }));
+      driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spin));
       
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
