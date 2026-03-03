@@ -13,31 +13,27 @@ public class intakeCommands extends Command {
 
 
     //intake contole 
-    public void intakeUp(double pos){
-        intake.intakeUp(pos);
-    }
-
-    public void intakeDown(double pos){
-        intake.intakeDown(pos);
+    public void intakeUpDown(){
+        intake.intakeUpDown();
     }
 
     public void intakeStop(){
         intake.intakeStop();
     }
-
+     
 
     //intake roller control
-    public void rollerIn(double speed){
 
-        if (!intake.getIsUp()){
-            intake.rollerIn(speed);
-        }
+    public void rollerInOut(){
+        intake.rollerInOut();
     }
 
-    public void rollerOut(double speed){
-        if (!intake.getIsUp()){
-            intake.rollerOut(-speed);
-        }
+    public void rollerIn(double speed){
+        intake.rollerIn(speed);
+    }
+
+    public void rollerOut(double speed){  
+        intake.rollerOut(-speed);
     }
 
     public void rollerStop(){

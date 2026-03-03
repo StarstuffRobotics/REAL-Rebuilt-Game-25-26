@@ -179,9 +179,9 @@ public class RobotContainer
 
       // planed button bindings, subject to change:
       // a while true: everything in reverse exept shoorter 
-      // b on true: intake roller toggle (up down)
+      // b on true: intake up down toggle (up down)
       // y on true: shooter, accelerator, spindexer the right way
-      // x on true: intake wheels toggle (in out) 
+      // x on true: intake wheels toggle (in stop) 
       // d pad up while true: turret hood up
       // d pad down while true: turret hood down
       // d pad left on true: hang down
@@ -196,15 +196,10 @@ public class RobotContainer
 
 
       
-      driverXbox.a().onTrue(Commands.runOnce(() -> {
-          if (intakeSubsystem.getIsUp()) {
-            intakeCommands.intakeDown(10.0);
-          } else {
-            intakeCommands.intakeUp(10.0);
-          }
-        }));
+      driverXbox.b().onTrue(Commands.runOnce(() -> intakeCommands.intakeUpDown()));//intake up and down, toggle
       
-      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      driverXbox.y().onTrue(Commands.runOnce(() -> intakeCommands.rollerInOut()));
+      
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
