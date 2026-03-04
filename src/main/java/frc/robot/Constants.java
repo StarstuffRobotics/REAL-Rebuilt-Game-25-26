@@ -36,7 +36,7 @@ public final class Constants
   {
 
     // Hold time on motor brakes when disabled
-    public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double WHEEL_LOCK_TIME = 20; // seconds
   }
 
   public static class OperatorConstants
@@ -54,9 +54,11 @@ public final class Constants
 //All this is in inches and fake numbers for now
   public static class LimelightConstants
   {
-  private final double limelightTurretOffsetX = 0;
-  private final double limelightTurretOffsetY = 0;
-  private final double limelightTurretHeight = 18.5;
+
+    public static final double limelightMountAngleDegrees = 0;
+    public final double limelightTurretOffsetX = 0;
+    public final double limelightTurretOffsetY = 0;
+    public final double limelightTurretHeight = 18.5;
 
   }
 
