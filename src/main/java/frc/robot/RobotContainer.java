@@ -22,8 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Intake.intakeCommands;
-import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 /**
@@ -39,8 +37,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-  private final intakeSubsystem intakeSubsystem = new intakeSubsystem();
-  private final intakeCommands intakeCommands = new intakeCommands(intakeSubsystem);
+  
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -118,7 +115,7 @@ public class RobotContainer
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
-    Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
+    Command driveSetpointGen                   = drivebase.driveWithSetpointGeneratorFieldRelative(
         driveDirectAngle);
     Command driveFieldOrientedDirectAngleKeyboard      = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
     Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
@@ -129,7 +126,8 @@ public class RobotContainer
     
     if (RobotBase.isSimulation())
     {
-      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      //drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     } else
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
@@ -179,9 +177,9 @@ public class RobotContainer
 
       // planed button bindings, subject to change:
       // a while true: everything in reverse exept shoorter 
-      // b on true: intake up down toggle (up down)
+      // b on true: intake roller toggle (up down)
       // y on true: shooter, accelerator, spindexer the right way
-      // x on true: intake wheels toggle (in stop) 
+      // x on true: intake wheels toggle (in out) 
       // d pad up while true: turret hood up
       // d pad down while true: turret hood down
       // d pad left on true: hang down
@@ -196,13 +194,9 @@ public class RobotContainer
 
 
       
-      driverXbox.b().onTrue(Commands.runOnce(() -> intakeCommands.intakeUpDown()));//intake up and down, toggle
       
-      driverXbox.y().onTrue(Commands.runOnce(() -> intakeCommands.rollerInOff()));
-
-      driverXbox.a().onTrue(Commands.runOnce(() -> intakeCommands.rollerOut(0.5)));
-      driverXbox.a().onFalse(Commands.runOnce(() -> intakeCommands.rollerStop()));
       
+      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
