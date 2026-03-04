@@ -198,7 +198,10 @@ public class RobotContainer
       
       driverXbox.b().onTrue(Commands.runOnce(() -> intakeCommands.intakeUpDown()));//intake up and down, toggle
       
-      driverXbox.y().onTrue(Commands.runOnce(() -> intakeCommands.rollerInOut()));
+      driverXbox.y().onTrue(Commands.runOnce(() -> intakeCommands.rollerInOff()));
+
+      driverXbox.a().onTrue(Commands.runOnce(() -> intakeCommands.rollerOut(0.5)));
+      driverXbox.a().onFalse(Commands.runOnce(() -> intakeCommands.rollerStop()));
       
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());

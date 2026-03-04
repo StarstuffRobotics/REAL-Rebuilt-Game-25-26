@@ -49,9 +49,10 @@ public class intakeSubsystem {
     //roller methods
 
 
-    public void rollerInOut(){
+    public void rollerInOff(){
         if (!rollerOn || !rollerDirection){ //if the roller is off or currently out, run the roller in
             rollerIn(0.5); // Adjust the speed as needed
+           
         }else{
             rollerStop();
         }

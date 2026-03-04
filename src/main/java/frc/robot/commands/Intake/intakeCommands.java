@@ -24,8 +24,8 @@ public class intakeCommands extends Command {
 
     //intake roller control
 
-    public void rollerInOut(){
-        intake.rollerInOut();
+    public void rollerInOff(){
+        intake.rollerInOff();
     }
 
     public void rollerIn(double speed){
