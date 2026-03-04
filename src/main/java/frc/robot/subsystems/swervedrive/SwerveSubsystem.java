@@ -1,6 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
@@ -26,6 +23,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d; // ADDED
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; // ADDED
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,82 +53,71 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-    /**
-     * Swerve drive object.
-     */
     private final SwerveDrive swerveDrive;
-    /**
-     * Enable vision odometry updates while driving.
-     */
+
+    // ADDED (for Elastic dashboard robot position)
+    private final Field2d field = new Field2d();
+
     private final boolean visionDriveTest = false;
-    /**
-     * PhotonVision class to keep an accurate odometry.
-     */
     private Vision vision;
 
-    /**
-     * Initialize {@link SwerveDrive} with the directory provided.
-     *
-     * @param directory Directory of swerve drive config files.
-     */
     public SwerveSubsystem(File directory) {
+
         boolean blueAlliance = false;
-        Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
-                Meter.of(4)),
-                Rotation2d.fromDegrees(0))
-                : new Pose2d(new Translation2d(Meter.of(16),
-                        Meter.of(4)),
-                        Rotation2d.fromDegrees(180));
-        // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+
+        Pose2d startingPose = blueAlliance
+                ? new Pose2d(new Translation2d(Meter.of(1), Meter.of(4)), Rotation2d.fromDegrees(0))
+                : new Pose2d(new Translation2d(Meter.of(16), Meter.of(4)), Rotation2d.fromDegrees(180));
+
         SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+
         try {
-            swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
-            // Alternative method if you don't want to supply the conversion factor via JSON files.
-            // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
+            swerveDrive = new SwerveParser(directory)
+                    .createSwerveDrive(Constants.MAX_SPEED, startingPose);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
-        swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
-        swerveDrive.setAngularVelocityCompensation(true,
-                true,
-                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-        swerveDrive.setModuleEncoderAutoSynchronize(false,
-                1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-        // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
+
+        // ADDED
+        SmartDashboard.putData("Field", field);
+
+        swerveDrive.setHeadingCorrection(false);
+        swerveDrive.setCosineCompensator(false);
+        swerveDrive.setAngularVelocityCompensation(true, true, 0.1);
+        swerveDrive.setModuleEncoderAutoSynchronize(false, 1);
+
         if (visionDriveTest) {
             setupPhotonVision();
-            // Stop the odometry thread if we are using vision that way we can synchronize updates better.
             swerveDrive.stopOdometryThread();
         }
+
         setupPathPlanner();
+
         RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
     }
 
-    /**
-     * Construct the swerve drive.
-     *
-     * @param driveCfg SwerveDriveConfiguration for the swerve.
-     * @param controllerCfg Swerve Controller.
-     */
     public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg) {
-        swerveDrive = new SwerveDrive(driveCfg,
+        swerveDrive = new SwerveDrive(
+                driveCfg,
                 controllerCfg,
                 Constants.MAX_SPEED,
-                new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
-                        Rotation2d.fromDegrees(0)));
+                new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)), Rotation2d.fromDegrees(0))
+        );
+
+        // ADDED
+        SmartDashboard.putData("Field", field);
     }
 
-    /**
-     * Setup the photon vision class.
-     */
     public void setupPhotonVision() {
         vision = new Vision(swerveDrive::getPose, swerveDrive.field);
     }
 
     @Override
     public void periodic() {
-        // When vision is enabled we must manually update odometry in SwerveDrive
+
+        // ADDED
+        field.setRobotPose(swerveDrive.getPose());
+
         if (visionDriveTest) {
             swerveDrive.updateOdometry();
             vision.updatePoseEstimation(swerveDrive);
@@ -137,8 +125,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void simulationPeriodic() {
-    }
+    public void simulationPeriodic() {}
+
 
     /**
      * Setup AutoBuilder for PathPlanner.
