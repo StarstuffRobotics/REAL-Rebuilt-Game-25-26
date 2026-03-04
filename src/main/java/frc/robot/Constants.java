@@ -56,11 +56,25 @@ public final class Constants
   {
 
     public static final double limelightMountAngleDegrees = 0;
-    public final double limelightTurretOffsetX = 0;
-    public final double limelightTurretOffsetY = 0;
-    public final double limelightTurretHeight = 18.5;
+    public static final double limelightTurretOffsetX = 0;
+    public static final double limelightTurretOffsetY = 0;
+    public static final double limelightTurretHeight = 18.5;
+
+    public static final double kTurnP = 0.02;
+    public static final double kTurnI = 0.0;
+    public static final double kTurnD = 0.001;
 
   }
 
+  public static class hoodConstatnts{
+    public final static int SERVO_PORT = 1;
+  }
 
+  public static class FieldConstants {
+    public static final int TARGET_HEIGHT_FEET = 6;
+  }
+
+  public static class rotationConstants {
+    public static final double ENCODER_DEGREES_PER_ROTATION = 360.0; // Adjust based on your encoder's resolution and gearing
+  }
 }
