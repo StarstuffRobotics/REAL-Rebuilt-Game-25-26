@@ -5,6 +5,9 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
+
+import static edu.wpi.first.units.Units.Rotations;
+
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,19 +17,19 @@ public class intakeSubsystem {
     private SparkFlex roller_motor = new SparkFlex(21, MotorType.kBrushless);
     SparkClosedLoopController pid = updown_motor.getClosedLoopController();
 
-    private boolean isup = false;
+    private boolean isup = true;
     private boolean rollerOn = false;
     private boolean rollerDirection = true; // true for in, false for out
 
     //intake up down methods
     
     public void intakeUp(double rotations){
-        pid.setReference(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+        pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
         isup = true;
     }
 
     public void intakeDown(double rotations){
-        pid.setReference(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+        pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
         isup = false;
     }
 
@@ -35,10 +38,11 @@ public class intakeSubsystem {
     }
 
     public void intakeUpDown(){
-        if (isup){
-            intakeDown(0); // Move to the down position
+        if (isup==true){
+            intakeDown(15); // Move to the down position
         } else {
-            intakeUp(1); // Move to the up position
+          //  intakeUp(-15); // Move to the up position
+
         }
     }
 

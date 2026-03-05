@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
+import frc.robot.subsystems.intake.*;
+import frc.robot.commands.Intake.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -37,7 +39,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-  
+  private final intakeSubsystem intakes = new intakeSubsystem();
+  private final intakeCommands intake = new intakeCommands(intakes);
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
@@ -160,7 +163,7 @@ public class RobotContainer
 //                              );
 
     }
-    if (DriverStation.isTest())
+      if (DriverStation.isTestEnabled())
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
@@ -196,7 +199,9 @@ public class RobotContainer
       
       
       
-      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
+      driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
+      //driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
