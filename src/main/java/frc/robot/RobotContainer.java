@@ -213,12 +213,22 @@ public class RobotContainer
       //     }
       //   }));
       
+      // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
       driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
+
+      // Spindexer
+      driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
+      driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
+      driverXbox.y().onTrue(Commands.runOnce(spindexerCommand::spin));
+
+      // Accelerator
       driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
       driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
       driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
+
+      // Other Stuff
       driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
