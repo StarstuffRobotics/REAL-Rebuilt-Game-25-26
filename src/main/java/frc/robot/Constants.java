@@ -60,5 +60,10 @@ public final class Constants
 
   }
 
+  public static class AcceleratorConstants
+  {
+    public static final int kAcceleratorMotorId = 23;
+    public static final double kAcceleratorSpeed = 0.8;
+  }
 
 }

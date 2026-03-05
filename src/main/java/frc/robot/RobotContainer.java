@@ -22,10 +22,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.accelerator.acceleratorCommands;
+import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.intake.*;
-import frc.robot.commands.Intake.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -41,7 +42,13 @@ public class RobotContainer
                                                                                 "swerve/neo"));
   private final intakeSubsystem intakes = new intakeSubsystem();
   private final intakeCommands intake = new intakeCommands(intakes);
-  /**
+
+  private final acceleratorSubsystem acceleratorSubsystem = new acceleratorSubsystem();
+  private final acceleratorCommands acceleratorCommands = new acceleratorCommands(acceleratorSubsystem);
+
+
+  
+   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -181,7 +188,7 @@ public class RobotContainer
       // planed button bindings, subject to change:
       // a while true: everything in reverse exept shoorter 
       // b on true: intake roller toggle (up down)
-      // y on true: shooter, accelerator, spindexer the right way
+      // y on true: shooter, accelerator, spindexer the right way toggle on off
       // x on true: intake wheels toggle (in out) 
       // d pad up while true: turret hood up
       // d pad down while true: turret hood down
@@ -197,11 +204,20 @@ public class RobotContainer
 
 
       
-      
+      // driverXbox.a().onTrue(Commands.runOnce(() -> {
+      //     if (intakeSubsystem.getIsUp()) {
+      //       intakeCommands.intakeDown(10.0);
+      //     } else {
+      //       intakeCommands.intakeUp(10.0);
+      //     }
+      //   }));
       
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
-      //driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
+      driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
+      driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
+      driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
+      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());

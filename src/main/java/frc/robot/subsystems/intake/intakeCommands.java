@@ -1,4 +1,4 @@
-package frc.robot.commands.Intake;
+package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.intakeSubsystem;
@@ -13,9 +13,6 @@ public class intakeCommands extends Command {
 
 
     //intake contole 
-
-    
-
     public void intakeUpDown(){
         intake.intakeUpDown();
     }

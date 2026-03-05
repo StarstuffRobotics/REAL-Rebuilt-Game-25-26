@@ -2,9 +2,12 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import static edu.wpi.first.units.Units.Rotations;
 
@@ -13,18 +16,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class intakeSubsystem {
         //set up for the intake, motors and methods to controle the motors.
-    private SparkFlex updown_motor = new SparkFlex(20, MotorType.kBrushless);
-    private SparkFlex roller_motor = new SparkFlex(21, MotorType.kBrushless);
+    public SparkFlex updown_motor = new SparkFlex(20, MotorType.kBrushless);
+    public SparkFlex roller_motor = new SparkFlex(21, MotorType.kBrushless);
     SparkClosedLoopController pid = updown_motor.getClosedLoopController();
+
 
     private boolean isup = true;
     private boolean rollerOn = false;
     private boolean rollerDirection = true; // true for in, false for out
 
+    public intakeSubsystem() {
+        SparkFlexConfig config = new SparkFlexConfig();
+        config.smartCurrentLimit(40);
+        updown_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        roller_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+   
+    }
+
+
     //intake up down methods
     
     public void intakeUp(double rotations){
         pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+            updown_motor.set(-0.1);
         isup = true;
     }
 
@@ -41,8 +55,7 @@ public class intakeSubsystem {
         if (isup==true){
             intakeDown(15); // Move to the down position
         } else {
-          //  intakeUp(-15); // Move to the up position
-
+          intakeUp(-15); // Move to the up position
         }
     }
 
