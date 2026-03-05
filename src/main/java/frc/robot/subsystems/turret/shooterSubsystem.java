@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
-public class TurretSubsystem extends SubsystemBase {
+public class shooterSubsystem extends SubsystemBase {
     
         //electronics
     private SparkFlex turret_motor1 = new SparkFlex(25, MotorType.kBrushless);
@@ -41,7 +41,7 @@ public class TurretSubsystem extends SubsystemBase {
         IDLE, SPIN, FIND_TARGET, TRACK_TARGET
     }
 
-    public TurretSubsystem(){
+    public shooterSubsystem(){
      
     }
 
