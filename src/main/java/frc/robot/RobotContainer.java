@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Intake.intakeCommands;
 import frc.robot.commands.accelerator.acceleratorCommands;
 import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -214,6 +215,7 @@ public class RobotContainer
       
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
+      driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
       driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
       driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
       driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));

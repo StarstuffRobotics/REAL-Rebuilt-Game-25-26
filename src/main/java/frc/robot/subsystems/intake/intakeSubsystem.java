@@ -68,24 +68,24 @@ public class intakeSubsystem {
 
     public void rollerInOff(){
         if (!rollerOn || !rollerDirection){ //if the roller is off or currently out, run the roller in
-            rollerIn(0.5); // Adjust the speed as needed
+            rollerIn(); // Adjust the speed as needed
            
         }else{
             rollerStop();
         }
     }
 
-    public void rollerIn(double speed){
+    public void rollerIn(){
         if (!isup){ //only run the roller if the intake is down
-            roller_motor.set(speed); //need to test
+            roller_motor.set(1); //need to test
             rollerOn= true;
             rollerDirection = true;
         }
     }
 
-    public void rollerOut(double speed){
+    public void rollerOut(){
         if (!isup){
-            roller_motor.set(-speed); //need to test
+            roller_motor.set(-1); //need to test
             rollerOn = true;
             rollerDirection = false;
         }

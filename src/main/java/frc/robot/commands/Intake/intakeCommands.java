@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.intakeSubsystem;
@@ -28,12 +28,12 @@ public class intakeCommands extends Command {
         intake.rollerInOff();
     }
 
-    public void rollerIn(double speed){
-        intake.rollerIn(speed);
+    public void rollerIn(){
+        intake.rollerIn();
     }
 
-    public void rollerOut(double speed){  
-        intake.rollerOut(-speed);
+    public void rollerOut(){  
+        intake.rollerOut();
     }
 
     public void rollerStop(){
