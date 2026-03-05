@@ -36,15 +36,22 @@ public class intakeSubsystem {
 
     //intake up down methods
     
-    public void intakeUp(double rotations){
-        pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
-            updown_motor.set(-0.1);
-        isup = true;
+    public void toggleDirection(){
+        isup=!isup;
     }
 
-    public void intakeDown(double rotations){
-        pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
-        isup = false;
+    public void intakeUp(){
+        
+            //pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+            updown_motor.set(-5);
+            toggleDirection();
+        
+    }
+
+    public void intakeDown(){
+        //pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
+        updown_motor.set(5);
+        toggleDirection();
     }
 
     public boolean getIsUp(){
@@ -52,10 +59,10 @@ public class intakeSubsystem {
     }
 
     public void intakeUpDown(){
-        if (isup==true){
-            intakeDown(15); // Move to the down position
+        if (isup){
+            intakeDown(); // Move to the down position
         } else {
-          intakeUp(-15); // Move to the up position
+            intakeUp(); // Move to the up position
         }
     }
 
