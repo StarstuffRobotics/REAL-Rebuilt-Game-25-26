@@ -29,10 +29,11 @@ public class spindexerSubsystem extends SubsystemBase {
 
     public void spin() {
         if (!spindexerSpinning) {
-            spindexerSpinning = true;
             motor.set(SpindexerConstants.kSpindexerSpeed);
+            spindexerSpinning = true;
         }else{
             stop();
+            spindexerSpinning = false;
         }
         
     }
@@ -40,8 +41,10 @@ public class spindexerSubsystem extends SubsystemBase {
     public void spin(double speed) {
         if (!spindexerSpinning) {
             motor.set(speed);
+            spindexerSpinning = true;
         }else{
             stop();
+            spindexerSpinning = false;
         }
     }
 

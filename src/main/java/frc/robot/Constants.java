@@ -72,7 +72,7 @@ public final class Constants
   public static class SpindexerConstants
   {
     public static final int kSpindexerMotorId = 22;
-    public static final double kSpindexerSpeed = 1;
+    public static final double kSpindexerSpeed = 0.2;
   }
 
   public static class IntakeConstants

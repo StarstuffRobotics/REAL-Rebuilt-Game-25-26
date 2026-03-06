@@ -1,5 +1,6 @@
 package frc.robot.commands.spindexer;
 
+import frc.robot.Constants.SpindexerConstants;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
 
 
@@ -11,7 +12,7 @@ public class spindexerCommand {
     }
 
     public void spin(){
-        spindexer.spin();
+        spindexer.spin(SpindexerConstants.kSpindexerSpeed);
     }
 
     public void spin(double speed){

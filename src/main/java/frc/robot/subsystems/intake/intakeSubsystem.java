@@ -92,7 +92,7 @@ public class intakeSubsystem {
 
     public void rollerOut(){
         
-            roller_motor.set(IntakeConstants.kRollerMotorSpeed); //need to test
+            roller_motor.set(-IntakeConstants.kRollerMotorSpeed); //need to test
             rollerOn = true;
             rollerDirection = false;
         
