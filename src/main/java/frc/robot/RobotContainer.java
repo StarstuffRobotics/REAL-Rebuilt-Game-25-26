@@ -28,7 +28,14 @@ import frc.robot.commands.accelerator.acceleratorCommands;
 import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.commands.spindexer.spindexerCommand;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.turret.hoodCommands;
+import frc.robot.commands.turret.shooterCommands;
+import frc.robot.commands.turret.turretCommands;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.turret.hoodSubsystem; // Ensure this is the correct package for shooterCommands
+import frc.robot.subsystems.turret.rotationSubsystem; // Ensure this is the correct package for rotationCommands
+import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for hoodCommands
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.intake.*;
 /**
@@ -56,6 +63,16 @@ public class RobotContainer
   private final spindexerSubsystem spindexer   = new spindexerSubsystem();
   private final spindexerCommand spindexerCommand = new spindexerCommand(spindexer);
 
+  private final shooterSubsystem shooterSubsystem = new shooterSubsystem();
+  private final shooterCommands shooter = new shooterCommands(shooterSubsystem);
+  
+  // private final rotationSubsystem rotation = new rotationSubsystem();
+  
+  // private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
+  // private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+  
+  // private final turretCommands turret = new turretCommands(shooter, rotation, hood);
+  
   
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -228,8 +245,6 @@ public class RobotContainer
       driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
       driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
 
-
-
       // Spindexer
       driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
       driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
@@ -239,6 +254,14 @@ public class RobotContainer
       driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
       driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
       driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
+
+      // Turret
+      driverXbox.y().onTrue(Commands.runOnce(() -> shooter.startMotor(ShooterConstants.kShooterSpeed)));
+      driverXbox.a().onTrue(Commands.runOnce(()-> shooter.shooterReverse(ShooterConstants.kShooterSpeedReverse)));
+      driverXbox.a().onFalse(Commands.runOnce(()-> shooter.shooterStop()));
+      // driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
+      // driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
       driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));

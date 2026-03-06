@@ -39,7 +39,7 @@ public final class Constants
   {
 
     // Hold time on motor brakes when disabled
-    public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double WHEEL_LOCK_TIME = 20; // seconds
   }
 
   public static class OperatorConstants
@@ -57,12 +57,33 @@ public final class Constants
 //All this is in inches and fake numbers for now
   public static class LimelightConstants
   {
-  private final double limelightTurretOffsetX = 0;
-  private final double limelightTurretOffsetY = 0;
-  private final double limelightTurretHeight = 18.5;
 
+    public static final double limelightMountAngleDegrees = 0;
+    public static final double limelightTurretOffsetX = 0;
+    public static final double limelightTurretOffsetY = 0;
+    public static final double limelightTurretHeight = 18.5;
+    public static final double kTurnP = 0.02;
+    public static final double kTurnI = 0.0;
+    public static final double kTurnD = 0.001;
   }
 
+
+public static class hoodConstants{
+  public final static int SERVO_PORT = 1;
+}
+
+public static class FieldConstants {
+  public static final int TARGET_HEIGHT_FEET = 6;
+}
+
+public static class rotationConstants {
+  public static final double ENCODER_DEGREES_PER_ROTATION = 360.0; // Adjust based on your encoder's resolution and gearing
+}
+
+  public static class ShooterConstants {
+  public static final double kShooterSpeed = 1;
+  public static final double kShooterSpeedReverse = 0.1;
+  }
   public static class AcceleratorConstants
   {
     public static final int kAcceleratorMotorId = 23;
