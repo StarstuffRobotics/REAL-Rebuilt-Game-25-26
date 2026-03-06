@@ -41,12 +41,17 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
+  // Intake
   private final intakeSubsystem intakes = new intakeSubsystem();
   private final intakeCommands intake = new intakeCommands(intakes);
 
+  // Accelerator
   private final acceleratorSubsystem acceleratorSubsystem = new acceleratorSubsystem();
   private final acceleratorCommands acceleratorCommands = new acceleratorCommands(acceleratorSubsystem);
 
+  // Spindexer
+  private final spindexerSubsystem spindexer   = new spindexerSubsystem();
+  private final spindexerCommand spindexerCommand = new spindexerCommand(spindexer);
 
   
    /**
