@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.turret.hoodCommands;
 import frc.robot.commands.turret.shooterCommands;
 import frc.robot.commands.turret.turretCommands;
@@ -210,8 +211,8 @@ public class RobotContainer
       
       
       
-      driverXbox.a().onTrue(Commands.runOnce(() -> shooter.startMotor(.4)));
-      driverXbox.b().onTrue(Commands.runOnce(()-> shooter.stopTurret()));
+      driverXbox.y().onTrue(Commands.runOnce(() -> shooter.startMotor(ShooterConstants.kShooterSpeed)));
+      driverXbox.a().whileTrue(Commands.runOnce(()-> shooter.shooterReverse(ShooterConstants.kShooterSpeed/2)));
       // driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
       // driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));

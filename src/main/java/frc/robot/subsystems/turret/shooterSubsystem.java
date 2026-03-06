@@ -8,12 +8,14 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.ShooterConstants;
 
 public class shooterSubsystem extends SubsystemBase {
 
     // Electronics - FIX: give each motor a unique CAN ID
     private SparkFlex turret_motor1 = new SparkFlex(25, MotorType.kBrushless);
     private SparkFlex turret_motor2 = new SparkFlex(26, MotorType.kBrushless); // was 25, now 26
+    private boolean turret_motorsOn = false;
 
     private SparkClosedLoopController motor1Controller = turret_motor1.getClosedLoopController();
     private SparkClosedLoopController motor2Controller = turret_motor2.getClosedLoopController();
@@ -57,7 +59,7 @@ public class shooterSubsystem extends SubsystemBase {
         Tv = LimelightHelpers.getTV("limelight-vision");
     }
 
-    public void startMotor() {
+    public void shooterOnOff() {
         if (!Tv) return; // No target visible, don't spin
 
         double distance = getDistanceToHub();
@@ -70,14 +72,27 @@ public class shooterSubsystem extends SubsystemBase {
         motor2Controller.setReference(rpm, ControlType.kVelocity);
     }
 
-    public void startMotor(double speed){
-       turret_motor1.set(speed);
-       turret_motor2.set(-speed); 
+    public void shooterOnOff(double speed){
+        if(!turret_motorsOn){
+            turret_motor1.set(speed);
+            turret_motor2.set(-speed);
+            turret_motorsOn = true;
+        } else {
+            turret_motor1.stopMotor();
+            turret_motor2.stopMotor();
+            turret_motorsOn = false;
+        }
     }
 
     public void stopMotor() {
         turret_motor1.stopMotor();
         turret_motor2.stopMotor();
+        turret_motorsOn = false;
+    }
+
+    public void shooterReverse(double speed ){
+        turret_motor1.set(-speed);
+        turret_motor2.set(speed);
     }
 
     public double getHoodAngle() {

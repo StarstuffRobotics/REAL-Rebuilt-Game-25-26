@@ -77,4 +77,8 @@ public final class Constants
   public static class rotationConstants {
     public static final double ENCODER_DEGREES_PER_ROTATION = 360.0; // Adjust based on your encoder's resolution and gearing
   }
+
+  public static class ShooterConstants {
+public static final double kShooterSpeed = 0.2;
+  }
 }

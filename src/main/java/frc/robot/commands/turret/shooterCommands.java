@@ -10,15 +10,19 @@ public class shooterCommands {
     }
 
     public void shootTurretOut(){
-        shooter.startMotor();//
+        shooter.stopMotor();//
     }
 
     public void shootTurretIn(){
-        shooter.startMotor();
+        shooter.stopMotor();
     }
 
     public void startMotor(double speed){
-        shooter.startMotor(speed);
+        shooter.shooterOnOff(speed);
+    }
+
+    public void shooterReverse(double speed){
+        shooter.shooterReverse(speed);
     }
 
     public void stopTurret(){
