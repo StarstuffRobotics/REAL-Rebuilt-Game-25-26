@@ -24,15 +24,34 @@ public class turretCommands {
     public void runTurret(){
         allignTurret();
         findOptimalHoodAngle();
-    
+        shootTurret();
+
     }
 
     public void shootTurret(){
         shooter.startMotor();
     }
 
+    public void shooterReverse(){
+        shooter.shooterReverse();
+    }
+
     public void stopRotation(){
         rotation.stopRotation();
+    }
+
+    public void stopHood(){
+        hood.stopHood();
+    }
+
+    public void shooterStop(){
+        shooter.shooterStop();
+    }
+
+    public void stopTurret(){
+        stopRotation();
+        stopHood();
+        shooterStop();
     }
 
     public void setHoodAngleZero(){

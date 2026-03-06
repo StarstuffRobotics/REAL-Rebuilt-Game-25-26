@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.commands.turret.hoodCommands;
 
 public class shooterSubsystem extends SubsystemBase {
 
@@ -17,6 +18,8 @@ public class shooterSubsystem extends SubsystemBase {
 
     private SparkClosedLoopController motor1Controller = turret_motor1.getClosedLoopController();
     private SparkClosedLoopController motor2Controller = turret_motor2.getClosedLoopController();
+
+    private hoodCommands hood; 
 
     private static double limelightMountAngleDegrees;
     private double Tx;
@@ -58,18 +61,25 @@ public class shooterSubsystem extends SubsystemBase {
     }
 
     public void shooterOnOff() {
-        if (!Tv) return; // No target visible, don't spin
+        if(!turret_motorsOn){
+            if (!Tv) return; // No target visible, don't spin
 
-        double distance = getDistanceToHub();
-        double rpm = calculateTargetRPM(distance, getHoodAngle());
+            double distance = getDistanceToHub();
+            double rpm = calculateTargetRPM(distance, getHoodAngle());
 
-        double speed = rpm/6784.0; // Convert RPM to percentage of max speed (assuming 6784 RPM is max)
+            double speed = rpm/6784.0; // Convert RPM to percentage of max speed (assuming 6784 RPM is max)
 
-        if (rpm < 0) return; // Invalid shot, don't spin
+            if (speed < 0) return; // Invalid shot
 
-        // Use closed-loop RPM control instead of open-loop percentage
-        turret_motor1.set(speed);
-        turret_motor2.set(-speed);
+            // Use closed-loop RPM control instead of open-loop percentage
+            turret_motor1.set(speed);
+            turret_motor2.set(-speed);
+            turret_motorsOn = true;
+        }else{
+            turret_motor1.stopMotor();
+            turret_motor2.stopMotor();
+            turret_motorsOn = false;
+        }
     }
 
     public void shooterOnOff(double speed){
@@ -83,8 +93,6 @@ public class shooterSubsystem extends SubsystemBase {
             turret_motorsOn = false;
         }
     }
-
-    
 
     public void shooterStop() {
         turret_motor1.stopMotor();
@@ -104,7 +112,7 @@ public class shooterSubsystem extends SubsystemBase {
 
     
     public double getHoodAngle() {
-        return 0; // Replace with actual encoder reading
+        return hood.getHoodAngle(); // Replace with actual encoder reading
     }
 
     /**
