@@ -79,7 +79,7 @@ public final class Constants
   }
 
   public static class ShooterConstants {
-public static final double kShooterSpeed = 0.6;
+public static final double kShooterSpeed = 1;
 public static final double kShooterSpeedReverse = 0.1;
   }
 }
