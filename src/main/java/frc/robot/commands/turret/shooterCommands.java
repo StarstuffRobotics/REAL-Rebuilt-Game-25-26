@@ -17,6 +17,10 @@ public class shooterCommands {
         shooter.startMotor();
     }
 
+    public void startMotor(double speed){
+        shooter.startMotor(speed);
+    }
+
     public void stopTurret(){
         shooter.stopMotor();
     }

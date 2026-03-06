@@ -46,12 +46,12 @@ public class RobotContainer
   private final shooterSubsystem shooterSubsystem = new shooterSubsystem();
   private final shooterCommands shooter = new shooterCommands(shooterSubsystem);
   
-  private final rotationSubsystem rotation = new rotationSubsystem();
+  // private final rotationSubsystem rotation = new rotationSubsystem();
   
-  private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
-  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+  // private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
+  // private final hoodCommands hood = new hoodCommands(hoodSubsystem);
   
-  private final turretCommands turret = new turretCommands(shooter, rotation, hood);
+  // private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -210,11 +210,11 @@ public class RobotContainer
       
       
       
-      driverXbox.a().onTrue(Commands.runOnce(() -> turret.shootTurretOut()));
-      driverXbox.b().onTrue(Commands.runOnce(()-> turret.reverseTurret()));
-      driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
-      driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
-      driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
+      driverXbox.a().onTrue(Commands.runOnce(() -> shooter.startMotor(.4)));
+      driverXbox.b().onTrue(Commands.runOnce(()-> shooter.stopTurret()));
+      // driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
+      // driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }

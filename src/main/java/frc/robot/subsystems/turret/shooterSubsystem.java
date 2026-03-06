@@ -70,6 +70,11 @@ public class shooterSubsystem extends SubsystemBase {
         motor2Controller.setReference(rpm, ControlType.kVelocity);
     }
 
+    public void startMotor(double speed){
+       turret_motor1.set(speed);
+       turret_motor2.set(-speed); 
+    }
+
     public void stopMotor() {
         turret_motor1.stopMotor();
         turret_motor2.stopMotor();

@@ -15,7 +15,7 @@ import frc.robot.LimelightHelpers;
 public class rotationSubsystem extends SubsystemBase {
     private final String LIMELIGHT_NAME = "limelight"; 
 
-    private SparkFlex turret_motor1 = new SparkFlex(26, MotorType.kBrushless); 
+    private SparkFlex turret_motor1 = new SparkFlex(24, MotorType.kBrushless); 
     
     // Soft limit constants (tune to your robot's physical range)
     private static final double TURRET_MAX_POSITION = 60.0;  // degrees
