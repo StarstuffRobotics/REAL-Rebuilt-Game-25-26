@@ -224,6 +224,8 @@ public class RobotContainer
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
       driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
+      driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
+
 
       // Spindexer
       driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));

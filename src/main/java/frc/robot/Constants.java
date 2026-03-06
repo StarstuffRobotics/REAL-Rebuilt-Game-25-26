@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -63,13 +66,21 @@ public final class Constants
   public static class AcceleratorConstants
   {
     public static final int kAcceleratorMotorId = 23;
-    public static final double kAcceleratorSpeed = 0.8;
+    public static final double kAcceleratorSpeed = 1;
   }
 
-  public static class spindexerConstants{
+  public static class SpindexerConstants
+  {
     public static final int kSpindexerMotorId = 22;
     public static final double kSpindexerSpeed = 1;
+  }
 
+  public static class IntakeConstants
+  {
+    public static final int kUpDown_MotorId = 20;
+    public static final int kRoller_MotorId = 21;
+    public static final double kRollerMotorSpeed = 0.425;
+    public static final double kUpDownMotorSpeed = 0.25;
 
   }
 }

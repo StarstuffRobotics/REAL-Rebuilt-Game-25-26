@@ -13,11 +13,12 @@ import static edu.wpi.first.units.Units.Rotations;
 
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class intakeSubsystem {
         //set up for the intake, motors and methods to controle the motors.
-    public SparkFlex updown_motor = new SparkFlex(20, MotorType.kBrushless);
-    public SparkFlex roller_motor = new SparkFlex(21, MotorType.kBrushless);
+    public SparkFlex updown_motor = new SparkFlex(IntakeConstants.kUpDown_MotorId, MotorType.kBrushless);
+    public SparkFlex roller_motor = new SparkFlex(IntakeConstants.kRoller_MotorId, MotorType.kBrushless);
     SparkClosedLoopController pid = updown_motor.getClosedLoopController();
 
 
@@ -43,14 +44,14 @@ public class intakeSubsystem {
     public void intakeUp(){
         
             //pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
-            updown_motor.set(-5);
+            updown_motor.set(-IntakeConstants.kUpDownMotorSpeed);
             toggleDirection();
         
     }
 
     public void intakeDown(){
         //pid.setSetpoint(rotations, ControlType.kPosition); // Updated to use the motor's closed-loop controller
-        updown_motor.set(5);
+        updown_motor.set(IntakeConstants.kUpDownMotorSpeed);
         toggleDirection();
     }
 
@@ -74,7 +75,7 @@ public class intakeSubsystem {
 
 
     public void rollerInOff(){
-        if (!rollerOn || !rollerDirection){ //if the roller is off or currently out, run the roller in
+        if (!rollerOn){ //if the roller is off or currently out, run the roller in
             rollerIn(); // Adjust the speed as needed
            
         }else{
@@ -83,19 +84,18 @@ public class intakeSubsystem {
     }
 
     public void rollerIn(){
-        if (!isup){ //only run the roller if the intake is down
-            roller_motor.set(1); //need to test
+            roller_motor.set(IntakeConstants.kRollerMotorSpeed); //need to test
             rollerOn= true;
-            rollerDirection = true;
-        }
+            rollerDirection = false;
+        
     }
 
     public void rollerOut(){
-        if (!isup){
-            roller_motor.set(-1); //need to test
+        
+            roller_motor.set(IntakeConstants.kRollerMotorSpeed); //need to test
             rollerOn = true;
             rollerDirection = false;
-        }
+        
     }
 
     public boolean getRollerOn(){

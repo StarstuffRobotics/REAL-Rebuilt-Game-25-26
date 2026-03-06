@@ -11,7 +11,7 @@ import frc.robot.Constants.*;
 
 public class spindexerSubsystem extends SubsystemBase {
     // If you are using a Spark Flex, change 'SparkMax' to 'SparkFlex' below
-    private final SparkMax motor = new SparkMax(spindexerConstants.kSpindexerMotorId, MotorType.kBrushless);
+    private final SparkMax motor = new SparkMax(SpindexerConstants.kSpindexerMotorId, MotorType.kBrushless);
     private final SparkMaxConfig config = new SparkMaxConfig();
 
     private boolean spindexerSpinning = false;
@@ -30,7 +30,7 @@ public class spindexerSubsystem extends SubsystemBase {
     public void spin() {
         if (!spindexerSpinning) {
             spindexerSpinning = true;
-            motor.set(spindexerConstants.kSpindexerSpeed);
+            motor.set(SpindexerConstants.kSpindexerSpeed);
         }else{
             stop();
         }
@@ -47,7 +47,7 @@ public class spindexerSubsystem extends SubsystemBase {
 
     public void reversedSpin() {
         if (!spindexerSpinning) {
-            motor.set(-spindexerConstants.kSpindexerSpeed);
+            motor.set(-SpindexerConstants.kSpindexerSpeed);
         }else{
             stop();
         }
