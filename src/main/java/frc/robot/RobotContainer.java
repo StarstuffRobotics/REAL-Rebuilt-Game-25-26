@@ -22,7 +22,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.turret.hoodCommands;
+import frc.robot.commands.turret.shooterCommands;
+import frc.robot.commands.turret.turretCommands;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.turret.hoodSubsystem; // Ensure this is the correct package for shooterCommands
+import frc.robot.subsystems.turret.rotationSubsystem; // Ensure this is the correct package for rotationCommands
+import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for hoodCommands
 import swervelib.SwerveInputStream;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -37,6 +43,15 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
+  private final shooterSubsystem shooterSubsystem = new shooterSubsystem();
+  private final shooterCommands shooter = new shooterCommands(shooterSubsystem);
+  
+  private final rotationSubsystem rotation = new rotationSubsystem();
+  
+  private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
+  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+  
+  private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -195,9 +210,11 @@ public class RobotContainer
       
       
       
-      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
+      driverXbox.a().onTrue(Commands.runOnce(() -> turret.shootTurretOut()));
+      driverXbox.b().onTrue(Commands.runOnce(()-> turret.reverseTurret()));
+      driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
+      driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }

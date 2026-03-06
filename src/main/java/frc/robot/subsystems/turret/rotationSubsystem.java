@@ -52,6 +52,8 @@ public class rotationSubsystem extends SubsystemBase {
         if (!hasTarget()) return 0.0;
         return calculateDistance(Ty);
     }
+
+    
     public double calculateDistance(double ty) {
         double totalAngleDegrees = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
         double angleToGoalRadians = Units.degreesToRadians(totalAngleDegrees);
@@ -64,6 +66,10 @@ public class rotationSubsystem extends SubsystemBase {
         // Convert encoder position to degrees — adjust the scale factor to match your gearing
         double turretDegrees = turret_motor1.getEncoder().getPosition() * Constants.rotationConstants.ENCODER_DEGREES_PER_ROTATION;
         return turretDegrees > TURRET_MIN_POSITION && turretDegrees < TURRET_MAX_POSITION;
+    }
+
+    public void stopRotation() {
+        turret_motor1.set(0);
     }
 
     public Command rotateTurret() {

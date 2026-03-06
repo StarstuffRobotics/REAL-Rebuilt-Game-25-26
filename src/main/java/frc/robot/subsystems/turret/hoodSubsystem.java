@@ -26,6 +26,17 @@ public class hoodSubsystem {
         setHoodAngle(hoodAngle);
     }
 
+    public void setHoodAngleCustom(double hoodAngle){
+        if(hoodAngle < 15){
+            hoodAngle = 15;
+        }
+        else if(hoodAngle > 40){
+            hoodAngle = 40;
+        }
+        linearServo1.setPosition(hoodAngle/100);
+        linearServo2.setPosition(hoodAngle/100);
+    }
+
     public void setHoodAngle(double hoodAngle){
         linearServo1.setPosition(hoodAngle/100);
         linearServo2.setPosition(hoodAngle/100);

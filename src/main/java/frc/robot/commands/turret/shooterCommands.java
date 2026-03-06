@@ -1,7 +1,6 @@
 package frc.robot.commands.turret;
 
 import frc.robot.subsystems.turret.shooterSubsystem;
-import frc.robot.subsystems.turret.shooterSubsystem;
 
 public class shooterCommands {
     shooterSubsystem shooter;
@@ -11,10 +10,14 @@ public class shooterCommands {
     }
 
     public void shootTurretOut(){
-        shooter.startMotor(1);//
+        shooter.startMotor();//
     }
 
     public void shootTurretIn(){
-        shooter.startMotor(-1);
+        shooter.startMotor();
+    }
+
+    public void stopTurret(){
+        shooter.stopMotor();
     }
 }

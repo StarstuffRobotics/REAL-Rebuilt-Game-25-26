@@ -51,7 +51,8 @@ public class shooterSubsystem extends SubsystemBase {
         Tv = LimelightHelpers.getTV("limelight-vision");
     }
 
-    public void startMotor(double speed){
+    public void startMotor(){
+        double speed = calculateTargetRPM(getDistanceToHub(), getHoodAngle())/5700; 
         turret_motor1.set(speed);
         turret_motor2.set(speed);
     }

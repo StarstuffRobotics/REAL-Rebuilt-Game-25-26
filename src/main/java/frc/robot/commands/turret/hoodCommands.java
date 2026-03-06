@@ -14,4 +14,7 @@ public class hoodCommands {
         hood.findOptomalHoodAngle(distanceFeet);
     }
 
+    public void setHoodAngleCustom(double hoodAngle){
+        hood.setHoodAngleCustom(hoodAngle);
+    }
 }
