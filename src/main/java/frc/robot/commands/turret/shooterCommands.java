@@ -20,6 +20,10 @@ public class shooterCommands {
         shooter.shooterReverse();
     }
 
+    public void startMotorSpeed(){
+        shooter.shooterOnOff(.5);
+    }
+
     public void shooterReverse(double speed ){
         shooter.shooterReverse(speed);
     }

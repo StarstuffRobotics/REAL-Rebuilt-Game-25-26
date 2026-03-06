@@ -36,8 +36,20 @@ public class turretCommands {
 
     }
 
+    public void manualTurretRight(){
+        rotation.manualRotateRight();
+    }
+
+    public void manualTurretLeft(){
+        rotation.manualRotateLeft();
+    }
+
     public void shootTurret(){
         shooter.startMotor();
+    }
+
+    public void shootTurretSpeed(){
+        shooter.startMotorSpeed();
     }
 
     public void shooterReverse(){
@@ -66,6 +78,10 @@ public class turretCommands {
         hood.setHoodAngleCustom(0);
     }
     
+    public double getHoodAngle(){
+       return hood.getHoodAngle();
+    }
+
     public void setHoodAngle(double hoodAngle){
         hood.setHoodAngleCustom(hoodAngle);
     }

@@ -54,4 +54,6 @@ public class hoodSubsystem {
         linearServo2.setPosition(hoodAngle/100); //might need to change for the right percentage
     }
     
+
+
 }

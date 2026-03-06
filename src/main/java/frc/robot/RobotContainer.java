@@ -261,13 +261,17 @@ public class RobotContainer
       driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
 
       // Turret
-      driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurret()));
+      driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
       
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
-      //driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
-      //driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
+      driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
+      
+      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodAngle(turret.getHoodAngle() + 0.1)));//hood up
+      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodAngle(turret.getHoodAngle() - 0.1)));//hood down
+      driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff

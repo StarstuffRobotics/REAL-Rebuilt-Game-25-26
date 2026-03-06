@@ -55,6 +55,7 @@ public class rotationSubsystem extends SubsystemBase {
     }
 
     
+    
     public double calculateDistance(double ty) {
         double totalAngleDegrees = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
         double angleToGoalRadians = Units.degreesToRadians(totalAngleDegrees);
@@ -127,4 +128,14 @@ public class rotationSubsystem extends SubsystemBase {
             turret_motor1.set(-0.1);
         });
     }
+
+    public void manualRotateRight(){
+        turret_motor1.set(.05);
+    }
+    
+    public void manualRotateLeft(){
+        turret_motor1.set(-.05);
+    }
+
+
 }
