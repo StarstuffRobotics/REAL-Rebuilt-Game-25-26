@@ -25,6 +25,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Intake.intakeCommands;
 import frc.robot.commands.accelerator.acceleratorCommands;
 import frc.robot.subsystems.accelerator.acceleratorSubsystem;
+import frc.robot.commands.spindexer.spindexerCommand;
+import frc.robot.subsystems.spindexer.spindexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 import frc.robot.subsystems.intake.*;
@@ -54,7 +56,7 @@ public class RobotContainer
   private final spindexerCommand spindexerCommand = new spindexerCommand(spindexer);
 
   
-   /**
+  /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -181,7 +183,7 @@ public class RobotContainer
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
       driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+      driverXbox.y().onTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
       driverXbox.leftBumper().onTrue(Commands.none());

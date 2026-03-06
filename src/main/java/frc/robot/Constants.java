@@ -66,4 +66,10 @@ public final class Constants
     public static final double kAcceleratorSpeed = 0.8;
   }
 
+  public static class spindexerConstants{
+    public static final int kSpindexerMotorId = 22;
+    public static final double kSpindexerSpeed = 1;
+
+
+  }
 }
