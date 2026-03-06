@@ -212,7 +212,9 @@ public class RobotContainer
       
       
       driverXbox.y().onTrue(Commands.runOnce(() -> shooter.startMotor(ShooterConstants.kShooterSpeed)));
-      driverXbox.a().whileTrue(Commands.runOnce(()-> shooter.shooterReverse(ShooterConstants.kShooterSpeed/2)));
+      driverXbox.a().onTrue(Commands.runOnce(()-> shooter.shooterReverse(ShooterConstants.kShooterSpeedReverse)));
+      driverXbox.a().onFalse(Commands.runOnce(()-> shooter.shooterStop()));
+
       // driverXbox.y().onTrue(Commands.runOnce(()-> turret.allignTurret()));
       // driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));

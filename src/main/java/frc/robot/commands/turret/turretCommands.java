@@ -17,14 +17,6 @@ public class turretCommands {
         rotation.rotateTurret();
     }
 
-    public void shootTurretOut(){
-        shooter.shootTurretOut();
-    }
-
-    public void shootTurretIn(){
-        shooter.shootTurretIn();
-    }
-
     public void findOptimalHoodAngle(){
         hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
     }
@@ -32,11 +24,6 @@ public class turretCommands {
     public void runTurret(){
         allignTurret();
         findOptimalHoodAngle();
-        shootTurretOut();
-    }
-
-    public void reverseTurret(){
-        shootTurretIn();
     }
 
     public void stopRotation(){

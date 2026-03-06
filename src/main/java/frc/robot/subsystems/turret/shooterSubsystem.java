@@ -84,7 +84,7 @@ public class shooterSubsystem extends SubsystemBase {
         }
     }
 
-    public void stopMotor() {
+    public void shooterStop() {
         turret_motor1.stopMotor();
         turret_motor2.stopMotor();
         turret_motorsOn = false;
