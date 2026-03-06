@@ -64,7 +64,7 @@ public class shooterSubsystem extends SubsystemBase {
         if(!turret_motorsOn){
             if (!Tv) return; // No target visible, don't spin
 
-            double distance = getDistanceToHub();
+            double distance = getFixedDistanceToHub(); // Use Limelight distance calculation
             double rpm = calculateTargetRPM(distance, getHoodAngle());
 
             double speed = rpm/6784.0; // Convert RPM to percentage of max speed (assuming 6784 RPM is max)
@@ -81,6 +81,7 @@ public class shooterSubsystem extends SubsystemBase {
             turret_motorsOn = false;
         }
     }
+
 
     public void shooterOnOff(double speed){
         if(!turret_motorsOn){
@@ -129,6 +130,9 @@ public class shooterSubsystem extends SubsystemBase {
 
         // FIXED: use height difference in numerator, not raw Ty
         return DELTA_H / Math.tan(angleToGoalRadians);
+    }
+    public double getFixedDistanceToHub(){
+        return 15.0;
     }
 
     /**

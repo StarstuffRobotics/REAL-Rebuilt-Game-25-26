@@ -72,6 +72,7 @@ public class RobotContainer
   
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
+  private boolean alleianceRelativeControlDefault = true;
   
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -82,7 +83,7 @@ public class RobotContainer
                                                               .withControllerRotationAxis(() -> driverXbox.getRightX() * -1) // Rotation
                                                               .deadband(OperatorConstants.DEADBAND)
                                                               .scaleTranslation(0.8)
-                                                              .allianceRelativeControl(true);
+                                                              .allianceRelativeControl(alleianceRelativeControlDefault);
 
 
   /**
@@ -199,7 +200,7 @@ public class RobotContainer
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      //driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.y().onTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
@@ -239,14 +240,19 @@ public class RobotContainer
       
       // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
+      
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
+      
       driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
-      driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
       driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
+      
+      driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
+     
 
       // Spindexer
       driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
       driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
+      
       driverXbox.y().onTrue(Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
 
       // Accelerator
@@ -256,6 +262,7 @@ public class RobotContainer
 
       // Turret
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurret()));
+      
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
@@ -264,11 +271,13 @@ public class RobotContainer
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
-      driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      //driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading)); // what does this do?
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.none());
+      driverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
+        alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
+      }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
     }
 
   }

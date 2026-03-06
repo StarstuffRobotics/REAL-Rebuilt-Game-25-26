@@ -21,9 +21,17 @@ public class turretCommands {
         hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
     }
     
+    public void hoodUp(){
+        hood.setHoodAngleCustom(hood.getHoodAngle() + 0.1);
+    }
+    
+    public void hoodDown(){
+        hood.setHoodAngleCustom(hood.getHoodAngle() - 0.1);
+    }
+
     public void runTurret(){
         allignTurret();
-        findOptimalHoodAngle();
+        //findOptimalHoodAngle();
         shootTurret();
 
     }
