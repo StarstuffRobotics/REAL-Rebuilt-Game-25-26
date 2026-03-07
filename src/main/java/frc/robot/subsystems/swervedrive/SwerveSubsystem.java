@@ -106,6 +106,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         // ADDED
         SmartDashboard.putData("Field", field);
+        setupPathPlanner();
     }
 
     public void setupPhotonVision() {
