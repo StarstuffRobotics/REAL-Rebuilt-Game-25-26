@@ -39,19 +39,19 @@ public class hoodSubsystem {
     }
 
     public void cycleHoodAngle(int mod){
-        
+    
         i+=mod;
 
-        if (i<0||i>estimatedposes.length){
+        if (i<0||i>=estimatedposes.length){
             i = 0; 
+        }else{
+            
+            double pos = estimatedposes[i];
+
+            linearServo1.setPosition(pos);
+            linearServo2.setPosition(pos);
+
         }
-
-
-        double pos = estimatedposes[i];
-
-        linearServo1.setPosition(pos);
-        linearServo2.setPosition(pos);
-
     }
 
     public void setHoodAngleCustom(double hoodAngle){
