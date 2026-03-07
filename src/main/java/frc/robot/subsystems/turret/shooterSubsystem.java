@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.turret.hoodCommands;
 
@@ -102,13 +103,13 @@ public class shooterSubsystem extends SubsystemBase {
     }
 
     public void shooterReverse( ){
-        turret_motor1.set(.5);
-        turret_motor2.set(-.5);
+        turret_motor1.set(-ShooterConstants.kShooterSpeedReverse);
+        turret_motor2.set(ShooterConstants.kShooterSpeedReverse);
     }
 
     public void shooterReverse(double speed ){
-        turret_motor1.set(speed);
-        turret_motor2.set(-speed);
+        turret_motor1.set(ShooterConstants.kShooterSpeedReverse);
+        turret_motor2.set(-ShooterConstants.kShooterSpeedReverse);
     }
 
     
