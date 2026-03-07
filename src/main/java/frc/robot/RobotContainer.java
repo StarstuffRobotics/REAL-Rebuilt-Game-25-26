@@ -78,12 +78,12 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1, //so that forward on the joystick is forward on the field, it was reversed
-                                                                () -> driverXbox.getLeftX() * -1) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
+                                                                () -> driverXbox.getLeftY(), //so that forward on the joystick is forward on the field, it was reversed
+                                                                () -> driverXbox.getLeftX()) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
                                                               .withControllerRotationAxis(() -> driverXbox.getRightX() * -1) // Rotation
                                                               .deadband(OperatorConstants.DEADBAND)
                                                               .scaleTranslation(0.8)
-                                                              .allianceRelativeControl(alleianceRelativeControlDefault);
+                                                              .allianceRelativeControl(false);
 
 
   /**
@@ -281,9 +281,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
-        alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
-      }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
+      // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
+      //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
+      // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
     }
 
   }
