@@ -26,5 +26,12 @@ public class hoodCommands {
         return hood.getHoodAngle();
     }
 
+    public void cycleHoodAngleForward(){
+        hood.cycleHoodAngle(1);
+    }
+
+    public void cycleHoodAngleBackward(){
+        hood.cycleHoodAngle(-1);
+    }
     
 }

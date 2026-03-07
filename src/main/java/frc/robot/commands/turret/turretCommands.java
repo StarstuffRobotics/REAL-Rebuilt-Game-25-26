@@ -86,4 +86,11 @@ public class turretCommands {
         hood.setHoodAngleCustom(hoodAngle);
     }
 
+    public void cycleHoodAngleForward(){
+        hood.cycleHoodAngleForward();
+    }
+
+    public void cycleHoodAngleBackward(){
+        hood.cycleHoodAngleBackward();
+    }
 }

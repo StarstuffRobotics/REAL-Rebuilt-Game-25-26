@@ -8,6 +8,11 @@ public class hoodSubsystem {
     private final Servo linearServo2 = new Servo(hoodConstants.SERVO_PORT2);
     
 
+    private final double[] estimatedposes = {0.0,.28,.4,.64,.68,.8,.84,.88,1.0}; //these are the estimated servo positions for each hood angle from 15 to 40 degrees in 2.5 degree increments
+
+
+    private int i = 0;
+
     ///
     /// 
     /// Note for later : hoodAngle ≈ 14 + 1.6 × distanceFeet
@@ -33,6 +38,17 @@ public class hoodSubsystem {
         return hoodAngle+15; // Adjusting for the 15° offset
     }
 
+    public void cycleHoodAngle(int mod){
+        
+        i+=mod;
+
+        double pos = estimatedposes[i];
+
+        linearServo1.setPosition(pos);
+        linearServo2.setPosition(pos);
+
+    }
+
     public void setHoodAngleCustom(double hoodAngle){
         if(hoodAngle < 15){
             hoodAngle = 15;
@@ -40,8 +56,12 @@ public class hoodSubsystem {
         else if(hoodAngle > 40){
             hoodAngle = 40;
         }
-        linearServo1.setSpeed(.05);
-        linearServo2.setSpeed(.05);
+
+        double servoPosition = (hoodAngle - 15) / 25.0;
+
+
+        linearServo1.setPosition(getHoodAngle()+servoPosition); //might need to change for the right percentage
+        linearServo2.setPosition(getHoodAngle()+servoPosition); //might need to change for the right percentage
     }
 
     public void stopHood(){
