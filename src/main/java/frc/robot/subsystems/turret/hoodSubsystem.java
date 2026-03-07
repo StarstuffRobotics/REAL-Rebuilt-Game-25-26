@@ -40,8 +40,8 @@ public class hoodSubsystem {
         else if(hoodAngle > 40){
             hoodAngle = 40;
         }
-        linearServo1.setPosition(hoodAngle/100);
-        linearServo2.setPosition(hoodAngle/100);
+        linearServo1.setSpeed(.05);
+        linearServo2.setSpeed(.05);
     }
 
     public void stopHood(){
@@ -50,8 +50,8 @@ public class hoodSubsystem {
     }
 
     public void setHoodAngle(double hoodAngle){
-        linearServo1.setPosition(hoodAngle/100); //might need to change for the right percentage
-        linearServo2.setPosition(hoodAngle/100); //might need to change for the right percentage
+        linearServo1.setSpeed(hoodAngle/100); //might need to change for the right percentage
+        linearServo2.setSpeed(hoodAngle/100); //might need to change for the right percentage
     }
     
 
