@@ -3,37 +3,46 @@ import frc.robot.subsystems.turret.LinearServo;
 
 
 public class hoodCommands {
-    LinearServo hood;
-
+    LinearServo hood1;
+    LinearServo hood2;
     public double distance = 0 ;
    
     public hoodCommands(){
-        this.hood = new LinearServo(1, 100, 50); // Example parameters: channel 1, length 100mm, speed 50mm/s
-        
+        this.hood1 = new LinearServo(0, 100, 50); // Example parameters: channel 1, length 100mm, speed 50mm/s
+        this.hood2 = new LinearServo(1, 100, 50); // Example parameters: channel 2, length 100mm, speed 50mm/s
     }
 
     public void setPosition(double distance){
-        hood.setPosition(distance);
+        hood1.setPosition(distance);
+        hood2.setPosition(distance);
     }
 
     public void updateHood(){
-        hood.updateCurPos();
+        hood1.updateCurPos();
+        hood2.updateCurPos();
     }
 
     public double getHoodAngle(){
-        return hood.getAngle();
+        return hood1.getAngle();
     }
 
     public void hoodUp(){
-        hood.setPosition(hood.getAngle() + 0.1);
+        hood1.setPosition(getHoodAngle() + 0.1);
+        hood2.setPosition(getHoodAngle() + 0.1);
     }
     public void hoodDown(){
-        hood.setPosition(hood.getAngle() - 0.1);
+        hood1.setPosition(getHoodAngle() - 0.1);
+        hood2.setPosition(getHoodAngle() - 0.1);
     }
 
     public void hoodZero(){
-        hood.setPosition(0);
+        hood1.setPosition(0);
+        hood2.setPosition(0);
     }
-   
+
+    public void updateCurPos(){
+        hood1.updateCurPos();
+        hood2.updateCurPos();
+    }
     
 }

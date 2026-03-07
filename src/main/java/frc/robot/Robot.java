@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.turret.hoodCommands;
+import frc.robot.subsystems.turret.LinearServo; // Update the package path to the correct location of hoodSubsystem
 
 
 /**
@@ -27,8 +28,8 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  private hoodCommands hoodCommands = new hoodCommands();
-
+  private hoodCommands hoodCommands = new hoodCommands(); // Example parameters: channel 0, length 100mm, speed 50mm/s
+  
   public Robot()
   {
     instance = this;
@@ -74,7 +75,8 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    hoodCommands.updateHood();
+    hoodCommands.updateCurPos();
+    
   }
 
   /**
