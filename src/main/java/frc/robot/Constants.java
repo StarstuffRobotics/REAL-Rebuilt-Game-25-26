@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -100,7 +97,7 @@ public static class rotationConstants {
   {
     public static final int kUpDown_MotorId = 20;
     public static final int kRoller_MotorId = 21;
-    public static final double kRollerMotorSpeed = 0.425;
+    public static final double kRollerMotorSpeed = 0.5;
     public static final double kUpDownMotorSpeed = 0.25;
 
   }

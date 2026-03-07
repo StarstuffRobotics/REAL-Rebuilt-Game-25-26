@@ -21,19 +21,67 @@ public class turretCommands {
         hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
     }
     
+    public void hoodUp(){
+        hood.setHoodAngleCustom(hood.getHoodAngle() + 0.1);
+    }
+    
+    public void hoodDown(){
+        hood.setHoodAngleCustom(hood.getHoodAngle() - 0.1);
+    }
+
     public void runTurret(){
         allignTurret();
-        findOptimalHoodAngle();
+        //findOptimalHoodAngle();
+        shootTurret();
+
+    }
+
+    public void manualTurretRight(){
+        rotation.manualRotateRight();
+    }
+
+    public void manualTurretLeft(){
+        rotation.manualRotateLeft();
+    }
+
+    public void shootTurret(){
+        shooter.startMotor();
+    }
+
+    public void shootTurretSpeed(){
+        shooter.startMotorSpeed();
+    }
+
+    public void shooterReverse(){
+        shooter.shooterReverse();
     }
 
     public void stopRotation(){
         rotation.stopRotation();
     }
 
+    public void stopHood(){
+        hood.stopHood();
+    }
+
+    public void shooterStop(){
+        shooter.shooterStop();
+    }
+
+    public void stopTurret(){
+        stopRotation();
+        stopHood();
+        shooterStop();
+    }
+
     public void setHoodAngleZero(){
         hood.setHoodAngleCustom(0);
     }
     
+    public double getHoodAngle(){
+       return hood.getHoodAngle();
+    }
+
     public void setHoodAngle(double hoodAngle){
         hood.setHoodAngleCustom(hoodAngle);
     }

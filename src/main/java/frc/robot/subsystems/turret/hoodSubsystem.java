@@ -26,6 +26,13 @@ public class hoodSubsystem {
         setHoodAngle(hoodAngle);
     }
 
+    public double getHoodAngle(){
+        
+        double servoPosition = linearServo1.getPosition(); 
+        double hoodAngle = (servoPosition * 100)/25; 
+        return hoodAngle+15; // Adjusting for the 15° offset
+    }
+
     public void setHoodAngleCustom(double hoodAngle){
         if(hoodAngle < 15){
             hoodAngle = 15;
@@ -37,9 +44,16 @@ public class hoodSubsystem {
         linearServo2.setPosition(hoodAngle/100);
     }
 
+    public void stopHood(){
+        linearServo1.setPosition(0);
+        linearServo2.setPosition(0);
+    }
+
     public void setHoodAngle(double hoodAngle){
-        linearServo1.setPosition(hoodAngle/100);
-        linearServo2.setPosition(hoodAngle/100);
+        linearServo1.setPosition(hoodAngle/100); //might need to change for the right percentage
+        linearServo2.setPosition(hoodAngle/100); //might need to change for the right percentage
     }
     
+
+
 }

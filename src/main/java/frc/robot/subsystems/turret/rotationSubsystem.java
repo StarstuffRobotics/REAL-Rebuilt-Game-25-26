@@ -48,11 +48,13 @@ public class rotationSubsystem extends SubsystemBase {
     public boolean hasTarget() {
         return Tv; 
     }
+
     public double getDistanceToTarget() {
         if (!hasTarget()) return 0.0;
         return calculateDistance(Ty);
     }
 
+    
     
     public double calculateDistance(double ty) {
         double totalAngleDegrees = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
@@ -98,4 +100,42 @@ public class rotationSubsystem extends SubsystemBase {
             turret_motor1.set(rotationSpeed);
         }, this);
     }
+
+    public Command rotateTurretRight(){
+        return new RunCommand(() -> {
+            if (!hasTarget()) {
+                turret_motor1.set(0);
+                return;
+            }
+            if (!isWithinSoftLimits()) {
+                turret_motor1.set(0);
+                return;
+            }
+            turret_motor1.set(0.1);
+        }, this);
+    }
+
+    public Command rotateTurretLeft(){
+        return new RunCommand(()-> {
+            if (!hasTarget()) {
+                turret_motor1.set(0);
+                return;
+            }
+            if (!isWithinSoftLimits()) {
+                turret_motor1.set(0);
+                return;
+            }
+            turret_motor1.set(-0.1);
+        });
+    }
+
+    public void manualRotateRight(){
+        turret_motor1.set(.05);
+    }
+    
+    public void manualRotateLeft(){
+        turret_motor1.set(-.05);
+    }
+
+
 }

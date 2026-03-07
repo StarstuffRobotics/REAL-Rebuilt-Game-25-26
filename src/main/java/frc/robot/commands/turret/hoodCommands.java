@@ -17,4 +17,14 @@ public class hoodCommands {
     public void setHoodAngleCustom(double hoodAngle){
         hood.setHoodAngleCustom(hoodAngle);
     }
+
+    public void stopHood(){
+        hood.stopHood();
+    }
+
+    public double getHoodAngle(){
+        return hood.getHoodAngle();
+    }
+
+    
 }

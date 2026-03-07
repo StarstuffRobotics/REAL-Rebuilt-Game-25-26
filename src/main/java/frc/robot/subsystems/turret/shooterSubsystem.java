@@ -1,14 +1,13 @@
 package frc.robot.subsystems.turret;
 
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.turret.hoodCommands;
 
 public class shooterSubsystem extends SubsystemBase {
 
@@ -19,6 +18,8 @@ public class shooterSubsystem extends SubsystemBase {
 
     private SparkClosedLoopController motor1Controller = turret_motor1.getClosedLoopController();
     private SparkClosedLoopController motor2Controller = turret_motor2.getClosedLoopController();
+
+    private hoodCommands hood; 
 
     private static double limelightMountAngleDegrees;
     private double Tx;
@@ -60,17 +61,27 @@ public class shooterSubsystem extends SubsystemBase {
     }
 
     public void shooterOnOff() {
-        if (!Tv) return; // No target visible, don't spin
+        if(!turret_motorsOn){
+            if (!Tv) return; // No target visible, don't spin
 
-        double distance = getDistanceToHub();
-        double rpm = calculateTargetRPM(distance, getHoodAngle());
+            double distance = getFixedDistanceToHub(); // Use Limelight distance calculation
+            double rpm = calculateTargetRPM(distance, getHoodAngle());
 
-        if (rpm < 0) return; // Invalid shot, don't spin
+            double speed = rpm/6784.0; // Convert RPM to percentage of max speed (assuming 6784 RPM is max)
 
-        // Use closed-loop RPM control instead of open-loop percentage
-        motor1Controller.setReference(rpm, ControlType.kVelocity);
-        motor2Controller.setReference(rpm, ControlType.kVelocity);
+            if (speed < 0) return; // Invalid shot
+
+            // Use closed-loop RPM control instead of open-loop percentage
+            turret_motor1.set(speed);
+            turret_motor2.set(-speed);
+            turret_motorsOn = true;
+        }else{
+            turret_motor1.stopMotor();
+            turret_motor2.stopMotor();
+            turret_motorsOn = false;
+        }
     }
+
 
     public void shooterOnOff(double speed){
         if(!turret_motorsOn){
@@ -90,13 +101,19 @@ public class shooterSubsystem extends SubsystemBase {
         turret_motorsOn = false;
     }
 
-    public void shooterReverse(double speed ){
-        turret_motor1.set(-speed);
-        turret_motor2.set(speed);
+    public void shooterReverse( ){
+        turret_motor1.set(.5);
+        turret_motor2.set(-.5);
     }
 
+    public void shooterReverse(double speed ){
+        turret_motor1.set(speed);
+        turret_motor2.set(-speed);
+    }
+
+    
     public double getHoodAngle() {
-        return 0; // Replace with actual encoder reading
+        return hood.getHoodAngle(); // Replace with actual encoder reading
     }
 
     /**
@@ -113,6 +130,9 @@ public class shooterSubsystem extends SubsystemBase {
 
         // FIXED: use height difference in numerator, not raw Ty
         return DELTA_H / Math.tan(angleToGoalRadians);
+    }
+    public double getFixedDistanceToHub(){
+        return 15.0;
     }
 
     /**
