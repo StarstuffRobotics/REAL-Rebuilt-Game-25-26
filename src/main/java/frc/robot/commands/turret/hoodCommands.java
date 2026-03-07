@@ -1,15 +1,24 @@
 package frc.robot.commands.turret;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.turret.LinearServo;
 
 
-public class hoodCommands {
+public class hoodCommands extends SubsystemBase {
     LinearServo hood1;
     LinearServo hood2;
     public double distance = 0 ;
    
+    
+   
     public hoodCommands(){
         this.hood1 = new LinearServo(0, 100, 50); // Example parameters: channel 1, length 100mm, speed 50mm/s
         this.hood2 = new LinearServo(1, 100, 50); // Example parameters: channel 2, length 100mm, speed 50mm/s
+    }
+
+    @Override
+    public void periodic() {
+        hood1.updateCurPos();  
+        hood2.updateCurPos();
     }
 
     public void setPosition(double distance){

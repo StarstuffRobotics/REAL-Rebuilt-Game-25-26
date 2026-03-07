@@ -141,6 +141,8 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     NamedCommands.registerCommand("shootTurret", Commands.runOnce(()->turret.shootTurretSpeed()));
+    NamedCommands.registerCommand("Accselerator On", Commands.runOnce(acceleratorCommands::spinToggle));
+    NamedCommands.registerCommand("Spindexer On", Commands.runOnce(()-> spindexerCommand.spin(SpindexerConstants.kSpindexerSpeed)));
     NamedCommands.registerCommand("setX", Commands.runOnce(() -> drivebase.lock()));
    
   }
@@ -244,32 +246,49 @@ public class RobotContainer
       //     }
       //   }));
       
+
+      driverXbox.a().onTrue(Commands.runOnce(() -> {
+        intake.rollerOut();
+        turret.shooterReverse();
+        acceleratorCommands.reverseSpin();
+        turret.shooterReverse();
+
+      }));
+
+      driverXbox.a().onFalse(Commands.runOnce(() -> {
+        intake.rollerStop();
+        turret.shooterStop();
+        acceleratorCommands.stop();
+        turret.shooterStop();
+
+      }));
+
       // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
       
-      driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
-      driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
+      //driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
+      //driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
       
-      driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
+      driverXbox.b().onFalse(Commands.runOnce( ()-> intake.intakeStop()));
      
 
       // Spindexer
-      driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
+      //driverXbox.a().onTrue(Commands.runOnce(spindexerCommand::reversedSpin));
       driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
       
       driverXbox.y().onTrue(Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
 
       // Accelerator
       driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
-      driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
+      //driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
       driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
 
       // Turret
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
       
-      driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
+      //driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
       driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy

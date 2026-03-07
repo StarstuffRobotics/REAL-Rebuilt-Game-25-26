@@ -14,6 +14,10 @@ public class LinearServo extends Servo {
     double MIN_ANGLE = 15;
 
 
+
+    
+
+
     /**
      * Parameters for L16-R Actuonix Linear Actuators
      *
