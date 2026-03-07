@@ -33,10 +33,9 @@ import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.turret.hoodSubsystem; // Ensure this is the correct package for shooterCommands
-import frc.robot.subsystems.turret.rotationSubsystem; // Ensure this is the correct package for rotationCommands
-import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for hoodCommands
-import swervelib.SwerveInputStream;
+import frc.robot.subsystems.turret.rotationSubsystem; // Ensure this is the correct package for shooterCommands
+import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for rotationCommands
+import swervelib.SwerveInputStream; // Ensure this is the correct package for hoodCommands
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -67,8 +66,8 @@ public class RobotContainer
   
   private final rotationSubsystem rotation = new rotationSubsystem();
   
-  private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
-  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+  
+  private final hoodCommands hood = new hoodCommands();
   
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
@@ -271,9 +270,9 @@ public class RobotContainer
       driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
-      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.cycleHoodAngleForward()));//hood up
-      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.cycleHoodAngleBackward()));//hood down
-      driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.hoodUp()));//hood up
+      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.hoodDown()));//hood down
+      //driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
