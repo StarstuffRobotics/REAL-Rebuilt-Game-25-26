@@ -42,6 +42,11 @@ public class hoodSubsystem {
         
         i+=mod;
 
+        if (i<0||i>estimatedposes.length){
+            i = 0; 
+        }
+
+
         double pos = estimatedposes[i];
 
         linearServo1.setPosition(pos);
