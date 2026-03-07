@@ -111,7 +111,7 @@ public class rotationSubsystem extends SubsystemBase {
                 turret_motor1.set(0);
                 return;
             }
-            turret_motor1.set(0.1);
+            turret_motor1.set(0.05);
         }, this);
     }
 
@@ -125,7 +125,7 @@ public class rotationSubsystem extends SubsystemBase {
                 turret_motor1.set(0);
                 return;
             }
-            turret_motor1.set(-0.1);
+            turret_motor1.set(-0.05);
         });
     }
 

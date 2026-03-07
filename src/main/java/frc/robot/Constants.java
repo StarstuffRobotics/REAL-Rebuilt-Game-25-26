@@ -66,7 +66,8 @@ public final class Constants
 
 
 public static class hoodConstants{
-  public final static int SERVO_PORT = 1;
+  public final static int SERVO_PORT1 = 8;
+  public final static int SERVO_PORT2 = 9;
 }
 
 public static class FieldConstants {

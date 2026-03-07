@@ -266,8 +266,10 @@ public class RobotContainer
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
-      driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
-      driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
+      driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
+      driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
+      driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
+      driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodAngle(turret.getHoodAngle() + 0.1)));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodAngle(turret.getHoodAngle() - 0.1)));//hood down

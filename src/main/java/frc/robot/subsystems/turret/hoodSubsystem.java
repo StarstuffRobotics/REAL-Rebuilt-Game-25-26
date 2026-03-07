@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants.hoodConstants;
 
 public class hoodSubsystem {
-    private final Servo linearServo1 = new Servo(hoodConstants.SERVO_PORT);
-    private final Servo linearServo2 = new Servo(hoodConstants.SERVO_PORT);
+    private final Servo linearServo1 = new Servo(hoodConstants.SERVO_PORT1);
+    private final Servo linearServo2 = new Servo(hoodConstants.SERVO_PORT2);
     
 
     ///
