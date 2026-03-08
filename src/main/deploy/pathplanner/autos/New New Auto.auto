@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Accelator"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SpindexerOn"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setX"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootTurret"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
