@@ -8,6 +8,7 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -242,7 +243,13 @@ public class RobotContainer
       //       intakeCommands.intakeUp(10.0);
       //     }
       //   }));
-      
+      CameraServer.startAutomaticCapture(0); 
+      CameraServer.startAutomaticCapture(1); 
+      CameraServer.startAutomaticCapture(2); 
+      CameraServer.startAutomaticCapture(3); 
+      CameraServer.startAutomaticCapture(4); 
+      CameraServer.startAutomaticCapture(5); 
+
       // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       

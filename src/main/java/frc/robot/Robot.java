@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -53,10 +57,17 @@ public class Robot extends TimedRobot
 
     limelightTurret = new HttpCamera("limelight-turret", "http://limelight-turret.local:5800/stream.mjpg");
     //limelightFront = new HttpCamera("limelight-front", "http://limelight-front.local:5800/stream.mjpg");
-    
+    CameraServer.addCamera(limelightTurret);
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+
+    Shuffleboard.getTab("Teleoperated")
+    .add("Limelight Feed", limelightTurret)
+    .withWidget(BuiltInWidgets.kCameraStream)
+    .withSize(4, 3) // Adjust size as needed
+    .withPosition(0, 0);
+
 
     if (isSimulation())
     {

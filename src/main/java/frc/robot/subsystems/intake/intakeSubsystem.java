@@ -12,6 +12,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -32,6 +34,13 @@ public class intakeSubsystem {
         updown_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         roller_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
    
+    }
+
+    public void periodic(){
+        SmartDashboard.putBoolean("Intake", rollerOn);
+        SmartDashboard.putBoolean("Up/Down", isup);
+        SmartDashboard.putBoolean("Roller In/Out", rollerDirection);
+
     }
 
 
