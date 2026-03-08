@@ -14,7 +14,7 @@ public class LinearServo extends Servo {
 
     public LinearServo(int channel, double length, double speed) {
         super(channel);
-        super.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+        super.setBoundsMicroseconds(2000, 0, 1500, 0, 1000);
         this.m_length = length;
         this.m_speed = speed;
     }
