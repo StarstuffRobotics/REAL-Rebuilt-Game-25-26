@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.hoodConstants;
 
 public class hoodSubsystem {
@@ -24,7 +25,10 @@ public class hoodSubsystem {
     // 13–15 ft → 36°–37°
     /// 
     /// 
-    
+    public void periodic(){
+        SmartDashboard.putNumber("Hood Angle", getHoodAngle());
+
+    }
 
     public void findOptomalHoodAngle(double distanceFeet){//need to add in percent error
         double hoodAngle = 14 + 1.6 * distanceFeet;

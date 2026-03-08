@@ -9,6 +9,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.commands.turret.hoodCommands;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 public class shooterSubsystem extends SubsystemBase {
 
@@ -59,6 +61,10 @@ public class shooterSubsystem extends SubsystemBase {
         Tx = LimelightHelpers.getTX("limelight-vision");
         Ty = LimelightHelpers.getTY("limelight-vision");
         Tv = LimelightHelpers.getTV("limelight-vision");
+        SmartDashboard.putBoolean("Shooter", turret_motorsOn);
+        //SmartDashboard.putBoolean("Shooter", turret_motorsOn);
+
+
     }
 
     public void shooterOnOff() {
@@ -100,6 +106,7 @@ public class shooterSubsystem extends SubsystemBase {
         turret_motor1.stopMotor();
         turret_motor2.stopMotor();
         turret_motorsOn = false;
+        SmartDashboard.putBoolean("Shooter", turret_motorsOn);
     }
 
     public void shooterReverse( ){
