@@ -100,7 +100,7 @@ public class RobotContainer
                                                              .allianceRelativeControl(false);
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                        () -> -driverXbox.getLeftY(),
+                                                                        () -> -driverXbox.getLeftY()*-1,
                                                                         () -> -driverXbox.getLeftX())
                                                                     .withControllerRotationAxis(() -> driverXbox.getRawAxis(
                                                                         2))
