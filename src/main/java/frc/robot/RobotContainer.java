@@ -243,7 +243,11 @@ public class RobotContainer
       //       intakeCommands.intakeUp(10.0);
       //     }
       //   }));
-      
+      CameraServer.startAutomaticCapture(0); 
+      CameraServer.startAutomaticCapture(1); 
+      CameraServer.startAutomaticCapture(2); 
+      CameraServer.startAutomaticCapture(3); 
+      CameraServer.startAutomaticCapture(4); 
       CameraServer.startAutomaticCapture(5); 
 
       // Intake
