@@ -82,6 +82,14 @@ public class turretCommands {
         return hood.getHoodAngle();
     }
 
+    public void moveHoodOneUp(){
+        hood.moveHoodOneUp();
+    }
+
+    public void moveHoodOneDown(){
+        hood.moveHoodOneDown();
+    }
+
     // public void setHoodAngle(double hoodAngle){
     //     hood.setHoodAngleCustom(hoodAngle);
     // }

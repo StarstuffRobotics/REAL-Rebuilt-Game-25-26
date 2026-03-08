@@ -4,16 +4,31 @@ import frc.robot.subsystems.turret.LinearServo;
 
 
 public class hoodCommands extends SubsystemBase {
-    // ✅ Create instances here with CORRECT ports (8 and 9)
-    private final LinearServo hood1 = new LinearServo(8, 100, 50);
-    private final LinearServo hood2 = new LinearServo(9, 100, 50);
+    
+    private final LinearServo hood1 = new LinearServo(0, 100, 50);
+    private final LinearServo hood2 = new LinearServo(1, 100, 50);
 
     private final double[] estimatedposes = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-    private int i = 0;
+    private int currentPoseIndex = 0;
 
     public hoodCommands() {
         
     }
+
+    public void moveHoodOneUp(){
+        currentPoseIndex = Math.min(currentPoseIndex + 1, estimatedposes.length - 1);
+        double position = estimatedposes[currentPoseIndex];
+        hood1.setPosition(position);
+        hood2.setPosition(position);
+    }
+
+    public void moveHoodOneDown(){
+        currentPoseIndex = Math.min(currentPoseIndex - 1, 0);
+        double position = estimatedposes[currentPoseIndex];
+        hood1.setPosition(position);
+        hood2.setPosition(position);
+    }
+
 
     @Override
     public void periodic() {
