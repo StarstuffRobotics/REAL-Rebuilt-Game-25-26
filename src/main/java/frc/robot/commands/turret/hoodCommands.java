@@ -4,21 +4,20 @@ import frc.robot.subsystems.turret.LinearServo;
 
 
 public class hoodCommands extends SubsystemBase {
-    LinearServo hood1;
-    LinearServo hood2;
+    // ✅ Create instances here with CORRECT ports (8 and 9)
+    private final LinearServo hood1 = new LinearServo(8, 100, 50);
+    private final LinearServo hood2 = new LinearServo(9, 100, 50);
 
-    public double distance = 0 ;
-   
-    
-   
-    public hoodCommands(){
-        this.hood1 = LinearServo.getHood2(); // Example parameters: channel 1, length 100mm, speed 50mm/s
-        this.hood2 = LinearServo.getHood1(); // Example parameters: channel 2, length 100mm, speed 50mm/s
+    private final double[] estimatedposes = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    private int i = 0;
+
+    public hoodCommands() {
+        
     }
 
     @Override
     public void periodic() {
-        hood1.updateCurPos();  
+        hood1.updateCurPos();
         hood2.updateCurPos();
     }
 
