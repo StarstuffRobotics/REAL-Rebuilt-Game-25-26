@@ -114,7 +114,7 @@ public class shooterSubsystem extends SubsystemBase {
 
     
     public double getHoodAngle() {
-        return hood.getHoodAngle(); // Replace with actual encoder reading
+        return hood.getHoodAngle(); 
     }
 
     /**
@@ -132,6 +132,7 @@ public class shooterSubsystem extends SubsystemBase {
         // FIXED: use height difference in numerator, not raw Ty
         return DELTA_H / Math.tan(angleToGoalRadians);
     }
+
     public double getFixedDistanceToHub(){
         return 15.0;
     }

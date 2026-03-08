@@ -13,6 +13,11 @@ public class shooterCommands {
         shooter.shooterOnOff(speed);
     }
 
+    public double calculateTargetRPM(){
+        double distance = shooter.getDistanceToHub(); // Use Limelight distance calculation
+        return shooterSubsystem.calculateTargetRPM(distance, shooter.getHoodAngle());
+    }
+
     public void startMotor(){
         shooter.shooterOnOff();
     }

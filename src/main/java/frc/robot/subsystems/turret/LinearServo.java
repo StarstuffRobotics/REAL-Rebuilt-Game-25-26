@@ -3,6 +3,7 @@ package frc.robot.subsystems.turret;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.LimelightHelpers;
 
 public class LinearServo extends Servo {
     double m_speed;
@@ -13,11 +14,7 @@ public class LinearServo extends Servo {
     double MAX_ANGLE = 40;
     double MIN_ANGLE = 15;
 
-
-
     
-
-
     /**
      * Parameters for L16-R Actuonix Linear Actuators
      *
@@ -58,23 +55,22 @@ public class LinearServo extends Servo {
         }
     }
 
-    /**
-     * Get current position of the servo
-     * Must be calling updateCurPos() periodically
-     *
-     * @return Servo Position [mm]
-     */
+  
     public double getAngle() {
-        return ((curPos/m_length)*(MAX_ANGLE-MIN_ANGLE)+MIN_ANGLE); // ✅ Fixed - was missing return statement!
+        return ((curPos/m_length)*(MAX_ANGLE-MIN_ANGLE)+MIN_ANGLE); 
     }
 
-    /**
-     * Checks if servo is at its target position
-     * Must be calling updateCurPos() periodically
-     *
-     * @return true when servo is at its target
-     */
+    
     public boolean isFinished() {
         return Math.abs(curPos - setPos) < 0.5; // ✅ Fixed - use tolerance instead of ==
     }
+
+
+
+    public void findOptomalHoodAngle(double distanceFeet){//need to add in percent error
+        double hoodAngle = 14 + 1.6 * distanceFeet;
+        setPosition(hoodAngle);
+    }
+
+
 }

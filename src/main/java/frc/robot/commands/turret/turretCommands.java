@@ -13,6 +13,8 @@ public class turretCommands {
         this.hood = hood;
     }
 
+
+    
     public void allignTurret(){
         rotation.rotateTurret();
     }
@@ -29,6 +31,7 @@ public class turretCommands {
         hood.hoodDown();
     }
 
+    
     public void runTurret(){
         allignTurret();
         //findOptimalHoodAngle();
@@ -45,7 +48,8 @@ public class turretCommands {
     }
 
     public void shootTurret(){
-        shooter.startMotor();
+        double speed = shooter.calculateTargetRPM()/6784.0;
+        shooter.startMotor(speed);
     }
 
     public void shootTurretSpeed(){
