@@ -22,16 +22,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.SpindexerConstants;
-import frc.robot.commands.Intake.intakeCommands;
-import frc.robot.commands.accelerator.acceleratorCommands;
-import frc.robot.commands.spindexer.spindexerCommand;
 import frc.robot.commands.turret.hoodCommands;
 import frc.robot.commands.turret.shooterCommands;
 import frc.robot.commands.turret.turretCommands;
-import frc.robot.subsystems.accelerator.acceleratorSubsystem;
-import frc.robot.subsystems.intake.intakeSubsystem;
-import frc.robot.subsystems.spindexer.spindexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
 import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for shooterCommands
@@ -50,16 +43,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   // Intake
-  private final intakeSubsystem intakes = new intakeSubsystem();
-  private final intakeCommands intake = new intakeCommands(intakes);
-
-  // Accelerator
-  private final acceleratorSubsystem acceleratorSubsystem = new acceleratorSubsystem();
-  private final acceleratorCommands acceleratorCommands = new acceleratorCommands(acceleratorSubsystem);
-
-  // Spindexer
-  private final spindexerSubsystem spindexer   = new spindexerSubsystem();
-  private final spindexerCommand spindexerCommand = new spindexerCommand(spindexer);
+ 
 
   private final shooterSubsystem shooterSubsystem = new shooterSubsystem();
   private final shooterCommands shooter = new shooterCommands(shooterSubsystem);
@@ -77,12 +61,12 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY() * -1, //so that forward on the joystick is forward on the field, it was reversed
-                                                                () -> driverXbox.getLeftX() * -1) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
+                                                                () -> driverXbox.getLeftY(), //so that forward on the joystick is forward on the field, it was reversed
+                                                                () -> driverXbox.getLeftX()) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
                                                               .withControllerRotationAxis(() -> driverXbox.getRightX() * -1) // Rotation
                                                               .deadband(OperatorConstants.DEADBAND)
                                                               .scaleTranslation(0.8)
-                                                              .allianceRelativeControl(alleianceRelativeControlDefault);
+                                                              .allianceRelativeControl(false);
 
 
   /**
@@ -132,19 +116,14 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+
     // Configure the trigger bindings
-
-    DriverStation.silenceJoystickConnectionWarning(true);
-
-
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-    NamedCommands.registerCommand("shootTurret", Commands.runOnce(()->turret.shootTurretSpeed()));
-    NamedCommands.registerCommand("Accselerator On", Commands.runOnce(acceleratorCommands::spinToggle));
-    NamedCommands.registerCommand("Spindexer On", Commands.runOnce(()-> spindexerCommand.spin(SpindexerConstants.kSpindexerSpeed)));
-    NamedCommands.registerCommand("setX", Commands.runOnce(() -> drivebase.lock()));
-   
+    NamedCommands.registerCommand("shootTurret",Commands.runOnce(()-> turret.shootTurretSpeed()));
+    //NamedCommands.registerCommand("Accelator", Commands.runOnce(acceleratorCommands::spinToggle));
+    //NamedCommands.registerCommand("SpindexerOn", Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
+    NamedCommands.registerCommand("setX",Commands.runOnce(drivebase::lock));
   }
 
   /**
@@ -246,49 +225,11 @@ public class RobotContainer
       //     }
       //   }));
       
-
-      driverXbox.a().onTrue(Commands.runOnce(() -> {
-        intake.rollerOut();
-        turret.shooterReverse();
-        acceleratorCommands.reverseSpin();
-        turret.shooterReverse();
-
-      }));
-
-      driverXbox.a().onFalse(Commands.runOnce(() -> {
-        intake.rollerStop();
-        turret.shooterStop();
-        acceleratorCommands.stop();
-        turret.shooterStop();
-
-      }));
-
-      // Intake
-      driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
       
-      driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
-      
-      //driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
-      //driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
-      
-      driverXbox.b().onFalse(Commands.runOnce( ()-> intake.intakeStop()));
-     
-
-      // Spindexer
-      //driverXbox.a().onTrue(Commands.runOnce(spindexerCommand::reversedSpin));
-      driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
-      
-      driverXbox.y().onTrue(Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
-
-      // Accelerator
-      driverXbox.y().onTrue(Commands.runOnce(acceleratorCommands::spinToggle));//off on
-      //driverXbox.a().onTrue(Commands.runOnce(acceleratorCommands::reverseSpin));//off on but reverse
-      driverXbox.a().onFalse(Commands.runOnce(acceleratorCommands::stop));
-
       // Turret
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
       
-      //driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
+      driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
       driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
@@ -296,9 +237,8 @@ public class RobotContainer
       driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
-      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.hoodUp()));//hood up
-      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.hoodDown()));//hood down
-      //driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
+      //driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.cycleHoodAngleForward()));//hood up
+      //driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.cycleHoodAngleBackward()));//hood down
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
@@ -306,9 +246,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
-        alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
-      }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
+      // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
+      //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
+      // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
     }
 
   }
@@ -321,7 +261,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Middle Blue");
+    return drivebase.getAutonomousCommand("Blue Middle Auto");
   }
 
   public void setMotorBrake(boolean brake)
