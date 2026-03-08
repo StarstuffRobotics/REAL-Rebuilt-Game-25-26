@@ -1,6 +1,5 @@
 package frc.robot.subsystems.turret;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -47,8 +46,13 @@ public class LinearServo extends Servo {
     }
 
     public void setPosition(double setpoint) {
-        setPos = MathUtil.clamp(setpoint, 0, m_length);
-        setSpeed((setPos / m_length * 2) - 1);
+        // setPos = MathUtil.clamp(setpoint, 0, m_length);
+        // setSpeed((setPos / m_length * 2) - 1);
+
+        setPos= Math.max(0,Math.min(m_length, setPos)); 
+        double servoValue = setPos / m_length; 
+
+        set(servoValue); 
     }
 
     /**
