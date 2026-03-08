@@ -227,7 +227,7 @@ public class RobotContainer
       
       
       // Turret
-      driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
+      driverXbox.y().onTrue(Commands.runOnce(() -> turret.runTurret()));
       
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
