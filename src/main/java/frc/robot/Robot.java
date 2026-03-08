@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,12 +19,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot
 {
 
+
   private static Robot   instance;
   private        Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+
+  private HttpCamera limelightTurret;
+  private HttpCamera limelightFront;
+
 
   public Robot()
   {
@@ -45,6 +51,9 @@ public class Robot extends TimedRobot
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
+    limelightTurret = new HttpCamera("limelight-turret", "http://limelight-turret.local:5800/stream.mjpg");
+    //limelightFront = new HttpCamera("limelight-front", "http://limelight-front.local:5800/stream.mjpg");
+    
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
