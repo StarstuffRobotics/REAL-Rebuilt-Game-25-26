@@ -137,11 +137,10 @@ public class RobotContainer
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     NamedCommands.registerCommand("shootTurret",Commands.runOnce(()-> turret.shootTurretSpeed()));
     NamedCommands.registerCommand("Accelator", Commands.runOnce(acceleratorCommands::spinToggle));
     NamedCommands.registerCommand("SpindexerOn", Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
-    NamedCommands.registerCommand("sexX",Commands.runOnce(drivebase::lock));
+    NamedCommands.registerCommand("setX",Commands.runOnce(drivebase::lock));
   }
 
   /**
