@@ -31,8 +31,8 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  private HttpCamera limelightTurret;
-  private HttpCamera limelightFront;
+  //private HttpCamera limelightTurret;
+  //private HttpCamera limelightFront;
 
 
   public Robot()
@@ -55,9 +55,9 @@ public class Robot extends TimedRobot
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    limelightTurret = new HttpCamera("limelight-turret", "http://limelight-turret.local:5800/stream.mjpg");
+    //limelightTurret = new HttpCamera("limelight-turret", "http://limelight-turret.local:5800/stream.mjpg");
     //limelightFront = new HttpCamera("limelight-front", "http://limelight-front.local:5800/stream.mjpg");
-    CameraServer.addCamera(limelightTurret);
+    //CameraServer.addCamera(limelightTurret);
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
@@ -84,11 +84,11 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    Shuffleboard.getTab("Teleoperated")
-    .add("Limelight Feed", limelightTurret)
-    .withWidget(BuiltInWidgets.kCameraStream)
-    .withSize(4, 3) // Adjust size as needed
-    .withPosition(0, 0);
+    // Shuffleboard.getTab("Teleoperated")
+    // .add("Limelight Feed", limelightTurret)
+    // .withWidget(BuiltInWidgets.kCameraStream)
+    // .withSize(4, 3) // Adjust size as needed
+    // .withPosition(0, 0);
   }
 
   /**

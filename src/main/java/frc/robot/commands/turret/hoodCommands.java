@@ -27,11 +27,11 @@ public class hoodCommands {
     }
 
     public void cycleHoodAngleForward(){
-        hood.cycleHoodAngle(1);
+        hood.cycleHoodAngle(3);
     }
 
     public void cycleHoodAngleBackward(){
-        hood.cycleHoodAngle(-1);
+        hood.cycleHoodAngle(-3);
     }
     
 }
