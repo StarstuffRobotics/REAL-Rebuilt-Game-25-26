@@ -252,19 +252,15 @@ public class RobotContainer
 
       // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
-      
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
-      
       driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
       driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
-      
       driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
      
 
       // Spindexer
       driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
       driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
-      
       driverXbox.y().onTrue(Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
 
       // Accelerator
@@ -274,7 +270,6 @@ public class RobotContainer
 
       // Turret
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
-      
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
