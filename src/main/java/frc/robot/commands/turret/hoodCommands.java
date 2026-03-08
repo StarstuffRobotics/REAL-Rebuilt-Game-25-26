@@ -6,6 +6,7 @@ import frc.robot.subsystems.turret.LinearServo;
 public class hoodCommands extends SubsystemBase {
     LinearServo hood1;
     LinearServo hood2;
+
     public double distance = 0 ;
    
     
@@ -36,12 +37,12 @@ public class hoodCommands extends SubsystemBase {
     }
 
     public void hoodUp(){
-        hood1.setPosition(getHoodAngle() + 0.1);
-        hood2.setPosition(getHoodAngle() + 0.1);
+        hood1.setPosition(getHoodAngle() + 3);
+        hood2.setPosition(getHoodAngle() + 3);
     }
     public void hoodDown(){
-        hood1.setPosition(getHoodAngle() - 0.1);
-        hood2.setPosition(getHoodAngle() - 0.1);
+        hood1.setPosition(getHoodAngle() - 3);
+        hood2.setPosition(getHoodAngle() - 3);
     }
 
     public void hoodZero(){

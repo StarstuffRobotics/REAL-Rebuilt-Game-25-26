@@ -27,6 +27,9 @@ public class LinearServo extends Servo {
      */
     public LinearServo(int channel, double length, double speed) {
         super(channel); // Call the superclass constructor with the channel parameter
+        
+        super.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);;  
+        
         this.m_length = length;
         this.m_speed = speed;
     }
@@ -49,7 +52,7 @@ public class LinearServo extends Servo {
         // setPos = MathUtil.clamp(setpoint, 0, m_length);
         // setSpeed((setPos / m_length * 2) - 1);
 
-        setPos= Math.max(0,Math.min(m_length, setPos)); 
+        setPos= Math.max(0,Math.min(m_length, setpoint)); 
         double servoValue = setPos / m_length; 
 
         set(servoValue); 
