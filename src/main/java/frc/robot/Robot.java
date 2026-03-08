@@ -62,13 +62,7 @@ public class Robot extends TimedRobot
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
 
-    Shuffleboard.getTab("Teleoperated")
-    .add("Limelight Feed", limelightTurret)
-    .withWidget(BuiltInWidgets.kCameraStream)
-    .withSize(4, 3) // Adjust size as needed
-    .withPosition(0, 0);
-
-
+  
     if (isSimulation())
     {
       DriverStation.silenceJoystickConnectionWarning(true);
@@ -90,6 +84,11 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    Shuffleboard.getTab("Teleoperated")
+    .add("Limelight Feed", limelightTurret)
+    .withWidget(BuiltInWidgets.kCameraStream)
+    .withSize(4, 3) // Adjust size as needed
+    .withPosition(0, 0);
   }
 
   /**
