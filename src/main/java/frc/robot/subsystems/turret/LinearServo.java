@@ -12,7 +12,8 @@ public class LinearServo extends Servo {
     double lastTime = 0;
     double MAX_ANGLE = 40;
     double MIN_ANGLE = 15;
-
+    private static LinearServo hood1 = new LinearServo(0, 100, 50); // Example parameters: channel 1, length 100mm, speed 50mm/s
+    private static LinearServo hood2 = new LinearServo(1, 100, 50);
 
 
     
@@ -25,11 +26,10 @@ public class LinearServo extends Servo {
      * @param length max length of the servo [mm]
      * @param speed max speed of the servo [mm/second]
      */
-    public LinearServo(int channel, int length, int speed) {
-        super(channel);
-        // Removed setBounds as it is not defined in the Servo class
-        m_length = length;
-        m_speed = speed;
+    public LinearServo(int channel, double length, double speed) {
+        super(channel); // Call the superclass constructor with the channel parameter
+        this.m_length = length;
+        this.m_speed = speed;
     }
 
     /**
@@ -37,6 +37,14 @@ public class LinearServo extends Servo {
      *
      * @param setpoint the target position [mm]
      */
+
+    public static LinearServo getHood1(){
+        return hood1;
+    }
+
+    public static LinearServo getHood2(){
+        return hood2;
+    }
 
     public void setPosition(double setpoint) {
         setPos = MathUtil.clamp(setpoint, 0, m_length);
