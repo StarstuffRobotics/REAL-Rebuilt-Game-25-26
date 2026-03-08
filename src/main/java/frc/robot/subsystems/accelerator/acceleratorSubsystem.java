@@ -5,6 +5,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AcceleratorConstants;
 
@@ -17,6 +19,10 @@ public class acceleratorSubsystem extends SubsystemBase {
         SparkFlexConfig config = new SparkFlexConfig();
         config.smartCurrentLimit(40);
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+
+    public void periodic(){
+        SmartDashboard.putBoolean("Accelerator", spinning);
     }
 
     public void spinToggle(){

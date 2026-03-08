@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
@@ -25,6 +27,11 @@ public class spindexerSubsystem extends SubsystemBase {
 
         // Apply the configuration to the motor
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    }
+    
+    public void periodic(){
+        SmartDashboard.putBoolean("Spindexer", spindexerSpinning);
+
     }
 
     public void spin() {
