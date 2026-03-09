@@ -79,13 +79,13 @@ public static class rotationConstants {
 }
 
   public static class ShooterConstants {
-  public static final double kShooterSpeed = .9;
+  public static final double kShooterSpeed = .75;
   public static final double kShooterSpeedReverse = 0.1;
   }
   public static class AcceleratorConstants
   {
     public static final int kAcceleratorMotorId = 23;
-    public static final double kAcceleratorSpeed = 1;
+    public static final double kAcceleratorSpeed = 0.75;
   }
 
   public static class SpindexerConstants
@@ -98,7 +98,7 @@ public static class rotationConstants {
   {
     public static final int kUpDown_MotorId = 20;
     public static final int kRoller_MotorId = 21;
-    public static final double kRollerMotorSpeed = 0.5;
+    public static final double kRollerMotorSpeed = 0.35;
     public static final double kUpDownMotorSpeed = 0.25;
 
   }
