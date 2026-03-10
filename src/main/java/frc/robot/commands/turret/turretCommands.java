@@ -15,8 +15,8 @@ public class turretCommands {
 
 
     
-    public void allignTurret(){
-        rotation.rotateTurret();
+    public void allignTurretOnOff(){
+        rotation.toogleTackingTurret();
     }
 
     // public void findOptimalHoodAngle(){
@@ -32,12 +32,12 @@ public class turretCommands {
     }
 
     
-    public void runTurret(){
-        allignTurret();
-        //findOptimalHoodAngle();
-        shootTurret();
+    // public void runTurret(){
+    //     allignTurret();
+    //     //findOptimalHoodAngle();
+    //     shootTurret();
 
-    }
+    // }
 
     public void manualTurretRight(){
         rotation.manualRotateRight();

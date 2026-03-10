@@ -3,7 +3,6 @@ package frc.robot.subsystems.turret;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.LimelightHelpers;
 
 public class LinearServo extends Servo {
     double m_speed;
@@ -56,9 +55,9 @@ public class LinearServo extends Servo {
     }
 
   
-    public double getAngle() {
-        return ((curPos/m_length)*(MAX_ANGLE-MIN_ANGLE)+MIN_ANGLE); 
-    }
+    // public double getAngle() {
+    //     return ((curPos/m_length)*(MAX_ANGLE-MIN_ANGLE)+MIN_ANGLE); 
+    // }
 
     
     public boolean isFinished() {
