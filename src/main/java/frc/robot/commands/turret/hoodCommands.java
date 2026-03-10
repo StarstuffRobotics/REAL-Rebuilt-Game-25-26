@@ -5,7 +5,7 @@ import frc.robot.subsystems.turret.LinearServo;
 
 public class hoodCommands extends SubsystemBase {
     
-    private final LinearServo hood1 = new LinearServo(0, 100, 50);
+    private final LinearServo hood1 = new LinearServo(2, 100, 50);
     private final LinearServo hood2 = new LinearServo(1, 100, 50);
 
     private final double[] estimatedposes = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
