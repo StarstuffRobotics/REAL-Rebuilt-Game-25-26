@@ -8,7 +8,6 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +19,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -34,10 +34,10 @@ import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.turret.hoodSubsystem;
-import frc.robot.subsystems.turret.rotationSubsystem;
-import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for shooterCommands
-import swervelib.SwerveInputStream; // Ensure this is the correct package for rotationCommands
+import frc.robot.subsystems.turret.hoodSubsystem; // Ensure this is the correct package for shooterCommands
+import frc.robot.subsystems.turret.rotationSubsystem; // Ensure this is the correct package for rotationCommands
+import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for hoodCommands
+import swervelib.SwerveInputStream;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -75,17 +75,16 @@ public class RobotContainer
   
   private boolean alleianceRelativeControlDefault = true;
   
-  
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY(), //so that forward on the joystick is forward on the field, it was reversed
-                                                                () -> driverXbox.getLeftX()) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
+                                                                () -> driverXbox.getLeftY() * -1, //so that forward on the joystick is forward on the field, it was reversed
+                                                                () -> driverXbox.getLeftX() * -1) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
                                                               .withControllerRotationAxis(() -> driverXbox.getRightX() * -1) // Rotation
                                                               .deadband(OperatorConstants.DEADBAND)
                                                               .scaleTranslation(0.8)
-                                                              .allianceRelativeControl(false);
+                                                              .allianceRelativeControl(alleianceRelativeControlDefault);
 
 
   /**
@@ -102,7 +101,7 @@ public class RobotContainer
                                                              .allianceRelativeControl(false);
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                        () -> -driverXbox.getLeftY()*-1,
+                                                                        () -> -driverXbox.getLeftY(),
                                                                         () -> -driverXbox.getLeftX())
                                                                     .withControllerRotationAxis(() -> driverXbox.getRawAxis(
                                                                         2))
@@ -135,14 +134,10 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("shootTurret",Commands.runOnce(()-> turret.shootTurretSpeed()));
-    NamedCommands.registerCommand("Accelator", Commands.runOnce(acceleratorCommands::spinToggle));
-    NamedCommands.registerCommand("SpindexerOn", Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
-    NamedCommands.registerCommand("setX",Commands.runOnce(drivebase::lock));
+    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
   }
 
   /**
@@ -243,24 +238,22 @@ public class RobotContainer
       //       intakeCommands.intakeUp(10.0);
       //     }
       //   }));
-      CameraServer.startAutomaticCapture(0); 
-      CameraServer.startAutomaticCapture(1); 
-      CameraServer.startAutomaticCapture(2); 
-      CameraServer.startAutomaticCapture(3); 
-      CameraServer.startAutomaticCapture(4); 
-      CameraServer.startAutomaticCapture(5); 
-
+      
       // Intake
       driverXbox.b().onTrue(Commands.runOnce(()-> intake.intakeUpDown()));
+      
       driverXbox.x().onTrue(Commands.runOnce(()-> intake.rollerInOff()));
+      
       driverXbox.a().onTrue(Commands.runOnce(()-> intake.rollerOut()));
       driverXbox.a().onFalse(Commands.runOnce(()-> intake.rollerStop()));
+      
       driverXbox.b().onFalse(Commands.runOnce(()-> intake.intakeStop()));
      
 
       // Spindexer
       driverXbox.a().onTrue((Commands.runOnce(spindexerCommand::reversedSpin)));
       driverXbox.a().onFalse(Commands.runOnce(spindexerCommand::stop));
+      
       driverXbox.y().onTrue(Commands.runOnce(()-> spindexer.spin(SpindexerConstants.kSpindexerSpeed)));
 
       // Accelerator
@@ -270,6 +263,7 @@ public class RobotContainer
 
       // Turret
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
+      
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
 
@@ -280,6 +274,7 @@ public class RobotContainer
       
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.cycleHoodAngleForward()));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.cycleHoodAngleBackward()));//hood down
+      driverXbox.x().onTrue(Commands.runOnce(()-> turret.findOptimalHoodAngle()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
@@ -287,9 +282,23 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
-      //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
-      // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
+      // ...existing code...
+      driverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
+        alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
+      }));
+
+      driverXbox.leftBumper().whileTrue(
+        new RunCommand(
+          () -> drivebase.drive(
+            new Translation2d(driverXbox.getLeftY(), -driverXbox.getLeftX()), // translation (x,y)
+            LimelightHelpers.getTX("limelight") * -0.05,                      // rotation
+            false                                                             // boolean flag
+          ),
+          drivebase
+        )
+      );
+// ...existing code...
+      //toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
     }
 
   }
@@ -302,7 +311,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Blue Middle Auto");
+    return drivebase.getAutonomousCommand("New Auto");
   }
 
   public void setMotorBrake(boolean brake)
