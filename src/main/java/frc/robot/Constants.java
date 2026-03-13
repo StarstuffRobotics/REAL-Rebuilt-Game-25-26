@@ -91,7 +91,9 @@ public static class rotationConstants {
   public static class SpindexerConstants
   {
     public static final int kSpindexerMotorId = 22;
-    public static final double kSpindexerSpeed = 0.2;
+    public static final double kSpindexerSpeed = 0.8;
+    public static final double kSpindexerSpeedReverse = 0.2;
+
   }
 
   public static class IntakeConstants

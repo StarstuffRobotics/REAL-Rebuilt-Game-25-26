@@ -57,7 +57,7 @@ public class spindexerSubsystem extends SubsystemBase {
 
     public void reversedSpin() {
         if (!spindexerSpinning) {
-            motor.set(-SpindexerConstants.kSpindexerSpeed);
+            motor.set(-SpindexerConstants.kSpindexerSpeedReverse);
         }else{
             stop();
         }
