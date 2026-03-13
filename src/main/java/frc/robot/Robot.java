@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.turret.hoodCommands;
-import frc.robot.subsystems.turret.LinearServo; // Update the package path to the correct location of hoodSubsystem
+ // Update the package path to the correct location of hoodSubsystem
 
 
 /**
@@ -28,7 +28,6 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  private hoodCommands hoodCommands = new hoodCommands(); // Example parameters: channel 0, length 100mm, speed 50mm/s
   
   public Robot()
   {
@@ -48,7 +47,7 @@ public class Robot extends TimedRobot
   {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer();//error
 
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 

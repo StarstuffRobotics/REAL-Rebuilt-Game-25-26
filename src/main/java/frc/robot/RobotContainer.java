@@ -26,6 +26,7 @@ import frc.robot.commands.turret.hoodCommands;
 import frc.robot.commands.turret.shooterCommands;
 import frc.robot.commands.turret.turretCommands;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.turret.HoodSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
 import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for shooterCommands
 import swervelib.SwerveInputStream; // Ensure this is the correct package for rotationCommands
@@ -49,10 +50,10 @@ public class RobotContainer
   private final shooterCommands shooter = new shooterCommands(shooterSubsystem);
   
   private final rotationSubsystem rotation = new rotationSubsystem();
-  
-  
-  private final hoodCommands hood = new hoodCommands();
-  
+
+  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
+  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
   private boolean alleianceRelativeControlDefault = true;
@@ -237,8 +238,8 @@ public class RobotContainer
       driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
-      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.moveHoodOneUp()));//hood up
-      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.moveHoodOneDown()));//hood down
+      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.hoodUp()));//hood up
+      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.hoodDown()));//hood down
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff

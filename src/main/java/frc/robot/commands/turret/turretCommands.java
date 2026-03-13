@@ -22,11 +22,11 @@ public class turretCommands {
     // }
     
     public void hoodUp(){
-        hood.hoodUp();
+        hood.setHoodSpeed();
     }
     
     public void hoodDown(){
-        hood.hoodDown();
+        hood.setHoodReversedSpeed();
     }
 
     public void runTurret(){
@@ -60,9 +60,7 @@ public class turretCommands {
         rotation.stopRotation();
     }
 
-    // public void stopHood(){
-    //     hood.stopHood();
-    // }
+  
 
     public void shooterStop(){
         shooter.shooterStop();
@@ -73,32 +71,4 @@ public class turretCommands {
         //stopHood();
         shooterStop();
     }
-
-    public void setHoodAngleZero(){
-        hood.hoodZero();
-    }
-    
-    public double getHoodAngle(){
-        return hood.getHoodAngle();
-    }
-
-    public void moveHoodOneUp(){
-        hood.moveHoodOneUp();
-    }
-
-    public void moveHoodOneDown(){
-        hood.moveHoodOneDown();
-    }
-
-    // public void setHoodAngle(double hoodAngle){
-    //     hood.setHoodAngleCustom(hoodAngle);
-    // }
-
-    // public void cycleHoodAngleForward(){
-    //     hood.cycleHoodAngleForward();
-    // }
-
-    // public void cycleHoodAngleBackward(){
-    //     hood.cycleHoodAngleBackward();
-    // }
 }

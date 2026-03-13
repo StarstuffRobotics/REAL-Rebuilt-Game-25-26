@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.commands.turret.hoodCommands;
 
 public class shooterSubsystem extends SubsystemBase {
 
@@ -20,7 +19,8 @@ public class shooterSubsystem extends SubsystemBase {
     private SparkClosedLoopController motor1Controller = turret_motor1.getClosedLoopController();
     private SparkClosedLoopController motor2Controller = turret_motor2.getClosedLoopController();
 
-    private hoodCommands hood; 
+   
+
 
     private static double limelightMountAngleDegrees;
     private double Tx;
@@ -48,6 +48,11 @@ public class shooterSubsystem extends SubsystemBase {
 
     public enum TurretState {
         IDLE, SPIN, FIND_TARGET, TRACK_TARGET
+    }
+
+    public double getHoodAngle() {
+        // Replace this with the actual implementation to retrieve the hood angle
+        return 25.0; // Placeholder value, replace with actual hood angle retrieval
     }
 
     public shooterSubsystem() {
@@ -114,9 +119,7 @@ public class shooterSubsystem extends SubsystemBase {
     }
 
     
-    public double getHoodAngle() {
-        return hood.getHoodAngle(); // Replace with actual encoder reading
-    }
+    
 
     /**
      * Uses the standard Limelight distance formula:
