@@ -29,6 +29,18 @@ public class turretCommands {
         hood.setHoodReversedSpeed();
     }
 
+    public void setHoodZero(){
+        hood.setHoodZero();
+    }
+
+    public void setHoodMax(){
+        hood.setHoodMax();
+    }
+
+    public void setHoodAngle(double angle){
+        hood.setHoodAngle(angle);
+    }
+
     public void runTurret(){
         allignTurret();
         //findOptimalHoodAngle();

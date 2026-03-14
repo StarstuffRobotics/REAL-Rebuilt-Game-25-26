@@ -31,6 +31,22 @@ public class hoodCommands  {
      public void getHoodAngle() {
         m_hoodSubsystem.getHoodAngle();
     }
+
+    public void setHoodZero() {
+        m_hoodSubsystem.setHoodZero();
+    }
+
+    public void setHoodMax() {
+        m_hoodSubsystem.setHoodMax();
+    }
+
+    public void setHoodAngle(double angle) {
+        m_hoodSubsystem.setHoodAngle(angle);
+    }
+    
+     public void stopHood() {
+        m_hoodSubsystem.stopHood();
+    }
     
     
 }

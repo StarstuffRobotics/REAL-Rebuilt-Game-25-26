@@ -55,7 +55,7 @@ public class RobotContainer
   private final hoodCommands hood = new hoodCommands(hoodSubsystem
 
 
-    
+
   );
 
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
@@ -244,6 +244,8 @@ public class RobotContainer
       
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.hoodUp()));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.hoodDown()));//hood down
+      driverXbox.povRight().onTrue(Commands.runOnce(()-> turret.setHoodZero()));
+      driverXbox.povLeft().onTrue(Commands.runOnce(()-> turret.setHoodMax()));
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
