@@ -21,13 +21,13 @@ public class turretCommands {
     //     hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
     // }
     
-    public void hoodUp(){
-        hood.setHoodSpeed();
-    }
+    // public void hoodUp(){
+    //     hood.setHoodSpeed();
+    // }
     
-    public void hoodDown(){
-        hood.setHoodReversedSpeed();
-    }
+    // public void hoodDown(){
+    //     hood.setHoodReversedSpeed();
+    // }
 
     public void setHoodZero(){
         hood.setHoodZero();

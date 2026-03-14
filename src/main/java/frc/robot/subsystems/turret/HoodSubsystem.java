@@ -16,23 +16,23 @@ public class HoodSubsystem extends SubsystemBase {
         m_servo.setSpeed(0);
     }
 
-    public void setSpeed() {
-        m_servo.setSpeed(0.3);
+    // public void setSpeed() {
+    //     m_servo.setSpeed(0.3);
         
-    }
+    // }
 
-    public void setReversedSpeed(){
-        m_servo.setSpeed(0.3);
-    }
+    // public void setReversedSpeed(){
+    //     m_servo.setSpeed(-0.3);
+    // }
 
-    public void setSpeed(double speed) {
-        m_servo.setSpeed(speed);
-    }
+    // public void setSpeed(double speed) {
+    //     m_servo.setSpeed(speed);
+    // }
 
 
-    public void setReversedSpeed(double speed) {
-        m_servo.setSpeed(-speed);
-    }
+    // public void setReversedSpeed(double speed) {
+    //     m_servo.setSpeed(-speed);
+    // }
 
     public void getHoodAngle() {
         // Implement logic to get the current angle of the hood
