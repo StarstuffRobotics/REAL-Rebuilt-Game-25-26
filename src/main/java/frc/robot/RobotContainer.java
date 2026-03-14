@@ -52,7 +52,11 @@ public class RobotContainer
   private final rotationSubsystem rotation = new rotationSubsystem();
 
   private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
-  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
+  private final hoodCommands hood = new hoodCommands(hoodSubsystem
+
+
+    
+  );
 
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   

@@ -5,10 +5,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class HoodSubsystem extends SubsystemBase {
     
-    private final Servo m_servo = new Servo(0);
+    private final Servo m_servo;
 
+    public HoodSubsystem() {
+        m_servo = new Servo(0); 
+        m_servo.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
+    }
+    
     public void setSpeed() {
         m_servo.set(0.5);
+        
     }
 
     public void setReversedSpeed(){
