@@ -43,7 +43,7 @@ public class HoodSubsystem extends SubsystemBase {
     }
 
     public void setHoodMax(){
-        m_servo.setAngle(60);
+        m_servo.setAngle(180);
     }
 
     public void setHoodAngle(double angle) {
