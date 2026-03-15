@@ -7,14 +7,15 @@ public class turretCommands {
     rotationSubsystem rotation;
     hoodCommands hood;
 
-    public turretCommands(shooterCommands shooter,rotationSubsystem rotation, hoodCommands hood){
+    public turretCommands(shooterCommands shooter, rotationSubsystem rotation, hoodCommands hood){
         this.shooter = shooter;
         this.rotation = rotation;   
         this.hood = hood;
     }
 
     public void allignTurret(){
-        rotation.rotateTurret();
+        // Calls the new PID method that actually moves the motor
+        rotation.runTurretPID(); 
     }
 
     // public void findOptimalHoodAngle(){
@@ -45,7 +46,6 @@ public class turretCommands {
         allignTurret();
         //findOptimalHoodAngle();
         shootTurret();
-
     }
 
     public void manualTurretRight(){
@@ -71,8 +71,6 @@ public class turretCommands {
     public void stopRotation(){
         rotation.stopRotation();
     }
-
-  
 
     public void shooterStop(){
         shooter.shooterStop();

@@ -5,15 +5,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 public class rotationSubsystem extends SubsystemBase {
-    private final String LIMELIGHT_NAME = "limelight"; 
+    private final String LIMELIGHT_NAME = "limelight-turret"; 
 
     private SparkFlex turret_motor1 = new SparkFlex(24, MotorType.kBrushless); 
     
@@ -30,6 +29,8 @@ public class rotationSubsystem extends SubsystemBase {
     private double Tx;
     private double Ty;
     private boolean Tv;
+    private int Tid; 
+    private int targetTagId = 9; // Default to Red Alliance
 
     public rotationSubsystem() {
         turnController.setTolerance(1.5); // degrees
@@ -40,21 +41,35 @@ public class rotationSubsystem extends SubsystemBase {
         Tx = LimelightHelpers.getTX(LIMELIGHT_NAME);
         Ty = LimelightHelpers.getTY(LIMELIGHT_NAME);
         Tv = LimelightHelpers.getTV(LIMELIGHT_NAME);
+        Tid = (int) LimelightHelpers.getFiducialID(LIMELIGHT_NAME); // Cast to int
       
+        // Check alliance color and set the target ID and Limelight Pipeline
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            if (alliance.get() == DriverStation.Alliance.Red) {
+                targetTagId = 9;
+                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 0); // Assuming Pipeline 0 is Red
+            } else {
+                targetTagId = 25;
+                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 1); // Assuming Pipeline 1 is Blue
+            }
+        }
+
         SmartDashboard.putBoolean("Tag Visible", hasTarget());
         SmartDashboard.putNumber("Distance", getDistanceToTarget());
         SmartDashboard.putNumber("Turret Tx", Tx);
+        SmartDashboard.putNumber("Target Tag ID", targetTagId);
     }
+
     public boolean hasTarget() {
-        return Tv; 
+        // We only have a valid target if the Limelight sees a tag AND it's the correct ID
+        return Tv && (Tid == targetTagId); 
     }
 
     public double getDistanceToTarget() {
         if (!hasTarget()) return 0.0;
         return calculateDistance(Ty);
     }
-
-    
     
     public double calculateDistance(double ty) {
         double totalAngleDegrees = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
@@ -74,59 +89,46 @@ public class rotationSubsystem extends SubsystemBase {
         turret_motor1.set(0);
     }
 
-    public Command rotateTurret() {
-        return new RunCommand(() -> {
-            if (!hasTarget()) {
-                turret_motor1.set(0);
-                return;
-            }
+    // This replaces your rotateTurret() Command so it can be called sequentially 
+    public void runTurretPID() {
+        if (!hasTarget()) {
+            turret_motor1.set(0);
+            return;
+        }
 
-            // Stop if soft limits are exceeded
-            if (!isWithinSoftLimits()) {
-                turret_motor1.set(0);
-                return;
-            }
+        // Stop if soft limits are exceeded
+        if (!isWithinSoftLimits()) {
+            turret_motor1.set(0);
+            return;
+        }
 
-            double rotationSpeed = -turnController.calculate(Tx, 0.0);
-            
-            // Widened deadband to reduce jitter
-            if (Math.abs(Tx) < 2.5) {
-                rotationSpeed = 0.0;
-            }
+        double rotationSpeed = -turnController.calculate(Tx, 0.0);
+        
+        // Widened deadband to reduce jitter
+        if (Math.abs(Tx) < 2.5) {
+            rotationSpeed = 0.0;
+        }
 
-            // Clamp output to safe range
-            rotationSpeed = Math.max(-0.4, Math.min(0.4, rotationSpeed));
+        // Clamp output to safe range
+        rotationSpeed = Math.max(-0.4, Math.min(0.4, rotationSpeed));
 
-            turret_motor1.set(rotationSpeed);
-        }, this);
+        turret_motor1.set(rotationSpeed);
     }
 
-    public Command rotateTurretRight(){
-        return new RunCommand(() -> {
-            if (!hasTarget()) {
-                turret_motor1.set(0);
-                return;
-            }
-            if (!isWithinSoftLimits()) {
-                turret_motor1.set(0);
-                return;
-            }
-            turret_motor1.set(0.05);
-        }, this);
+    public void rotateTurretRight() {
+        if (!hasTarget() || !isWithinSoftLimits()) {
+            turret_motor1.set(0);
+            return;
+        }
+        turret_motor1.set(0.05);
     }
 
-    public Command rotateTurretLeft(){
-        return new RunCommand(()-> {
-            if (!hasTarget()) {
-                turret_motor1.set(0);
-                return;
-            }
-            if (!isWithinSoftLimits()) {
-                turret_motor1.set(0);
-                return;
-            }
-            turret_motor1.set(-0.05);
-        });
+    public void rotateTurretLeft() {
+        if (!hasTarget() || !isWithinSoftLimits()) {
+            turret_motor1.set(0);
+            return;
+        }
+        turret_motor1.set(-0.05);
     }
 
     public void manualRotateRight(){
@@ -136,6 +138,4 @@ public class rotationSubsystem extends SubsystemBase {
     public void manualRotateLeft(){
         turret_motor1.set(-.05);
     }
-
-
 }
