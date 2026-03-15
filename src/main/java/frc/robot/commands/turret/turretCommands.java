@@ -17,17 +17,29 @@ public class turretCommands {
         rotation.rotateTurret();
     }
 
-    public void findOptimalHoodAngle(){
-        hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
-    }
+    // public void findOptimalHoodAngle(){
+    //     hood.findOptimalHoodAngle(rotation.getDistanceToTarget());
+    // }
     
-    public void hoodUp(){
-        hood.setHoodAngleCustom(hood.getHoodAngle() + 0.1);
-    }
+    // public void hoodUp(){
+    //     hood.setHoodSpeed();
+    // }
     
-    public void hoodDown(){
-        hood.setHoodAngleCustom(hood.getHoodAngle() - 0.1);
+    // public void hoodDown(){
+    //     hood.setHoodReversedSpeed();
+    // }
+
+    public void setHoodZero(){
+        hood.setHoodZero();
     }
+
+    public void setHoodMax(){
+        hood.setHoodMax();
+    }
+
+    // public void setHoodAngle(double angle){
+    //     hood.setHoodAngle(angle);
+    // }
 
     public void runTurret(){
         allignTurret();
@@ -60,9 +72,7 @@ public class turretCommands {
         rotation.stopRotation();
     }
 
-    public void stopHood(){
-        hood.stopHood();
-    }
+  
 
     public void shooterStop(){
         shooter.shooterStop();
@@ -70,27 +80,7 @@ public class turretCommands {
 
     public void stopTurret(){
         stopRotation();
-        stopHood();
+        //stopHood();
         shooterStop();
-    }
-
-    public void setHoodAngleZero(){
-        hood.setHoodAngleCustom(0);
-    }
-    
-    public double getHoodAngle(){
-       return hood.getHoodAngle();
-    }
-
-    public void setHoodAngle(double hoodAngle){
-        hood.setHoodAngleCustom(hoodAngle);
-    }
-
-    public void cycleHoodAngleForward(){
-        hood.cycleHoodAngleForward();
-    }
-
-    public void cycleHoodAngleBackward(){
-        hood.cycleHoodAngleBackward();
     }
 }

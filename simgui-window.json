@@ -23,7 +23,11 @@
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
+<<<<<<< HEAD
       "Pos": "285,9",
+=======
+      "Pos": "174,64",
+>>>>>>> hoodcodetest
       "Size": "740,373"
     },
     "###FMS": {
@@ -34,7 +38,11 @@
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "250,465",
+<<<<<<< HEAD
       "Size": "796,206"
+=======
+      "Size": "796,172"
+>>>>>>> hoodcodetest
     },
     "###Keyboard 0 Settings": {
       "Collapsed": "0",
@@ -58,7 +66,11 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
+<<<<<<< HEAD
       "Pos": "-29,311",
+=======
+      "Pos": "205,308",
+>>>>>>> hoodcodetest
       "Size": "192,218"
     },
     "###Timing": {

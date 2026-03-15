@@ -22,7 +22,8 @@ public class shooterSubsystem extends SubsystemBase {
     private SparkClosedLoopController motor1Controller = turret_motor1.getClosedLoopController();
     private SparkClosedLoopController motor2Controller = turret_motor2.getClosedLoopController();
 
-    private hoodCommands hood; 
+   
+
 
     private static double limelightMountAngleDegrees;
     private double Tx;
@@ -52,6 +53,11 @@ public class shooterSubsystem extends SubsystemBase {
         IDLE, SPIN, FIND_TARGET, TRACK_TARGET
     }
 
+    public double getHoodAngle() {
+        // Replace this with the actual implementation to retrieve the hood angle
+        return 25.0; // Placeholder value, replace with actual hood angle retrieval
+    }
+
     public shooterSubsystem() {
         // TODO: Configure PID gains on motor1Controller and motor2Controller here
     }
@@ -71,7 +77,8 @@ public class shooterSubsystem extends SubsystemBase {
         if(!turret_motorsOn){
             if (!Tv) return; // No target visible, don't spin
 
-            double distance = getFixedDistanceToHub(); // Use Limelight distance calculation
+            double distance = getDistanceToHub(); // Use Limelight distance calculation
+            
             double rpm = calculateTargetRPM(distance, getHoodAngle());
 
             double speed = rpm/6784.0; // Convert RPM to percentage of max speed (assuming 6784 RPM is max)
@@ -120,9 +127,7 @@ public class shooterSubsystem extends SubsystemBase {
     }
 
     
-    public double getHoodAngle() {
-        return hood.getHoodAngle(); // Replace with actual encoder reading
-    }
+    
 
     /**
      * Uses the standard Limelight distance formula:

@@ -1,37 +1,45 @@
 package frc.robot.commands.turret;
-import frc.robot.subsystems.turret.hoodSubsystem;
+import frc.robot.subsystems.turret.HoodSubsystem;
 
 
-public class hoodCommands {
-    hoodSubsystem hood;
+public class hoodCommands  {
+    
+    private final HoodSubsystem m_hoodSubsystem;
 
-    public double distance = 0 ;
-    public hoodCommands(hoodSubsystem hood){
-        this.hood = hood;
+
+    
+    public hoodCommands(HoodSubsystem hoodSubsystem) {
+        m_hoodSubsystem = hoodSubsystem;
     }
 
-    public void findOptimalHoodAngle(double distanceFeet){//will find angle then set angle pass in the distence form the lime light
-        hood.findOptomalHoodAngle(distanceFeet);
+    // public void setHoodSpeed(double speed) {
+    //     m_hoodSubsystem.setSpeed(speed);
+    // }
+
+    // public void setHoodSpeed() {
+    //     m_hoodSubsystem.setSpeed();
+    // }
+
+    // public void setHoodReversedSpeed(double speed) {
+    //     m_hoodSubsystem.setReversedSpeed(speed);
+    // }
+
+    // public void setHoodReversedSpeed() {
+    //     m_hoodSubsystem.setReversedSpeed();
+    // }
+
+     public void getHoodAngle() {
+        m_hoodSubsystem.getHoodAngle();
     }
 
-    public void setHoodAngleCustom(double hoodAngle){
-        hood.setHoodAngleCustom(hoodAngle);
+    public void setHoodZero() {
+        m_hoodSubsystem.setHoodZero();
     }
 
-    public void stopHood(){
-        hood.stopHood();
+    public void setHoodMax() {
+        m_hoodSubsystem.setHoodMax();
     }
 
-    public double getHoodAngle(){
-        return hood.getHoodAngle();
-    }
-
-    public void cycleHoodAngleForward(){
-        hood.cycleHoodAngle(3);
-    }
-
-    public void cycleHoodAngleBackward(){
-        hood.cycleHoodAngle(-3);
-    }
+  
     
 }

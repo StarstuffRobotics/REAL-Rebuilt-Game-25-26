@@ -24,8 +24,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SpindexerConstants;
-import frc.robot.commands.Intake.intakeCommands;
 import frc.robot.commands.accelerator.acceleratorCommands;
+import frc.robot.commands.intake.intakeCommands;
 import frc.robot.commands.spindexer.spindexerCommand;
 import frc.robot.commands.turret.hoodCommands;
 import frc.robot.commands.turret.shooterCommands;
@@ -33,8 +33,9 @@ import frc.robot.commands.turret.turretCommands;
 import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
+// import frc.robot.subsystems.sound;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.turret.hoodSubsystem;
+import frc.robot.subsystems.turret.HoodSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
 import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for shooterCommands
 import swervelib.SwerveInputStream; // Ensure this is the correct package for rotationCommands
@@ -52,6 +53,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   // Intake
+ 
   private final intakeSubsystem intakes = new intakeSubsystem();
   private final intakeCommands intake = new intakeCommands(intakes);
 
@@ -68,10 +70,11 @@ public class RobotContainer
   
   private final rotationSubsystem rotation = new rotationSubsystem();
   
-  private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
+  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
   private final hoodCommands hood = new hoodCommands(hoodSubsystem);
   
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
+
   
   private boolean alleianceRelativeControlDefault = true;
   
@@ -80,12 +83,13 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driverXbox.getLeftY(), //so that forward on the joystick is forward on the field, it was reversed
-                                                                () -> driverXbox.getLeftX()) //so that the right stick rotates, will add strafing soon. I do not know if I can do this tho bc. there is that thing on line 57.
+                                                                () -> driverXbox.getLeftY(), // Forward on the joystick is forward on the field
+                                                                () -> driverXbox.getLeftX()) // Right stick rotates
                                                               .withControllerRotationAxis(() -> driverXbox.getRightX() * -1) // Rotation
                                                               .deadband(OperatorConstants.DEADBAND)
                                                               .scaleTranslation(0.8)
                                                               .allianceRelativeControl(false);
+                                                              
 
 
   /**
@@ -135,6 +139,7 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+
 
     // Configure the trigger bindings
     configureBindings();
@@ -272,14 +277,15 @@ public class RobotContainer
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
+      driverXbox.b().onTrue(Commands.runOnce(()-> turret.stopTurret()));
 
       driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
       driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
       driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
-      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.cycleHoodAngleForward()));//hood up
-      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.cycleHoodAngleBackward()));//hood down
+      driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodZero()));//hood up
+      driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodMax()));//hood down
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
 
       // Other Stuff
@@ -287,6 +293,9 @@ public class RobotContainer
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
+      //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
+      // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
       // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
       //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
       // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
@@ -303,6 +312,7 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand("Blue Middle Auto");
+    // return drivebase.getAutonomousCommand("Blue Middle Auto");
   }
 
   public void setMotorBrake(boolean brake)
