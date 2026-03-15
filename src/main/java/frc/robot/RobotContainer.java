@@ -25,6 +25,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.turret.hoodCommands;
 import frc.robot.commands.turret.shooterCommands;
 import frc.robot.commands.turret.turretCommands;
+import frc.robot.subsystems.sound;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.turret.HoodSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
@@ -52,11 +53,9 @@ public class RobotContainer
   private final rotationSubsystem rotation = new rotationSubsystem();
 
   private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
-  private final hoodCommands hood = new hoodCommands(hoodSubsystem
+  private final hoodCommands hood = new hoodCommands(hoodSubsystem);
 
-
-
-  );
+  private final sound sound = new sound();
 
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
   
@@ -236,6 +235,7 @@ public class RobotContainer
       
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
+      driverXbox.b().onTrue(Commands.runOnce(()-> turret.stopTurret()));
 
       driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
       driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
