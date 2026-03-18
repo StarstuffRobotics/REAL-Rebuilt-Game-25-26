@@ -3,11 +3,11 @@ package frc.robot.subsystems.turret;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class HoodSubsystem extends SubsystemBase {
+public class hoodSubsystem extends SubsystemBase {
     
     private final Servo m_servo;
 
-    public HoodSubsystem() {
+    public hoodSubsystem() {
         m_servo = new Servo(0); 
         m_servo.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
     }
