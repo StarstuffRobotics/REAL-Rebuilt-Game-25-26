@@ -48,6 +48,10 @@ public class turretCommands {
         shootTurret();
     }
 
+    public void runTurretPID(){
+        rotation.runTurretPID();
+    }
+
     public void manualTurretRight(){
         rotation.manualRotateRight();
     }

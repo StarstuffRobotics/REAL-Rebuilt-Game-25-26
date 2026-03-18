@@ -42,6 +42,7 @@ public class rotationSubsystem extends SubsystemBase {
     private Set<Integer> validHubTags = RED_HUB_TAGS;
 
     public rotationSubsystem() {
+        turret_motor1.getEncoder().setPosition(0);
         turnController.setTolerance(1.5); // degrees
     }
 
@@ -73,7 +74,7 @@ public class rotationSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Turret Tx",        Tx);
         SmartDashboard.putNumber("Seen Tag ID",      Tid);
 
-        runTurretPID();
+        
     }
 
     
@@ -132,18 +133,12 @@ public class rotationSubsystem extends SubsystemBase {
     }
 
     public void rotateTurretRight() {
-        if (!hasTarget() || !isWithinSoftLimits()) {
-            turret_motor1.set(0);
-            return;
-        }
+        
         turret_motor1.set(0.05);
     }
 
     public void rotateTurretLeft() {
-        if (!hasTarget() || !isWithinSoftLimits()) {
-            turret_motor1.set(0);
-            return;
-        }
+        
         turret_motor1.set(-0.05);
     }
 

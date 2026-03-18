@@ -73,8 +73,10 @@ public class RobotContainer
   private final hoodCommands hood = new hoodCommands(hoodSubsystem);
   
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
-
   
+ 
+
+
   private boolean alleianceRelativeControlDefault = true;
   
   
@@ -138,7 +140,7 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-
+    
 
     // Configure the trigger bindings
     configureBindings();
@@ -158,6 +160,12 @@ public class RobotContainer
    */
   private void configureBindings()
   {
+
+    rotation.setDefaultCommand(
+      Commands.run(() -> turret.runTurretPID(), rotation)
+    );
+
+
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
@@ -278,8 +286,8 @@ public class RobotContainer
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
       driverXbox.b().onTrue(Commands.runOnce(()-> turret.stopTurret()));
 
-      driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
-      driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
+      driverXbox.leftTrigger().whileTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
+      driverXbox.rightTrigger().whileTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
       // driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       // driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
