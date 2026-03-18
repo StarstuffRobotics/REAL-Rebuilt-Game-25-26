@@ -59,6 +59,8 @@ public class rotationSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Distance", getDistanceToTarget());
         SmartDashboard.putNumber("Turret Tx", Tx);
         SmartDashboard.putNumber("Target Tag ID", targetTagId);
+
+        runTurretPID();
     }
 
     public boolean hasTarget() {
