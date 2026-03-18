@@ -284,8 +284,7 @@ public class RobotContainer
       driverXbox.y().onTrue(Commands.runOnce(() -> turret.shootTurretSpeed()));
       driverXbox.a().onTrue(Commands.runOnce(()-> turret.shooterReverse()));
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
-      driverXbox.b().onTrue(Commands.runOnce(()-> turret.stopTurret()));
-
+      
       driverXbox.leftTrigger().whileTrue(Commands.run(()-> turret.manualTurretRight(),rotation));//rotate the turret left manualy
       driverXbox.rightTrigger().whileTrue(Commands.run(()-> turret.manualTurretLeft(), rotation));//rotate the turret right manually
       driverXbox.rightTrigger().onFalse(Commands.run(()-> turret.stopRotation(), rotation));
@@ -294,15 +293,13 @@ public class RobotContainer
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodZero()));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodMax()));//hood down
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));
-
+      //driverXbox.povRight().onTrue(Commands.runOnce(()-> rotation.runTurretPID()));
       // Other Stuff
       ////driverXbox.a().whileTrue(Commands.runOnce(drivebase::addFakeVisionReading)); // what does this do?
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
-      //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
-      // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
+      driverXbox.rightBumper().whileTrue(Commands.runOnce(()-> rotation.runTurretPID(),rotation));
       // riverXbox.rightBumper().onTrue(Commands.runOnce(() -> {
       //   alleianceRelativeControlDefault = !alleianceRelativeControlDefault;
       // }));//toggle alliance-centric control (alliance relative control is on by default, so this would turn it off and on)
