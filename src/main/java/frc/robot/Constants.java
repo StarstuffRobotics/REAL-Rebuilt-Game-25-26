@@ -59,9 +59,9 @@ public final class Constants
     public static final double limelightTurretOffsetX = 0;
     public static final double limelightTurretOffsetY = 0;
     public static final double limelightTurretHeight = 18.5;
-    public static final double kTurnP = 0.02;
+    public static final double kTurnP = 0.1;
     public static final double kTurnI = 0.0;
-    public static final double kTurnD = 0.001;
+    public static final double kTurnD = 0.1;
   }
 
 

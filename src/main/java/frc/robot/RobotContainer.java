@@ -34,7 +34,7 @@ import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.turret.hoodSubsystem;
+import frc.robot.subsystems.turret.HoodSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
 import frc.robot.subsystems.turret.shooterSubsystem; // Ensure this is the correct package for shooterCommands
 import swervelib.SwerveInputStream; // Ensure this is the correct package for rotationCommands
@@ -69,7 +69,7 @@ public class RobotContainer
   
   private final rotationSubsystem rotation = new rotationSubsystem();
   
-  private final hoodSubsystem hoodSubsystem = new hoodSubsystem();
+  private final HoodSubsystem hoodSubsystem = new HoodSubsystem();
   private final hoodCommands hood = new hoodCommands(hoodSubsystem);
   
   private final turretCommands turret = new turretCommands(shooter, rotation, hood);
