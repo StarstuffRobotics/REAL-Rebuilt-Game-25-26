@@ -12,23 +12,7 @@ public class hoodCommands  {
         m_hoodSubsystem = hoodSubsystem;
     }
 
-    // public void setHoodSpeed(double speed) {
-    //     m_hoodSubsystem.setSpeed(speed);
-    // }
-
-    // public void setHoodSpeed() {
-    //     m_hoodSubsystem.setSpeed();
-    // }
-
-    // public void setHoodReversedSpeed(double speed) {
-    //     m_hoodSubsystem.setReversedSpeed(speed);
-    // }
-
-    // public void setHoodReversedSpeed() {
-    //     m_hoodSubsystem.setReversedSpeed();
-    // }
-
-     public void getHoodAngle() {
+    public void getHoodAngle() {
         m_hoodSubsystem.getHoodAngle();
     }
 
@@ -40,6 +24,8 @@ public class hoodCommands  {
         m_hoodSubsystem.setHoodMax();
     }
 
+    public void stopHood(){
+        m_hoodSubsystem.stopHood();
+    }
   
-    
 }
