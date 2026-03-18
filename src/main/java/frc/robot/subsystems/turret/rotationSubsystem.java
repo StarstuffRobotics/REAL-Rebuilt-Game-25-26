@@ -64,7 +64,7 @@ public class rotationSubsystem extends SubsystemBase {
     }
 
     public boolean hasTarget() {
-        // We only have a valid target if the Limelight sees a tag AND it's the correct ID
+        // We only have a valid target if the Limelight sees a tag AND it's the correct IDb n
         return Tv && (Tid == targetTagId); 
     }
 
@@ -93,10 +93,10 @@ public class rotationSubsystem extends SubsystemBase {
 
     // This replaces your rotateTurret() Command so it can be called sequentially 
     public void runTurretPID() {
-        if (!hasTarget()) {
-            turret_motor1.set(0);
-            return;
-        }
+        // if (!hasTarget()) {
+        //     turret_motor1.set(0);
+        //     return;
+        // }
 
         // Stop if soft limits are exceeded
         if (!isWithinSoftLimits()) {

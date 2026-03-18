@@ -33,7 +33,6 @@ import frc.robot.commands.turret.turretCommands;
 import frc.robot.subsystems.accelerator.acceleratorSubsystem;
 import frc.robot.subsystems.intake.intakeSubsystem;
 import frc.robot.subsystems.spindexer.spindexerSubsystem;
-// import frc.robot.subsystems.sound;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.turret.HoodSubsystem;
 import frc.robot.subsystems.turret.rotationSubsystem;
@@ -281,8 +280,8 @@ public class RobotContainer
 
       driverXbox.leftTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
       driverXbox.rightTrigger().onTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
-      driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
-      driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
+      // driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
+      // driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
       
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodZero()));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodMax()));//hood down
