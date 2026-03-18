@@ -162,7 +162,7 @@ public class RobotContainer
   {
 
     rotation.setDefaultCommand(
-      Commands.run(() -> turret.runTurretPID(), rotation)
+      rotation.runTurretPID()
     );
 
 
@@ -286,11 +286,11 @@ public class RobotContainer
       driverXbox.a().onFalse(Commands.runOnce(()-> turret.shooterStop()));
       driverXbox.b().onTrue(Commands.runOnce(()-> turret.stopTurret()));
 
-      driverXbox.leftTrigger().whileTrue(Commands.runOnce(()-> turret.manualTurretRight()));//rotate the turret left manualy
-      driverXbox.rightTrigger().whileTrue(Commands.runOnce(()-> turret.manualTurretLeft()));//rotate the turret right manualy
-      // driverXbox.rightTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
-      // driverXbox.leftTrigger().onFalse(Commands.runOnce(()-> turret.stopRotation()));
-      
+      driverXbox.leftTrigger().whileTrue(Commands.run(()-> turret.manualTurretRight(),rotation));//rotate the turret left manualy
+      driverXbox.rightTrigger().whileTrue(Commands.run(()-> turret.manualTurretLeft(), rotation));//rotate the turret right manually
+      driverXbox.rightTrigger().onFalse(Commands.run(()-> turret.stopRotation(), rotation));
+      driverXbox.leftTrigger().onFalse(Commands.run(()-> turret.stopRotation(), rotation));
+
       driverXbox.povUp().onTrue(Commands.runOnce(()-> turret.setHoodZero()));//hood up
       driverXbox.povDown().onTrue(Commands.runOnce( () -> turret.setHoodMax()));//hood down
       //driverXbox.y().onFalse(Commands.runOnce(()-> turret.stopRotation()));

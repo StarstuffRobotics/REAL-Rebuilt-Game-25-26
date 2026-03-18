@@ -9,6 +9,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -106,17 +108,17 @@ public class rotationSubsystem extends SubsystemBase {
         turret_motor1.set(0);
     }
 
-    public void runTurretPID() {
+    public Command runTurretPID() {
         // Do nothing if we don't see a tag from the outher allinece.
         if (!hasTarget()) {
             turret_motor1.set(0);
-            return;
+            return null;
         }
 
         // Stop if soft limits are exceeded
         if (!isWithinSoftLimits()) {
             turret_motor1.set(0);
-            return;
+            return null;
         }
 
         double rotationSpeed = -turnController.calculate(Tx, 0.0);
@@ -129,7 +131,9 @@ public class rotationSubsystem extends SubsystemBase {
         // Clamp output to safe range
         rotationSpeed = Math.max(-0.4, Math.min(0.4, rotationSpeed));
 
-        turret_motor1.set(rotationSpeed);
+        final double rotSpeed = rotationSpeed;
+        
+        return Commands.runOnce(() -> turret_motor1.set(rotSpeed));
     }
 
     public void rotateTurretRight() {
