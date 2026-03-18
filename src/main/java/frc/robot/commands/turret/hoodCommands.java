@@ -1,14 +1,14 @@
 package frc.robot.commands.turret;
-import frc.robot.subsystems.turret.HoodSubsystem;
+import frc.robot.subsystems.turret.hoodSubsystem;
 
 
 public class hoodCommands  {
     
-    private final HoodSubsystem m_hoodSubsystem;
+    private final hoodSubsystem m_hoodSubsystem;
 
 
     
-    public hoodCommands(HoodSubsystem hoodSubsystem) {
+    public hoodCommands(hoodSubsystem hoodSubsystem) {
         m_hoodSubsystem = hoodSubsystem;
     }
 
