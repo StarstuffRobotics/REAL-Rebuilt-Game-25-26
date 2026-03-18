@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret;
 
+import java.util.Set;
+
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -12,25 +14,32 @@ import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
 public class rotationSubsystem extends SubsystemBase {
-    private final String LIMELIGHT_NAME = "limelight-turret"; 
+    private final String LIMELIGHT_NAME = "limelight-turret";
 
-    private SparkFlex turret_motor1 = new SparkFlex(24, MotorType.kBrushless); 
-    
-    // Soft limit constants (tune to your robot's physical range)
+    private final SparkFlex turret_motor1 = new SparkFlex(24, MotorType.kBrushless);
+
+    // Soft limit constants
     private static final double TURRET_MAX_POSITION = 60.0;  // degrees
     private static final double TURRET_MIN_POSITION = -60.0; // degrees
 
+   
+    // Based on field map: Red hub = 2,3,4,5,8,9,10,11 | Blue hub = 18,19,20,21,24,25,26,27
+    private static final Set<Integer> RED_HUB_TAGS  = Set.of(2, 3, 4, 5, 8, 9, 10, 11);
+    private static final Set<Integer> BLUE_HUB_TAGS = Set.of(18, 19, 20, 21, 24, 25, 26, 27);
+
     private final PIDController turnController = new PIDController(
-        Constants.LimelightConstants.kTurnP, 
-        Constants.LimelightConstants.kTurnI, 
+        Constants.LimelightConstants.kTurnP,
+        Constants.LimelightConstants.kTurnI,
         Constants.LimelightConstants.kTurnD
     );
-    
+
     private double Tx;
     private double Ty;
     private boolean Tv;
-    private int Tid; 
-    private int targetTagId = 9; // Default to Red Alliance
+    private int Tid;
+
+   
+    private Set<Integer> validHubTags = RED_HUB_TAGS;
 
     public rotationSubsystem() {
         turnController.setTolerance(1.5); // degrees
@@ -38,52 +47,57 @@ public class rotationSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Tx = LimelightHelpers.getTX(LIMELIGHT_NAME);
-        Ty = LimelightHelpers.getTY(LIMELIGHT_NAME);
-        Tv = LimelightHelpers.getTV(LIMELIGHT_NAME);
-        Tid = (int) LimelightHelpers.getFiducialID(LIMELIGHT_NAME); // Cast to int
-      
-        // Check alliance color and set the target ID and Limelight Pipeline
+        Tx  = LimelightHelpers.getTX(LIMELIGHT_NAME);
+        Ty  = LimelightHelpers.getTY(LIMELIGHT_NAME);
+        Tv  = LimelightHelpers.getTV(LIMELIGHT_NAME);
+        Tid = (int) LimelightHelpers.getFiducialID(LIMELIGHT_NAME);
+
+        
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
             if (alliance.get() == DriverStation.Alliance.Red) {
-                targetTagId = 9;
-                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 0); // Assuming Pipeline 0 is Red
+                validHubTags = RED_HUB_TAGS;
+                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 0);
             } else {
-                targetTagId = 25;
-                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 1); // Assuming Pipeline 1 is Blue
+                validHubTags = BLUE_HUB_TAGS;
+                LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 1);
             }
+        }else{
+            //defults to red on not allince detected.
+            validHubTags = RED_HUB_TAGS;
+            LimelightHelpers.setPipelineIndex(LIMELIGHT_NAME, 0);
         }
 
-        SmartDashboard.putBoolean("Tag Visible", hasTarget());
-        SmartDashboard.putNumber("Distance", getDistanceToTarget());
-        SmartDashboard.putNumber("Turret Tx", Tx);
-        SmartDashboard.putNumber("Target Tag ID", targetTagId);
+        SmartDashboard.putBoolean("Hub Tag Visible", hasTarget());
+        SmartDashboard.putNumber("Distance",         getDistanceToTarget());
+        SmartDashboard.putNumber("Turret Tx",        Tx);
+        SmartDashboard.putNumber("Seen Tag ID",      Tid);
 
         runTurretPID();
     }
 
+    
     public boolean hasTarget() {
-        // We only have a valid target if the Limelight sees a tag AND it's the correct IDb n
-        return Tv && (Tid == targetTagId); 
+        return Tv && validHubTags.contains(Tid);
     }
 
     public double getDistanceToTarget() {
         if (!hasTarget()) return 0.0;
         return calculateDistance(Ty);
     }
-    
+
     public double calculateDistance(double ty) {
-        double totalAngleDegrees = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
+        double totalAngleDegrees  = Constants.LimelightConstants.limelightMountAngleDegrees + ty;
         double angleToGoalRadians = Units.degreesToRadians(totalAngleDegrees);
         if (Math.abs(Math.tan(angleToGoalRadians)) < 1e-5) return 0.0;
-        return (Units.feetToMeters(Constants.FieldConstants.TARGET_HEIGHT_FEET) - Constants.LimelightConstants.limelightTurretHeight) 
+        return (Units.feetToMeters(Constants.FieldConstants.TARGET_HEIGHT_FEET)
+                - Constants.LimelightConstants.limelightTurretHeight)
                / Math.tan(angleToGoalRadians);
     }
-    
+
     private boolean isWithinSoftLimits() {
-        // Convert encoder position to degrees — adjust the scale factor to match your gearing
-        double turretDegrees = turret_motor1.getEncoder().getPosition() * Constants.rotationConstants.ENCODER_DEGREES_PER_ROTATION;
+        double turretDegrees = turret_motor1.getEncoder().getPosition()
+                               * Constants.rotationConstants.ENCODER_DEGREES_PER_ROTATION;
         return turretDegrees > TURRET_MIN_POSITION && turretDegrees < TURRET_MAX_POSITION;
     }
 
@@ -91,12 +105,12 @@ public class rotationSubsystem extends SubsystemBase {
         turret_motor1.set(0);
     }
 
-    // This replaces your rotateTurret() Command so it can be called sequentially 
     public void runTurretPID() {
-        // if (!hasTarget()) {
-        //     turret_motor1.set(0);
-        //     return;
-        // }
+        // Do nothing if we don't see a tag from the outher allinece.
+        if (!hasTarget()) {
+            turret_motor1.set(0);
+            return;
+        }
 
         // Stop if soft limits are exceeded
         if (!isWithinSoftLimits()) {
@@ -105,8 +119,8 @@ public class rotationSubsystem extends SubsystemBase {
         }
 
         double rotationSpeed = -turnController.calculate(Tx, 0.0);
+
         
-        // Widened deadband to reduce jitter
         if (Math.abs(Tx) < 2.5) {
             rotationSpeed = 0.0;
         }
@@ -133,11 +147,11 @@ public class rotationSubsystem extends SubsystemBase {
         turret_motor1.set(-0.05);
     }
 
-    public void manualRotateRight(){
-        turret_motor1.set(.05);
+    public void manualRotateRight() {
+        turret_motor1.set(0.05);
     }
-    
-    public void manualRotateLeft(){
-        turret_motor1.set(-.05);
+
+    public void manualRotateLeft() {
+        turret_motor1.set(-0.05);
     }
 }
