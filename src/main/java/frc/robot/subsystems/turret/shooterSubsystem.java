@@ -4,12 +4,11 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.LimelightHelpers;
-import frc.robot.commands.turret.hoodCommands;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class shooterSubsystem extends SubsystemBase {

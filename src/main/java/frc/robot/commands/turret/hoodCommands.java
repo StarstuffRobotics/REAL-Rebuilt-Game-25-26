@@ -1,29 +1,29 @@
-package frc.robot.commands.turret;
-import frc.robot.subsystems.turret.hoodSubsystem;
+// package frc.robot.commands.turret;
+// import frc.robot.subsystems.turret.hoodSubsystem;
 
 
-public class hoodCommands  {
+// public class hoodCommands  {
     
-    private final hoodSubsystem m_hoodSubsystem;
+//     private final hoodSubsystem m_hoodSubsystem;
 
 
     
-    public hoodCommands(hoodSubsystem hoodSubsystem) {
-        m_hoodSubsystem = hoodSubsystem;
-    }
+//     public hoodCommands(hoodSubsystem hoodSubsystem) {
+//         m_hoodSubsystem = hoodSubsystem;
+//     }
 
-    public void getHoodAngle() {
-        m_hoodSubsystem.getHoodAngle();
-    }
+//     public void getHoodAngle() {
+//         m_hoodSubsystem.getHoodAngle();
+//     }
 
-    public void setHoodZero() {
-        m_hoodSubsystem.setHoodZero();
-    }
+//     public void setHoodZero() {
+//         m_hoodSubsystem.setHoodZero();
+//     }
 
-    public void setHoodMax() {
-        m_hoodSubsystem.setHoodMax();
-    }
+//     public void setHoodMax() {
+//         m_hoodSubsystem.setHoodMax();
+//     }
 
     
   
-}
+// }
