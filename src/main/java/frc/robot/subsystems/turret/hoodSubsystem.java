@@ -10,16 +10,12 @@ public class hoodSubsystem extends SubsystemBase {
 
     public hoodSubsystem() {
         m_servoLeft = new Servo(0); 
-        //m_servoLeft.setBoundsMicroseconds(2000, 0, 0, 0, 1000);
+        m_servoLeft.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
         m_servoRight = new Servo(1); 
-        //m_servoRight.setBoundsMicroseconds(2000, 0, 0, 0, 1000);
+        m_servoRight.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
     
     }
-    
-    public void stopHood() {
-        m_servoLeft.setSpeed(0);
-        m_servoRight.setSpeed(0);
-    }
+  
 
 //lj;kjkl  ;lkjlj lj 
 
@@ -29,19 +25,19 @@ public class hoodSubsystem extends SubsystemBase {
     }
 
     public void setHoodZero(){
-        m_servoLeft.set(0);
-        m_servoRight.set(0);
+        m_servoLeft.setAngle(0);
+        m_servoRight.setAngle(180); // ← inverted
     }
-
+    
     public void setHoodMax(){
-        m_servoLeft.set(1);
-        m_servoRight.set(1);
+        m_servoLeft.setAngle(180);
+        m_servoRight.setAngle(0); // ← inverted
     }
-
+    
     public void setHoodAngle(double angle) {
-        m_servoLeft.set(angle);
-        m_servoRight.set(angle);
+        m_servoLeft.setAngle(angle);
+        m_servoRight.setAngle(180 - angle); // ← inverted
     }
 
 
-}
+} 

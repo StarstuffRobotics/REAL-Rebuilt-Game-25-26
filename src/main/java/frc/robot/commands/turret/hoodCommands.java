@@ -24,8 +24,6 @@ public class hoodCommands  {
         m_hoodSubsystem.setHoodMax();
     }
 
-    public void stopHood(){
-        m_hoodSubsystem.stopHood();
-    }
+    
   
 }
