@@ -24,6 +24,8 @@ public class HoodSubsystem extends SubsystemBase {
         m_servoRight.setSpeed(0);
     }
 
+//lj;kjkl  ;lkjlj lj 
+
     /** Returns the current angle of the left servo as a proxy for hood angle. */
     public double getHoodAngle() {
         return m_servoLeft.getAngle();
