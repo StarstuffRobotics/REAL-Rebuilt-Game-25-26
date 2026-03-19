@@ -5,12 +5,12 @@ import frc.robot.subsystems.turret.rotationSubsystem;
 public class turretCommands {
     shooterCommands shooter;
     rotationSubsystem rotation;
-    // hoodCommands hood;
+    hoodCommands hood;
 
-    public turretCommands(shooterCommands shooter,rotationSubsystem rotation){
+    public turretCommands(shooterCommands shooter,rotationSubsystem rotation, hoodCommands hood){
         this.shooter = shooter;
         this.rotation = rotation;   
-        //this.hood = hood;
+        this.hood = hood;
     }
 
     public void allignTurret(){
@@ -29,13 +29,13 @@ public class turretCommands {
     //     hood.setHoodReversedSpeed();
     // }
 
-    // public void setHoodZero(){
-    //     hood.setHoodZero();
-    // }
+    public void setHoodZero(){
+        hood.setHoodZero();
+    }
 
-    // public void setHoodMax(){
-    //     hood.setHoodMax();
-    // }
+    public void setHoodMax(){
+        hood.setHoodMax();
+    }
 
     // public void setHoodAngle(double angle){
     //     hood.setHoodAngle(angle);
