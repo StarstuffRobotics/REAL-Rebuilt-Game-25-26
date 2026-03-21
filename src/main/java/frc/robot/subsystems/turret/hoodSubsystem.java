@@ -3,52 +3,41 @@ package frc.robot.subsystems.turret;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class HoodSubsystem extends SubsystemBase {
+public class hoodSubsystem extends SubsystemBase {
     
-    private final Servo m_servo;
+    private final Servo m_servoLeft;
+    private final Servo m_servoRight;
 
-    public HoodSubsystem() {
-        m_servo = new Servo(0); 
-        m_servo.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
-    }
+    public hoodSubsystem() {
+        m_servoLeft = new Servo(0); 
+        m_servoLeft.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
+        m_servoRight = new Servo(1); 
+        m_servoRight.setBoundsMicroseconds(2100, 1508, 1500, 1492, 900);
     
-    public void stopHood() {
-        m_servo.setSpeed(0);
     }
+  
 
-    // public void setSpeed() {
-    //     m_servo.setSpeed(0.3);
-        
-    // }
+//lj;kjkl  ;lkjlj lj 
 
-    // public void setReversedSpeed(){
-    //     m_servo.setSpeed(-0.3);
-    // }
-
-    // public void setSpeed(double speed) {
-    //     m_servo.setSpeed(speed);
-    // }
-
-
-    // public void setReversedSpeed(double speed) {
-    //     m_servo.setSpeed(-speed);
-    // }
-
-    public void getHoodAngle() {
-        // Implement logic to get the current angle of the hood
+    /** Returns the current angle of the left servo as a proxy for hood angle. */
+    public double getHoodAngle() {
+        return m_servoLeft.getAngle();
     }
 
     public void setHoodZero(){
-        m_servo.setAngle(0);
+        m_servoLeft.setAngle(0);
+        m_servoRight.setAngle(180); // ← inverted
     }
-
+    
     public void setHoodMax(){
-        m_servo.setAngle(180);
+        m_servoLeft.setAngle(180);
+        m_servoRight.setAngle(0); // ← inverted
     }
-
+    
     public void setHoodAngle(double angle) {
-        m_servo.setAngle(angle);
+        m_servoLeft.setAngle(angle);
+        m_servoRight.setAngle(180 - angle); // ← inverted
     }
 
 
-}
+} 
