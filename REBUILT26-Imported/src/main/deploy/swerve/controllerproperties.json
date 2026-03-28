@@ -1,0 +1,9 @@
+{
+  "angleJoyStickRadiusDeadband": 0.5,
+  "heading": {
+    "p": 0.012,
+    "i": 0.0,
+    "d": 0.0002,
+    "f": 0.0
+  }
+}
